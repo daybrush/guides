@@ -1,0 +1,52 @@
+{
+    "name": "vue-guides",
+    "version": "0.1.0",
+    "description": "A Vue Guides component that can draw grids and scroll infinitely.",
+    "main": "./dist/guides.cjs.js",
+    "module": "./dist/guides.esm.js",
+    "types": "declaration/Guides.d.ts",
+    "sideEffects": false,
+    "keywords": [
+        "scene",
+        "scenejs",
+        "scene.js",
+        "scena",
+        "guides",
+        "scroller",
+        "vue"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/daybrush/guides.git"
+    },
+    "author": "Daybrush",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/daybrush/guides/issues"
+    },
+    "homepage": "https://daybrush.com/guides",
+    "scripts": {
+        "serve": "vue-cli-service serve",
+        "build": "rollup -c && npm run declaration",
+        "declaration": "rm -rf declaration && tsc -p tsconfig.declaration.json",
+        "lint": "vue-cli-service lint"
+    },
+    "dependencies": {
+        "@scena/guides": "^0.1.3",
+        "vue": "^2.6.10",
+        "vue-class-component": "^7.0.2",
+        "vue-property-decorator": "^8.3.0"
+    },
+    "devDependencies": {
+        "@daybrush/builder": "^0.1.2",
+        "@daybrush/drag": "^0.11.0",
+        "@vue/cli-plugin-eslint": "^4.0.0",
+        "@vue/cli-plugin-typescript": "^4.0.0",
+        "@vue/cli-service": "^4.0.0",
+        "@vue/eslint-config-typescript": "^4.0.0",
+        "eslint": "^5.16.0",
+        "eslint-plugin-vue": "^5.0.0",
+        "typescript": "~3.5.3",
+        "vue-template-compiler": "^2.6.10"
+    }
+}
