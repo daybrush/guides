@@ -1,8 +1,7 @@
-import { Component } from "react";
-import * as React from "react";
+import { Component, h } from "preact";
 import Scene from "scenejs";
 import "./App.css";
-import Guides from "../react-guides/Guides";
+import Guides from "../preact-guides/Guides";
 import { ref } from "framework-utils";
 import Dragger from "@daybrush/drag";
 
@@ -61,7 +60,7 @@ export default class App extends Component<{}> {
                     <a href="https://github.com/daybrush/guides/tree/master/packages/svelte-guides" target="_blank"><img alt="Svelte"
                         src="https://img.shields.io/static/v1.svg?label=&message=Svelte&style=flat-square&color=C82B38" /></a>
                 </p>
-                <p className="description">A React Guides component draw Ruler and manage Guidelines.</p>
+                <p className="description">A Preact Guides component draw Ruler and manage Guidelines.</p>
                 <div className="buttons">
                     <a href="https://github.com/daybrush/guides/tree/master/packages/svelte-guides" target="_blank">Download</a>
                 </div>
