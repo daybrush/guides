@@ -1452,7 +1452,13 @@ version: 0.1.2
     });
     var scrollX = 0;
     var scrollY = 0;
+    var box = document.querySelector(".box");
     new Dragger(document.body, {
+      dragstart: function (e) {
+        if (e.inputEvent.target === box) {
+          return false;
+        }
+      },
       drag: function (e) {
         scrollX -= e.deltaX;
         scrollY -= e.deltaY;
@@ -1462,7 +1468,7 @@ version: 0.1.2
         guides2.scrollGuides(scrollX);
       }
     });
-    document.querySelector(".box").addEventListener("click", function () {
+    box.addEventListener("click", function () {
       scrollX = 0;
       scrollY = 0;
       guides1.scroll(0);

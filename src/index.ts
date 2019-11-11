@@ -19,7 +19,14 @@ window.addEventListener("resize", () => {
 let scrollX = 0;
 let scrollY = 0;
 
+const box = document.querySelector(".box");
+
 new Dragger(document.body, {
+    dragstart: e => {
+        if (e.inputEvent.target === box) {
+            return false;
+        }
+    },
     drag: e => {
         scrollX -= e.deltaX;
         scrollY -= e.deltaY;
@@ -30,8 +37,7 @@ new Dragger(document.body, {
         guides2.scrollGuides(scrollX);
     },
 });
-
-document.querySelector(".box").addEventListener("click", () => {
+box.addEventListener("click", () => {
     scrollX = 0;
     scrollY = 0;
     guides1.scroll(0);
