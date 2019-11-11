@@ -1,0 +1,69 @@
+{
+  "name": "@scena/react-guides",
+  "version": "0.1.0",
+  "description": "A React Guides component draw Ruler and manage Guidelines.",
+  "main": "./dist/guides.cjs.js",
+  "module": "./dist/guides.esm.js",
+  "sideEffects": false,
+  "types": "declaration/index.d.ts",
+  "scripts": {
+    "lint": "tslint -c tslint.json 'src/**/*.ts'",
+    "start": "react-scripts start",
+    "build": "rollup -c && npm run declaration && print-sizes ./dist ",
+    "declaration": "rm -rf declaration && tsc -p tsconfig.declaration.json"
+  },
+  "keywords": [
+    "scene",
+    "scenejs",
+    "scene.js",
+    "scena",
+    "guides",
+    "guidelines",
+    "scroller",
+    "ruler",
+    "react"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/daybrush/guides/blob/master/packages/react-guides"
+  },
+  "author": "Daybrush",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/daybrush/guides/issues"
+  },
+  "homepage": "https://github.com/daybrush/guides#readme",
+  "devDependencies": {
+    "@daybrush/builder": "^0.1.0",
+    "@scenejs/effects": "^1.0.1",
+    "@types/react": "^16.8.18",
+    "@types/react-color": "^3.0.1",
+    "@types/react-dom": "^16.8.4",
+    "print-sizes": "0.0.4",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-scripts": "^3.0.1",
+    "shape-svg": "^0.3.3",
+    "tslint": "^5.20.1",
+    "typescript": "^3.4.5"
+  },
+  "dependencies": {
+    "@daybrush/drag": "^0.11.0",
+    "@daybrush/utils": "^0.10.1",
+    "@scena/react-ruler": "^0.1.4",
+    "framework-utils": "^0.2.1",
+    "react-css-styler": "^0.4.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
