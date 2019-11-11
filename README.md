@@ -54,8 +54,8 @@ window.addEventListener("wheel", e => {
     scrollX += e.deltaX;
     scrollY += e.deltaY;
 
-    this.guides.scrollGuides(scrollY);
-    this.guides.scroll(scrollX);
+    guides.scrollGuides(scrollY);
+    guides.scroll(scrollX);
 });
 
 

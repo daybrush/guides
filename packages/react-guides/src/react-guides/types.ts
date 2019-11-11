@@ -1,4 +1,4 @@
-import { RulerProps } from "@scena/react-ruler";
+import { RulerProps } from "@scena/react-ruler/declaration/types";
 import { IObject } from "@daybrush/utils";
 
 export interface GuidesState {
