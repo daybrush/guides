@@ -4,7 +4,7 @@ name: @scena/guides
 license: MIT
 author: Daybrush
 repository: git+https://github.com/daybrush/guides.git
-version: 0.1.2
+version: 0.1.3
 */
 (function () {
     'use strict';
@@ -869,7 +869,7 @@ version: 0.1.2
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/guides/blob/master/packages/preact-guides
-    version: 0.1.3
+    version: 0.1.4
     */
 
     /*
@@ -1066,7 +1066,7 @@ version: 0.1.2
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/guides/blob/master/packages/react-guides
-    version: 0.1.1
+    version: 0.1.2
     */
 
     /*! *****************************************************************************
