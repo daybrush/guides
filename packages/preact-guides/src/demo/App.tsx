@@ -60,7 +60,7 @@ export default class App extends Component<{}> {
                     <a href="https://github.com/daybrush/guides/tree/master/packages/svelte-guides" target="_blank"><img alt="Svelte"
                         src="https://img.shields.io/static/v1.svg?label=&message=Svelte&style=flat-square&color=C82B38" /></a>
                 </p>
-                <p className="description">A Preact Guides component draw Ruler and manage Guidelines.</p>
+                <p className="description">A Preact Guides component that can draw ruler and manage guidelines.</p>
                 <div className="buttons">
                     <a href="https://github.com/daybrush/guides/tree/master/packages/svelte-guides" target="_blank">Download</a>
                 </div>

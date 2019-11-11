@@ -16,7 +16,7 @@
     alt="Vue"
     src="https://img.shields.io/static/v1.svg?label=&message=Svelte&style=flat-square&color=C82B38"></a>
 </p>
-<p align="middle">A Guides component draw Ruler and manage Guidelines.</p>
+<p align="middle">The Guides component that can draw ruler and manage guidelines.</p>
 <p align="middle">
     <a href="https://daybrush.com/guides" target="_blank"><strong>Demo</strong></a> /
     <a href="https://github.com/daybrush/scenejs-editor" target="_blank"><strong>Main Project</strong></a>
