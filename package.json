@@ -13,7 +13,7 @@
         "doc": "rm -rf ./doc && jsdoc -c jsdoc.json",
         "demo:start": "rollup -c rollup.config.demo.js -w",
         "demo:build": "rollup -c rollup.config.demo.js",
-        "prerelease": "npm run build && prerelease --dirs=dist",
+        "prerelease": "npm run build && npm run demo:build && prerelease --dirs=dist",
         "release": "npm run build && npm run demo:build && release --dirs=dist",
         "release:init": "npm run build && npm run demo:build && release -i --dirs=dist",
         "deploy": "gh-pages -d ./demo --dest=./ --add --remote origin"
