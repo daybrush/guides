@@ -4,7 +4,7 @@ name: @scena/guides
 license: MIT
 author: Daybrush
 repository: git+https://github.com/daybrush/guides.git
-version: 0.1.3
+version: 0.1.4
 */
 (function () {
     'use strict';
@@ -174,7 +174,7 @@ version: 0.1.3
     license: MIT
     author: Daybrush
     repository: git+https://github.com/daybrush/drag.git
-    version: 0.11.1
+    version: 0.11.0
     */
 
     /*! *****************************************************************************
@@ -423,12 +423,9 @@ version: 0.1.3
         }
 
         if (this.isTouch) {
-          var passive = {
-            passive: false
-          };
-          addEvent(el, "touchstart", this.onDragStart, passive);
-          addEvent(container, "touchmove", this.onDrag, passive);
-          addEvent(container, "touchend", this.onDragEnd, passive);
+          addEvent(el, "touchstart", this.onDragStart);
+          addEvent(container, "touchmove", this.onDrag);
+          addEvent(container, "touchend", this.onDragEnd);
         }
       }
 
@@ -869,7 +866,7 @@ version: 0.1.3
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/guides/blob/master/packages/preact-guides
-    version: 0.1.4
+    version: 0.1.5
     */
 
     /*
@@ -1066,7 +1063,7 @@ version: 0.1.3
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/guides/blob/master/packages/react-guides
-    version: 0.1.2
+    version: 0.1.3
     */
 
     /*! *****************************************************************************
@@ -1226,7 +1223,9 @@ version: 0.1.3
             unit = _a.unit,
             zoom = _a.zoom,
             style = _a.style,
-            rulerStyle = _a.rulerStyle;
+            rulerStyle = _a.rulerStyle,
+            backgroundColor = _a.backgroundColor,
+            lineColor = _a.lineColor;
         return W(GuidesElement, {
           ref: ref(this, "manager"),
           className: prefix("manager", type),
@@ -1238,6 +1237,8 @@ version: 0.1.3
           height: height,
           unit: unit,
           zoom: zoom,
+          backgroundColor: backgroundColor,
+          lineColor: lineColor,
           style: rulerStyle
         }), W("div", {
           className: GUIDES,
