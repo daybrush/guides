@@ -1,0 +1,33 @@
+{
+  "name": "ngx-guides",
+  "version": "0.1.0",
+  "description": "An Angular Guides component that can draw ruler and manage guidelines.",
+  "keywords": [
+    "scene",
+    "scenejs",
+    "scene.js",
+    "scena",
+    "ruler",
+    "guidelines",
+    "guides",
+    "scroller",
+    "angular"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daybrush/guides.git"
+  },
+  "author": "Daybrush",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/daybrush/guides/issues"
+  },
+  "homepage": "https://daybrush.com/guides",
+  "peerDependencies": {
+    "@angular/common": "^8.2.13",
+    "@angular/core": "^8.2.13"
+  },
+  "dependencies": {
+    "@scena/guides": "^0.1.3"
+  }
+}
