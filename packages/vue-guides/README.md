@@ -3,7 +3,7 @@
 <p align="middle" ><img src="https://raw.githubusercontent.com/daybrush/guides/master/demo/images/guides.png"/></p>
 <h2 align="middle">Vue Guides</h2>
 <p align="middle">
-<a href="https://www.npmjs.com/package/@scena/vue-guides" target="_blank"><img src="https://img.shields.io/npm/v/@scena/vue-guides.svg?style=flat-square&color=007acc&label=version" alt="npm version" /></a>
+<a href="https://www.npmjs.com/package/vue-guides" target="_blank"><img src="https://img.shields.io/npm/v/vue-guides.svg?style=flat-square&color=007acc&label=version" alt="npm version" /></a>
 <img src="https://img.shields.io/badge/language-typescript-blue.svg?style=flat-square"/>
 <a href="https://github.com/daybrush/guides/blob/master/LICENSE" target="_blank"><img src="https://img.shields.io/github/license/daybrush/guides.svg?style=flat-square&label=license&color=08CE5D"/></a>
 <a href="https://github.com/daybrush/guides/tree/master/packages/react-guides" target="_blank"><img alt="React" src="https://img.shields.io/static/v1.svg?label=&message=React&style=flat-square&color=61daeb"></a>
@@ -26,7 +26,7 @@
 ## ⚙️ Installation
 ### npm
 ```sh
-$ npm i @scena/vue-guides
+$ npm i vue-guides
 ```
 
 ## 🚀 How to use
@@ -37,20 +37,52 @@ $ npm i @scena/vue-guides
     </div>
 </template>
 <script>
-    import Guides from "@scena/vue-guides";
+    import Guides from "vue-guides";
 
     export default {
         components: {
             "vue-guides": Guides,
         },
         mounted() {
-            this.$refs.guides.resize();
+            const guides = this.$refs.guides;
+            let scrollX = 0;
+            let scrollY = 0;
+            guides.resize();
+
             window.addEventListener("resize", () => {
                 guides.resize();
+            });
+            window.addEventListener("wheel", e => {
+                scrollX += e.deltaX;
+                scrollY += e.deltaY;
+                guides.scroll(scrollX);
+                guides.scrollGuides(scrollY);
             });
         },
     };
 </script>
+```
+
+```ts
+
+export interface GuidesProps {
+    type?: "horizontal" | "vertical";
+    width?: number;
+    height?: number;
+    unit?: number;
+    zoom?: number;
+    style?: IObject<any>;
+    backgroundColor?: string;
+    lineColor?: string;
+    setGuides?: (guides: number[]) => any;
+    rulerStyle?: IObject<any>;
+}
+export interface GuidesInterface {
+    getGuides(): number[];
+    scroll(pos: number): void;
+    scrollGuides(pos: number): void;
+    resize(): void;
+}
 ```
 
 
@@ -70,7 +102,7 @@ Please give a ⭐️ if this project helped you!
 
 ## 👏 Contributing
 
-If you have any questions or requests or want to contribute to `guides` or other packages, please write the [issue](https://github.com/daybrush/guides/issues) or give me a Pull Request freely.
+If you have any questions or requests or want to contribute to `vud-guides` or other packages, please write the [issue](https://github.com/daybrush/guides/issues) or give me a Pull Request freely.
 
 ## 🐞 Bug Report
 
