@@ -21,7 +21,8 @@ const defaultOptions = {
             noPropTypes: false,
             noEnv: false,
             noReactIs: false,
-            usePreactX: false,
+            usePreactX: true,
+            resolvePreactCompat: true,
             aliasModules: {
                 "react-css-styler": "preact-css-styler",
                 "@scena/react-ruler": "preact-ruler",

@@ -5,7 +5,6 @@ import preact from "rollup-plugin-preact";
 const preactPlugin = preact({
     noPropTypes: true,
     usePreactX: true,
-    resolvePreactCompat: true,
 });
 
 const external = {
