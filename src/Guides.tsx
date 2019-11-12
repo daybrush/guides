@@ -41,6 +41,9 @@ class Guides implements GuidesInterface {
     public getGuides() {
         return this.getPreactGuides().getGuides();
     }
+    public setState(state: any, callback: () => void) {
+        this.innerGuides.setState(state, callback);
+    }
     public destroy() {
         render("", this.tempElement);
         this.tempElement = null;
