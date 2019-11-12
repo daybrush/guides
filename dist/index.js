@@ -4,7 +4,7 @@ name: @scena/guides
 license: MIT
 author: Daybrush
 repository: git+https://github.com/daybrush/guides.git
-version: 0.2.1
+version: 0.2.3
 */
 (function () {
     'use strict';
