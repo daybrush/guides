@@ -4,7 +4,7 @@ name: @scena/guides
 license: MIT
 author: Daybrush
 repository: git+https://github.com/daybrush/guides.git
-version: 0.1.4
+version: 0.2.0
 */
 (function () {
     'use strict';
@@ -1402,6 +1402,10 @@ version: 0.1.4
 
       __proto.getGuides = function () {
         return this.getPreactGuides().getGuides();
+      };
+
+      __proto.setState = function (state, callback) {
+        this.innerGuides.setState(state, callback);
       };
 
       __proto.destroy = function () {
