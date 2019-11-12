@@ -1,6 +1,6 @@
 <script lang="ts">
   import VanillaGuides, {
-    GuidesProps,
+    GuidesOptions,
     PROPERTIES
   } from "@scena/guides";
 
@@ -15,12 +15,13 @@
   export let style = { width: "100%", height: "100%"};
 
   declare var $$props: any;
-  let options: Partial<GuidesProps> = {};
+  let options: Partial<GuidesOptions> = {};
   let guides: VanillaGuides;
   let guidesElement: HTMLElement;
 
   function setStyle() {
-    const elStyle = guidesElement.style;
+    const el = options.container || guidesElement;
+    const elStyle = el.style;
 
     for (const name in style) {
       if (elStyle[name] === style[name]) {
@@ -42,15 +43,13 @@
       }
     });
     if (guides) {
-      for (const name in options) {
-        guides[name] = options[name];
-      }
+      guides.setState(options);
       setStyle();
     }
   });
   onMount(() => {
     setStyle();
-    guides = new VanillaGuides(guidesElement, options);
+    guides = new VanillaGuides(options.container || guidesElement, options);
   });
   onDestroy(() => {
     guides.destroy();
@@ -69,5 +68,6 @@
     return guides.getGuides();
   }
 </script>
-
+{#if !options.container}
 <div class="guides" bind:this={guidesElement} />
+{/if}

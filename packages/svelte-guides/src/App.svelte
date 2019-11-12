@@ -3,6 +3,7 @@
   import { onMount } from "svelte";
   import Dragger from "@daybrush/drag";
 
+  let ruler1;
   let guides1: Guides;
   let guides2: Guides;
   let box: HTMLElement;
@@ -163,8 +164,8 @@
 </style>
 
 <div class="box" on:click={onRestore} bind:this={box} />
-<div class="ruler horizontal">
-  <Guides bind:this={guides1} type="horizontal" rulerStyle={{ left: "30px", width: "calc(100% - 30px)", height: "30px"}} />
+<div class="ruler horizontal" bind:this={ruler1}>
+  <Guides bind:this={guides1} container={ruler1} type="horizontal" rulerStyle={{ left: "30px", width: "calc(100% - 30px)", height: "30px"}} />
 </div>
 <div class="ruler vertical">
   <Guides bind:this={guides2} type="vertical"  rulerStyle={{ top: "30px", height: "calc(100% - 30px)", width: "30px"}}/>

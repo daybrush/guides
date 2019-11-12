@@ -1,8 +1,9 @@
 import { ref, Properties } from "framework-utils";
 import { h, render } from "preact";
 import { PROPERTIES } from "./consts";
-import { GuidesInterface, GuidesProps } from "@scena/react-guides/declaration/types";
+import { GuidesInterface } from "@scena/react-guides/declaration/types";
 import InnerGuides from "./InnerGuides";
+import { GuidesOptions } from "./types";
 
 @Properties(PROPERTIES, (prototype, property) => {
     Object.defineProperty(prototype, property, {
@@ -22,7 +23,7 @@ class Guides implements GuidesInterface {
     private tempElement = document.createElement("div");
     private innerGuides!: InnerGuides;
 
-    constructor(container: HTMLElement, options: Partial<GuidesProps> = {}) {
+    constructor(container: HTMLElement, options: Partial<GuidesOptions> = {}) {
         render(
             <InnerGuides ref={ref(this, "innerGuides")}
                 {...options} container={container} />,
@@ -41,7 +42,7 @@ class Guides implements GuidesInterface {
     public getGuides() {
         return this.getPreactGuides().getGuides();
     }
-    public setState(state: any, callback: () => void) {
+    public setState(state: any, callback?: () => void) {
         this.innerGuides.setState(state, callback);
     }
     public destroy() {
