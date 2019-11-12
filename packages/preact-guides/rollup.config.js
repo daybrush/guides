@@ -9,8 +9,9 @@ const defaultOptions = {
         "@daybrush/drag": "Dragger",
         "preact": "Preact",
         "preact-compat": "preact-compat",
-        "framework-utils": "framework-utils",
         "preact-css-styler": "preact-css-styler",
+        "preact-ruler": "preact-ruler",
+        "framework-utils": "framework-utils",
         "@egjs/agent": "eg.Agent",
         "@egjs/children-differ": "eg.ChildrenDiffer",
     },
@@ -23,6 +24,7 @@ const defaultOptions = {
             usePreactX: false,
             aliasModules: {
                 "react-css-styler": "preact-css-styler",
+                "@scena/react-ruler": "preact-ruler",
             },
         }),
     ],
