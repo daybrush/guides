@@ -4,7 +4,7 @@ name: preact-guides
 license: MIT
 author: Daybrush
 repository: https://github.com/daybrush/guides/blob/master/packages/preact-guides
-version: 0.1.0
+version: 0.1.7
 */
 (function (factory) {
 	typeof define === 'function' && define.amd ? define(factory) :
@@ -711,7 +711,6 @@ version: 0.1.0
 	function render(vnode, parent, merge) {
 	  return diff(merge, vnode, {}, false, parent, false);
 	}
-	//# sourceMappingURL=preact.mjs.map
 
 	/*! *****************************************************************************
 	Copyright (c) Microsoft Corporation. All rights reserved.
@@ -1686,7 +1685,6 @@ version: 0.1.0
 	function removeEvent(el, type, listener) {
 	  el.removeEventListener(type, listener);
 	}
-	//# sourceMappingURL=utils.esm.js.map
 
 	/*
 	Copyright (c) 2019 Daybrush
@@ -1883,7 +1881,6 @@ version: 0.1.0
 
 	  return ListMap;
 	}();
-	//# sourceMappingURL=list-map.esm.js.map
 
 	/*
 	Copyright (c) 2016 Daybrush
@@ -5669,7 +5666,6 @@ version: 0.1.0
 	  Scene.VERSION = "1.1.4";
 	  return Scene;
 	}(Animator);
-	//# sourceMappingURL=scene.esm.js.map
 
 	var __extends$2 = (undefined && undefined.__extends) || (function () {
 	    var extendStatics = function (d, b) {
@@ -6190,7 +6186,6 @@ version: 0.1.0
 	PureComponent.prototype.shouldComponentUpdate = function (props, state) {
 		return shallowDiffers(this.props, props) || shallowDiffers(this.state, state);
 	};
-	//# sourceMappingURL=preact-compat.es.js.map
 
 	/*
 	Copyright (c) 2019 Daybrush
@@ -6228,7 +6223,6 @@ version: 0.1.0
 	    e && (target[name][i] = e);
 	  };
 	}
-	//# sourceMappingURL=utils.esm.js.map
 
 	/*
 	Copyright (c) 2019 Daybrush
@@ -6417,7 +6411,6 @@ version: 0.1.0
 	  };
 	  return Ruler;
 	}(PureComponent);
-	//# sourceMappingURL=ruler.esm.js.map
 
 	/*
 	Copyright (c) 2019 Daybrush
@@ -6425,7 +6418,7 @@ version: 0.1.0
 	license: MIT
 	author: Daybrush
 	repository: git+https://github.com/daybrush/drag.git
-	version: 0.11.0
+	version: 0.11.1
 	*/
 
 	/*! *****************************************************************************
@@ -6674,9 +6667,12 @@ version: 0.1.0
 	    }
 
 	    if (this.isTouch) {
-	      addEvent(el, "touchstart", this.onDragStart);
-	      addEvent(container, "touchmove", this.onDrag);
-	      addEvent(container, "touchend", this.onDragEnd);
+	      var passive = {
+	        passive: false
+	      };
+	      addEvent(el, "touchstart", this.onDragStart, passive);
+	      addEvent(container, "touchmove", this.onDrag, passive);
+	      addEvent(container, "touchend", this.onDragEnd, passive);
 	    }
 	  }
 
@@ -6850,7 +6846,6 @@ version: 0.1.0
 
 	  return Dragger;
 	}();
-	//# sourceMappingURL=drag.esm.js.map
 
 	/*
 	Copyright (c) 2019 Daybrush
@@ -7006,7 +7001,6 @@ version: 0.1.0
 	    }(Component$1)
 	  );
 	}
-	//# sourceMappingURL=styler.esm.js.map
 
 	/*
 	Copyright (c) 2019 Daybrush
@@ -7014,7 +7008,7 @@ version: 0.1.0
 	license: MIT
 	author: Daybrush
 	repository: https://github.com/daybrush/guides/blob/master/packages/react-guides
-	version: 0.1.0
+	version: 0.1.3
 	*/
 
 	/*! *****************************************************************************
@@ -7174,7 +7168,9 @@ version: 0.1.0
 	        unit = _a.unit,
 	        zoom = _a.zoom,
 	        style = _a.style,
-	        rulerStyle = _a.rulerStyle;
+	        rulerStyle = _a.rulerStyle,
+	        backgroundColor = _a.backgroundColor,
+	        lineColor = _a.lineColor;
 	    return createElement(GuidesElement, {
 	      ref: ref(this, "manager"),
 	      className: prefix("manager", type),
@@ -7186,6 +7182,8 @@ version: 0.1.0
 	      height: height,
 	      unit: unit,
 	      zoom: zoom,
+	      backgroundColor: backgroundColor,
+	      lineColor: lineColor,
 	      style: rulerStyle
 	    }), createElement("div", {
 	      className: GUIDES,
@@ -7288,7 +7286,6 @@ version: 0.1.0
 	  };
 	  return Guides;
 	}(PureComponent);
-	//# sourceMappingURL=guides.esm.js.map
 
 	var App =
 	/*#__PURE__*/
@@ -7415,7 +7412,7 @@ version: 0.1.0
 	      src: "https://img.shields.io/static/v1.svg?label=&message=Svelte&style=flat-square&color=C82B38"
 	    }))), h("p", {
 	      className: "description"
-	    }, "A Preact Guides component draw Ruler and manage Guidelines."), h("div", {
+	    }, "A Preact Guides component that can draw ruler and manage guidelines."), h("div", {
 	      className: "buttons"
 	    }, h("a", {
 	      href: "https://github.com/daybrush/guides/tree/master/packages/svelte-guides",
@@ -7450,6 +7447,6 @@ version: 0.1.0
 	  return App;
 	}(Component);
 
-	render(h(App, null), document.getElementById("root")); //# sourceMappingURL=index.js.map
+	render(h(App, null), document.getElementById("root"));
 
 }));

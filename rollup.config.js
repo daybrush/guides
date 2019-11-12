@@ -16,6 +16,8 @@ const external = {
     "@egjs/agent": "eg.Agent",
     "@egjs/children-differ": "eg.ChildrenDiffer",
     "preact": "preact",
+    "preact-guides": "preact-guides",
+    "preact-ruler": "preact-ruler",
 };
 export default builder([
     {
