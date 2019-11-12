@@ -1,7 +1,8 @@
-import { GuidesProps } from "@scena/react-guides/declaration/types";
+import { GuidesOptions } from "./types";
 
-export const PROPERTIES: Array<keyof GuidesProps> = [
+export const PROPERTIES: Array<keyof GuidesOptions> = [
     "setGuides",
     "type", "width", "height", "rulerStyle",
     "unit", "zoom", "style", "backgroundColor", "lineColor",
+    "container",
 ];

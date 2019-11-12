@@ -22,10 +22,10 @@ class Guides implements GuidesInterface {
     private tempElement = document.createElement("div");
     private innerGuides!: InnerGuides;
 
-    constructor(parentElement: HTMLElement, options: Partial<GuidesProps> = {}) {
+    constructor(container: HTMLElement, options: Partial<GuidesProps> = {}) {
         render(
             <InnerGuides ref={ref(this, "innerGuides")}
-                {...options} parentElement={parentElement} />,
+                {...options} container={container} />,
             this.tempElement,
         );
     }
