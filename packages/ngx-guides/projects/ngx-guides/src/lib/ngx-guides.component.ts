@@ -11,6 +11,7 @@ import { IObject } from '@daybrush/utils';
 })
 export class NgxGuidesComponent implements GuidesInterface, GuidesProps, AfterViewInit, OnChanges, OnDestroy {
   @ViewChild('guidesRef', { static: false }) private guidesRef: ElementRef;
+  @Input() public className?: string;
   @Input() public type?: 'horizontal' | 'vertical';
   @Input() public width?: number;
   @Input() public height?: number;
@@ -56,6 +57,7 @@ export class NgxGuidesComponent implements GuidesInterface, GuidesProps, AfterVi
   ngAfterViewInit() {
     const el = this.guidesRef.nativeElement;
     this.guides = new Guides(el, {
+      className: this.className,
       type: this.type,
       width: this.width,
       height: this.height,
@@ -63,6 +65,7 @@ export class NgxGuidesComponent implements GuidesInterface, GuidesProps, AfterVi
       zoom: this.zoom,
       setGuides: this.setGuides,
       rulerStyle: this.rulerStyle,
+      backgroundColor: this.backgroundColor,
     });
     this.setStyle();
   }

@@ -5,4 +5,5 @@ export const PROPERTIES: Array<keyof GuidesOptions> = [
     "type", "width", "height", "rulerStyle",
     "unit", "zoom", "style", "backgroundColor", "lineColor",
     "container",
+    "className",
 ];

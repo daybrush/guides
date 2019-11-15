@@ -78,6 +78,8 @@ canvas {
 
 export default class Guides extends React.PureComponent<GuidesProps, GuidesState> implements GuidesInterface {
     public static defaultProps = {
+        className: "",
+        type: "horizontal",
         setGuides: () => { },
         zoom: 1,
         style: { width: "100%", height: "100%" },
@@ -95,6 +97,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
 
     public render() {
         const {
+            className,
             type,
             width,
             height,
@@ -107,7 +110,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         } = this.props as Required<GuidesProps>;
         return <GuidesElement
             ref={ref(this, "manager")}
-            className={prefix("manager", type)}
+            className={`${prefix("manager", type)} ${className}`}
             style={style}
             >
             <Ruler

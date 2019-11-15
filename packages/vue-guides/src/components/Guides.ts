@@ -6,6 +6,8 @@ import { IObject } from "@daybrush/utils";
 })
 export default class Guides extends Vue implements GuidesInterface, GuidesProps {
 
+    @Prop() public className?: string;
+    @Prop() public container?: HTMLElement;
     @Prop() public setGuides?: ((guides: number[]) => any) | undefined;
     @Prop() public rulerStyle?: IObject<any> | undefined;
     @Prop() public type?: "horizontal" | "vertical";

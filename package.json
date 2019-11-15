@@ -1,6 +1,6 @@
 {
     "name": "@scena/guides",
-    "version": "0.2.9",
+    "version": "0.3.0",
     "description": "A Vanilla Guides component that can draw ruler and manage guidelines.",
     "main": "./dist/guides.cjs.js",
     "module": "./dist/guides.esm.js",
@@ -16,7 +16,8 @@
         "prerelease": "npm run build && npm run demo:build && prerelease --dirs=dist",
         "release": "npm run build && npm run demo:build && release --dirs=dist",
         "release:init": "npm run build && npm run demo:build && release -i --dirs=dist",
-        "deploy": "gh-pages -d ./demo --dest=./ --add --remote origin"
+        "deploy": "gh-pages -d ./demo --dest=./ --add --remote origin",
+        "packages": "pvu --packages=ngx-guides/projects/ngx-guides,vue-guides,svelte-guides"
     },
     "keywords": [
         "scene",
@@ -48,6 +49,7 @@
         "gh-pages": "^2.0.1",
         "keycon": "^0.5.0",
         "print-sizes": "0.0.4",
+        "pvu": "^0.1.1",
         "rollup-plugin-css-bundle": "^1.0.4",
         "rollup-plugin-preact": "^0.5.2",
         "scenejs": "^1.1.4",
@@ -56,6 +58,6 @@
     },
     "dependencies": {
         "preact": "^10.0.0",
-        "preact-guides": "^0.1.10"
+        "preact-guides": "^0.2.0"
     }
 }

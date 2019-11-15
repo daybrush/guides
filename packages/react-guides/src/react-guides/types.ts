@@ -5,6 +5,7 @@ export interface GuidesState {
     guides: number[];
 }
 export interface GuidesProps extends RulerProps {
+    className?: string;
     setGuides?: (guides: number[]) => any;
     rulerStyle?: IObject<any>;
 }
