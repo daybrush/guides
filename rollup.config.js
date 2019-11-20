@@ -15,6 +15,7 @@ const external = {
     "@egjs/agent": "eg.Agent",
     "@egjs/children-differ": "eg.ChildrenDiffer",
     "preact": "preact",
+    "preact/compat": "preact/compat",
     "preact-guides": "preact-guides",
     "preact-ruler": "preact-ruler",
 };

@@ -8,6 +8,7 @@ const defaultOptions = {
         "@daybrush/utils": "utils",
         "@daybrush/drag": "Dragger",
         "preact": "Preact",
+        "preact/compat": "preact/compat",
         "preact-compat": "preact-compat",
         "preact-css-styler": "preact-css-styler",
         "preact-ruler": "preact-ruler",
@@ -22,7 +23,6 @@ const defaultOptions = {
             noEnv: false,
             noReactIs: false,
             usePreactX: true,
-            resolvePreactCompat: true,
             aliasModules: {
                 "react-css-styler": "preact-css-styler",
                 "@scena/react-ruler": "preact-ruler",
