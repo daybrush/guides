@@ -18,6 +18,7 @@ export default class Guides extends Vue implements GuidesInterface, GuidesProps 
     @Prop({ default: () => ({ width: "100%", height: "100%" }) }) public style?: IObject<any>;
     @Prop() public backgroundColor?: string;
     @Prop() public lineColor?: string;
+    @Prop() public textColor?: string;
     private guides!: VanillaGuides;
     private options!: Partial<GuidesProps>;
 

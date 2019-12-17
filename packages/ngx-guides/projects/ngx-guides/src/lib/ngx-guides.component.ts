@@ -20,6 +20,7 @@ export class NgxGuidesComponent implements GuidesInterface, GuidesProps, AfterVi
   @Input() public style: IObject<any> = { width: '100%', height: '100%' };
   @Input() public backgroundColor?: string;
   @Input() public lineColor?: string;
+  @Input() public textColor?: string;
   @Input() public setGuides?: (guides: number[]) => any;
   @Input() public rulerStyle?: IObject<any>;
   private guides: Guides;

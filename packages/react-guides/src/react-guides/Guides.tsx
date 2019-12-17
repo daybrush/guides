@@ -107,6 +107,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             rulerStyle,
             backgroundColor,
             lineColor,
+            textColor,
         } = this.props as Required<GuidesProps>;
         return <GuidesElement
             ref={ref(this, "manager")}
@@ -123,6 +124,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                 backgroundColor={backgroundColor}
                 lineColor={lineColor}
                 style={rulerStyle}
+                textColor={textColor}
             />
             <div className={GUIDES} ref={ref(this, "guidesElement")}>
                 <div className={ADDER} ref={ref(this, "adderElement")} />

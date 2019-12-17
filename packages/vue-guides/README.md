@@ -74,6 +74,7 @@ export interface GuidesProps {
     style?: IObject<any>;
     backgroundColor?: string;
     lineColor?: string;
+    textColor?: string;
     setGuides?: (guides: number[]) => any;
     rulerStyle?: IObject<any>;
 }

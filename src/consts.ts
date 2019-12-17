@@ -6,4 +6,5 @@ export const PROPERTIES: Array<keyof GuidesOptions> = [
     "unit", "zoom", "style", "backgroundColor", "lineColor",
     "container",
     "className",
+    "textColor",
 ];
