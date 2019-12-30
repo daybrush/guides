@@ -2,7 +2,7 @@ import * as React from "react";
 import Ruler from "@scena/react-ruler";
 import { ref, refs, prefixCSS } from "framework-utils";
 import Dragger from "@daybrush/drag";
-import styled, { StylerInterface } from "react-css-styler";
+import styled, { StyledInterface } from "react-css-styled";
 import { GUIDES, GUIDE, DRAGGING, ADDER } from "./consts";
 import { prefix } from "./utils";
 import { hasClass, addClass, removeClass } from "@daybrush/utils";
@@ -90,7 +90,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     public adderElement!: HTMLElement;
     public scrollPos: number = 0;
     public ruler!: Ruler;
-    private manager!: StylerInterface;
+    private manager!: StyledInterface;
     private guidesElement!: HTMLElement;
     private dragger!: Dragger;
     private guideElements: HTMLElement[] = [];

@@ -9,7 +9,7 @@ const defaultOptions = {
         "react": "React",
         "keycon": "KeyController",
         "react-dom": "ReactDOM",
-        "react-css-styler": "styled"
+        "react-css-styled": "styled"
     },
 };
 

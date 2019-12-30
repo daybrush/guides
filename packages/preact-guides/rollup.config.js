@@ -10,7 +10,7 @@ const defaultOptions = {
         "preact": "Preact",
         "preact/compat": "preact/compat",
         "preact-compat": "preact-compat",
-        "preact-css-styler": "preact-css-styler",
+        "preact-css-styled": "preact-css-styled",
         "preact-ruler": "preact-ruler",
         "framework-utils": "framework-utils",
         "@egjs/agent": "eg.Agent",
@@ -24,11 +24,12 @@ const defaultOptions = {
             noReactIs: false,
             usePreactX: true,
             aliasModules: {
-                "react-css-styler": "preact-css-styler",
+                "react-css-styled": "preact-css-styled",
                 "@scena/react-ruler": "preact-ruler",
             },
         }),
     ],
+    sourcemap: false,
 };
 
 export default builder([
