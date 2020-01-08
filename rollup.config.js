@@ -5,6 +5,7 @@ import preact from "rollup-plugin-preact";
 const preactPlugin = preact({
     noPropTypes: true,
     usePreactX: true,
+    resolvePreactCompat: true,
 });
 
 const external = {
@@ -14,10 +15,7 @@ const external = {
     "framework-utils": "framework-utils",
     "@egjs/agent": "eg.Agent",
     "@egjs/children-differ": "eg.ChildrenDiffer",
-    "preact": "preact",
-    "preact/compat": "preact/compat",
-    "preact-guides": "preact-guides",
-    "preact-ruler": "preact-ruler",
+    "css-styled": "css-styled",
 };
 export default builder([
     {

@@ -1,6 +1,6 @@
 {
     "name": "preact-guides",
-    "version": "0.3.1",
+    "version": "0.3.2",
     "description": "A Preact Guides component that can draw ruler and manage guidelines.",
     "main": "./dist/guides.cjs.js",
     "module": "./dist/guides.esm.js",
@@ -47,7 +47,11 @@
     },
     "dependencies": {
         "@scena/react-guides": "^0.3.1",
-        "preact-css-styled": "^0.1.1",
-        "preact-ruler": "^0.1.7"
+        "preact-css-styled": "^0.1.2",
+        "preact-ruler": "^0.2.1"
+    },
+    "peerDependencies": {
+        "preact-ruler": ">=0.2.1",
+        "preact-css-styled": ">=0.1.2"
     }
 }
