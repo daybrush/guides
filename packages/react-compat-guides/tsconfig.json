@@ -8,7 +8,6 @@
     "experimentalDecorators": true,
     "skipLibCheck": true,
     "moduleResolution": "node",
-    "jsx": "react",
     "lib": [
       "es2015",
       "dom"

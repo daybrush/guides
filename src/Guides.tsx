@@ -1,5 +1,6 @@
 import { ref, Properties } from "framework-utils";
-import { h, render } from "preact";
+import * as React from "react";
+import { render } from "react-dom";
 import { PROPERTIES } from "./consts";
 import { GuidesInterface } from "@scena/react-guides/declaration/types";
 import InnerGuides from "./InnerGuides";
@@ -46,12 +47,12 @@ class Guides implements GuidesInterface {
         this.innerGuides.setState(state, callback);
     }
     public destroy() {
-        render("", this.tempElement);
+        render(null, this.tempElement);
         this.tempElement = null;
         this.innerGuides = null;
     }
     private getPreactGuides() {
-        return this.innerGuides.preactGuides;
+        return this.innerGuides.guides;
     }
 }
 

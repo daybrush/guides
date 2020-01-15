@@ -1,34 +1,42 @@
 
 import builder from "@daybrush/builder";
-import preact from "rollup-plugin-preact";
+import compat from "rollup-plugin-react-compat";
 
-const preactPlugin = preact({
-    noPropTypes: true,
-    usePreactX: true,
-    resolvePreactCompat: true,
+
+const reactCompat = compat({
+    useReactCompat: true,
+    aliasModules: {
+        "@scena/react-guides": "react-compat-guides",
+    },
+});
+const resolveReactCompat = compat({
+    useReactCompat: true,
+    resolveCompat: true,
 });
 
 const external = {
+    "react-simple-compat": "react-simple-compat",
+    "react-compat-guides": "react-compat-guides",
     "@egjs/component": "@egjs/component",
     "@daybrush/utils": "@daybrush/utils",
     "@daybrush/drag": "@daybrush/drag",
     "framework-utils": "framework-utils",
     "@egjs/agent": "eg.Agent",
     "@egjs/children-differ": "eg.ChildrenDiffer",
-    "css-styled": "css-styled",
 };
 export default builder([
     {
         name: "Guides",
         input: "src/index.umd.ts",
         output: "./dist/guides.js",
-        plugins: [preactPlugin],
+        plugins: [resolveReactCompat],
+
     },
     {
         name: "Guides",
         input: "src/index.umd.ts",
         output: "./dist/guides.min.js",
-        plugins: [preactPlugin],
+        plugins: [resolveReactCompat],
         uglify: true,
     },
     {
@@ -36,7 +44,7 @@ export default builder([
         output: "./dist/guides.esm.js",
         exports: "named",
         format: "es",
-        plugins: [preactPlugin],
+        plugins: [reactCompat],
         external,
     },
     {
@@ -44,7 +52,7 @@ export default builder([
         output: "./dist/guides.cjs.js",
         exports: "default",
         format: "cjs",
-        plugins: [preactPlugin],
+        plugins: [reactCompat],
         external,
     },
 ]);

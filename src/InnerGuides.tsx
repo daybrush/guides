@@ -1,18 +1,18 @@
-import { Component, h } from "preact";
-import { createPortal } from "preact/compat";
+import * as React from "react";
+import { createPortal } from "react-dom";
 import { ref } from "framework-utils";
-import PreactGuides from "preact-guides";
+import ReactGuides from "@scena/react-guides";
 import { GuidesOptions } from "./types";
 
-export default class InnerGuides extends Component<GuidesOptions, GuidesOptions> {
+export default class InnerGuides extends React.Component<GuidesOptions, GuidesOptions> {
     public state: GuidesOptions = {};
-    public preactGuides: PreactGuides;
+    public guides: ReactGuides;
     constructor(props: GuidesOptions) {
         super(props);
         this.state = this.props;
     }
     public render() {
         const { container, ...state } = this.state;
-        return createPortal(<PreactGuides ref={ref(this, "preactGuides")} {...state} />, container);
+        return createPortal(<ReactGuides ref={ref(this, "guides")} {...state} />, container);
     }
 }

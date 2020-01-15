@@ -1,6 +1,5 @@
 
 import builder from "@daybrush/builder";
-import preact from "rollup-plugin-preact";
 
 export default builder([
     {
