@@ -4,7 +4,7 @@ name: @scena/guides
 license: MIT
 author: Daybrush
 repository: git+https://github.com/daybrush/guides.git
-version: 0.4.2
+version: 0.4.4
 */
 (function () {
     'use strict';
@@ -74,7 +74,7 @@ version: 0.4.2
     license: MIT
     author: Daybrush
     repository: git+https://github.com/daybrush/framework-utils.git
-    version: 0.3.0
+    version: 0.3.4
     */
     function prefixNames(prefix) {
       var classNames = [];
@@ -90,7 +90,9 @@ version: 0.4.2
       }).join(" ");
     }
     function prefixCSS(prefix, css) {
-      return css.replace(/\.([^{,\s\d.]+)/g, "." + prefix + "$1");
+      return css.replace(/([^}{]*){/mg, function (_, selector) {
+        return selector.replace(/\.([^{,\s\d.]+)/g, "." + prefix + "$1") + "{";
+      });
     }
     /* react */
 
@@ -115,30 +117,530 @@ version: 0.4.2
       };
     }
 
-    var n,u,t,i,o,r,f={},e=[],c=/acit|ex(?:s|g|n|p|$)|rph|grid|ows|mnc|ntw|ine[ch]|zoo|^ord/i;function s(n,l){for(var u in l)n[u]=l[u];return n}function a(n){var l=n.parentNode;l&&l.removeChild(n);}function h(n,l,u){var t,i=arguments,o={};for(t in l)"key"!==t&&"ref"!==t&&(o[t]=l[t]);if(arguments.length>3)for(u=[u],t=3;t<arguments.length;t++)u.push(i[t]);if(null!=u&&(o.children=u),"function"==typeof n&&null!=n.defaultProps)for(t in n.defaultProps)void 0===o[t]&&(o[t]=n.defaultProps[t]);return v(n,o,l&&l.key,l&&l.ref)}function v(l,u,t,i){var o={type:l,props:u,key:t,ref:i,__k:null,__:null,__b:0,__e:null,__d:null,__c:null,constructor:void 0};return n.vnode&&n.vnode(o),o}function y(n){return n.children}function d(n,l){this.props=n,this.context=l;}function m(n,l){if(null==l)return n.__?m(n.__,n.__.__k.indexOf(n)+1):null;for(var u;l<n.__k.length;l++)if(null!=(u=n.__k[l])&&null!=u.__e)return u.__e;return "function"==typeof n.type?m(n):null}function w(n){var l,u;if(null!=(n=n.__)&&null!=n.__c){for(n.__e=n.__c.base=null,l=0;l<n.__k.length;l++)if(null!=(u=n.__k[l])&&null!=u.__e){n.__e=n.__c.base=u.__e;break}return w(n)}}function g(l){(!l.__d&&(l.__d=!0)&&1===u.push(l)||i!==n.debounceRendering)&&((i=n.debounceRendering)||t)(k);}function k(){var n,l,t,i,o,r,f;for(u.sort(function(n,l){return l.__v.__b-n.__v.__b});n=u.pop();)n.__d&&(t=void 0,i=void 0,r=(o=(l=n).__v).__e,(f=l.__P)&&(t=[],i=T(f,o,s({},o),l.__n,void 0!==f.ownerSVGElement,null,t,null==r?m(o):r),$(t,o),i!=r&&w(o)));}function _(n,l,u,t,i,o,r,c,s){var h,v,p,y,d,w,g,k=u&&u.__k||e,_=k.length;if(c==f&&(c=null!=o?o[0]:_?m(u,0):null),h=0,l.__k=b(l.__k,function(u){if(null!=u){if(u.__=l,u.__b=l.__b+1,null===(p=k[h])||p&&u.key==p.key&&u.type===p.type)k[h]=void 0;else for(v=0;v<_;v++){if((p=k[v])&&u.key==p.key&&u.type===p.type){k[v]=void 0;break}p=null;}if(y=T(n,u,p=p||f,t,i,o,r,c,s),(v=u.ref)&&p.ref!=v&&(g||(g=[]),p.ref&&g.push(p.ref,null,u),g.push(v,u.__c||y,u)),null!=y){if(null==w&&(w=y),null!=u.__d)y=u.__d,u.__d=null;else if(o==p||y!=c||null==y.parentNode){n:if(null==c||c.parentNode!==n)n.appendChild(y);else{for(d=c,v=0;(d=d.nextSibling)&&v<_;v+=2)if(d==y)break n;n.insertBefore(y,c);}"option"==l.type&&(n.value="");}c=y.nextSibling,"function"==typeof l.type&&(l.__d=y);}}return h++,u}),l.__e=w,null!=o&&"function"!=typeof l.type)for(h=o.length;h--;)null!=o[h]&&a(o[h]);for(h=_;h--;)null!=k[h]&&A(k[h],k[h]);if(g)for(h=0;h<g.length;h++)z(g[h],g[++h],g[++h]);}function b(n,l,u){if(null==u&&(u=[]),null==n||"boolean"==typeof n)l&&u.push(l(null));else if(Array.isArray(n))for(var t=0;t<n.length;t++)b(n[t],l,u);else u.push(l?l("string"==typeof n||"number"==typeof n?v(null,n,null,null):null!=n.__e||null!=n.__c?v(n.type,n.props,n.key,null):n):n);return u}function x(n,l,u,t,i){var o;for(o in u)o in l||P(n,o,null,u[o],t);for(o in l)i&&"function"!=typeof l[o]||"value"===o||"checked"===o||u[o]===l[o]||P(n,o,l[o],u[o],t);}function C(n,l,u){"-"===l[0]?n.setProperty(l,u):n[l]="number"==typeof u&&!1===c.test(l)?u+"px":null==u?"":u;}function P(n,l,u,t,i){var o,r,f,e,c;if(i?"className"===l&&(l="class"):"class"===l&&(l="className"),"key"===l||"children"===l);else if("style"===l)if(o=n.style,"string"==typeof u)o.cssText=u;else{if("string"==typeof t&&(o.cssText="",t=null),t)for(r in t)u&&r in u||C(o,r,"");if(u)for(f in u)t&&u[f]===t[f]||C(o,f,u[f]);}else"o"===l[0]&&"n"===l[1]?(e=l!==(l=l.replace(/Capture$/,"")),c=l.toLowerCase(),l=(c in n?c:l).slice(2),u?(t||n.addEventListener(l,N,e),(n.l||(n.l={}))[l]=u):n.removeEventListener(l,N,e)):"list"!==l&&"tagName"!==l&&"form"!==l&&"type"!==l&&!i&&l in n?n[l]=null==u?"":u:"function"!=typeof u&&"dangerouslySetInnerHTML"!==l&&(l!==(l=l.replace(/^xlink:?/,""))?null==u||!1===u?n.removeAttributeNS("http://www.w3.org/1999/xlink",l.toLowerCase()):n.setAttributeNS("http://www.w3.org/1999/xlink",l.toLowerCase(),u):null==u||!1===u?n.removeAttribute(l):n.setAttribute(l,u));}function N(l){this.l[l.type](n.event?n.event(l):l);}function T(l,u,t,i,o,r,f,e,c){var a,h,v,p,m,w,g,k,x,C,P=u.type;if(void 0!==u.constructor)return null;(a=n.__b)&&a(u);try{n:if("function"==typeof P){if(k=u.props,x=(a=P.contextType)&&i[a.__c],C=a?x?x.props.value:a.__:i,t.__c?g=(h=u.__c=t.__c).__=h.__E:("prototype"in P&&P.prototype.render?u.__c=h=new P(k,C):(u.__c=h=new d(k,C),h.constructor=P,h.render=D),x&&x.sub(h),h.props=k,h.state||(h.state={}),h.context=C,h.__n=i,v=h.__d=!0,h.__h=[]),null==h.__s&&(h.__s=h.state),null!=P.getDerivedStateFromProps&&(h.__s==h.state&&(h.__s=s({},h.__s)),s(h.__s,P.getDerivedStateFromProps(k,h.__s))),p=h.props,m=h.state,v)null==P.getDerivedStateFromProps&&null!=h.componentWillMount&&h.componentWillMount(),null!=h.componentDidMount&&h.__h.push(h.componentDidMount);else{if(null==P.getDerivedStateFromProps&&k!==p&&null!=h.componentWillReceiveProps&&h.componentWillReceiveProps(k,C),!h.__e&&null!=h.shouldComponentUpdate&&!1===h.shouldComponentUpdate(k,h.__s,C)){for(h.props=k,h.state=h.__s,h.__d=!1,h.__v=u,u.__e=t.__e,u.__k=t.__k,h.__h.length&&f.push(h),a=0;a<u.__k.length;a++)u.__k[a]&&(u.__k[a].__=u);break n}null!=h.componentWillUpdate&&h.componentWillUpdate(k,h.__s,C),null!=h.componentDidUpdate&&h.__h.push(function(){h.componentDidUpdate(p,m,w);});}h.context=C,h.props=k,h.state=h.__s,(a=n.__r)&&a(u),h.__d=!1,h.__v=u,h.__P=l,a=h.render(h.props,h.state,h.context),u.__k=b(null!=a&&a.type==y&&null==a.key?a.props.children:a),null!=h.getChildContext&&(i=s(s({},i),h.getChildContext())),v||null==h.getSnapshotBeforeUpdate||(w=h.getSnapshotBeforeUpdate(p,m)),_(l,u,t,i,o,r,f,e,c),h.base=u.__e,h.__h.length&&f.push(h),g&&(h.__E=h.__=null),h.__e=null;}else u.__e=j(t.__e,u,t,i,o,r,f,c);(a=n.diffed)&&a(u);}catch(l){n.__e(l,u,t);}return u.__e}function $(l,u){n.__c&&n.__c(u,l),l.some(function(u){try{l=u.__h,u.__h=[],l.some(function(n){n.call(u);});}catch(l){n.__e(l,u.__v);}});}function j(n,l,u,t,i,o,r,c){var s,a,h,v,p,y=u.props,d=l.props;if(i="svg"===l.type||i,null==n&&null!=o)for(s=0;s<o.length;s++)if(null!=(a=o[s])&&(null===l.type?3===a.nodeType:a.localName===l.type)){n=a,o[s]=null;break}if(null==n){if(null===l.type)return document.createTextNode(d);n=i?document.createElementNS("http://www.w3.org/2000/svg",l.type):document.createElement(l.type),o=null;}if(null===l.type)null!=o&&(o[o.indexOf(n)]=null),y!==d&&n.data!=d&&(n.data=d);else if(l!==u){if(null!=o&&(o=e.slice.call(n.childNodes)),h=(y=u.props||f).dangerouslySetInnerHTML,v=d.dangerouslySetInnerHTML,!c){if(y===f)for(y={},p=0;p<n.attributes.length;p++)y[n.attributes[p].name]=n.attributes[p].value;(v||h)&&(v&&h&&v.__html==h.__html||(n.innerHTML=v&&v.__html||""));}x(n,d,y,i,c),l.__k=l.props.children,v||_(n,l,u,t,"foreignObject"!==l.type&&i,o,r,f,c),c||("value"in d&&void 0!==d.value&&d.value!==n.value&&(n.value=null==d.value?"":d.value),"checked"in d&&void 0!==d.checked&&d.checked!==n.checked&&(n.checked=d.checked));}return n}function z(l,u,t){try{"function"==typeof l?l(u):l.current=u;}catch(l){n.__e(l,t);}}function A(l,u,t){var i,o,r;if(n.unmount&&n.unmount(l),(i=l.ref)&&(i.current&&i.current!==l.__e||z(i,null,u)),t||"function"==typeof l.type||(t=null!=(o=l.__e)),l.__e=l.__d=null,null!=(i=l.__c)){if(i.componentWillUnmount)try{i.componentWillUnmount();}catch(l){n.__e(l,u);}i.base=i.__P=null;}if(i=l.__k)for(r=0;r<i.length;r++)i[r]&&A(i[r],u,t);null!=o&&a(o);}function D(n,l,u){return this.constructor(n,u)}function E(l,u,t){var i,r,c;n.__&&n.__(l,u),r=(i=t===o)?null:t&&t.__k||u.__k,l=h(y,null,[l]),c=[],T(u,(i?u:t||u).__k=l,r||f,f,void 0!==u.ownerSVGElement,t&&!i?[t]:r?null:e.slice.call(u.childNodes),c,t||f,i),$(c,l);}function H(n,l){E(n,l,o);}n={__e:function(n,l){for(var u,t;l=l.__;)if((u=l.__c)&&!u.__)try{if(u.constructor&&null!=u.constructor.getDerivedStateFromError&&(t=!0,u.setState(u.constructor.getDerivedStateFromError(n))),null!=u.componentDidCatch&&(t=!0,u.componentDidCatch(n)),t)return g(u.__E=u)}catch(l){n=l;}throw n}},d.prototype.setState=function(n,l){var u;u=this.__s!==this.state?this.__s:this.__s=s({},this.state),"function"==typeof n&&(n=n(u,this.props)),n&&s(u,n),null!=n&&this.__v&&(this.__e=!1,l&&this.__h.push(l),g(this));},d.prototype.forceUpdate=function(n){this.__v&&(this.__e=!0,n&&this.__h.push(n),g(this));},d.prototype.render=y,u=[],t="function"==typeof Promise?Promise.prototype.then.bind(Promise.resolve()):setTimeout,o=f,r=0;
+    /*
+    Copyright (c) 2019-present NAVER Corp.
+    name: @egjs/list-differ
+    license: MIT
+    author: NAVER Corp.
+    repository: https://github.com/naver/egjs-list-differ
+    version: 1.0.0
+    */
+    /*
+    egjs-list-differ
+    Copyright (c) 2019-present NAVER Corp.
+    MIT license
+    */
+    var PolyMap =
+    /*#__PURE__*/
+    function () {
+      function PolyMap() {
+        this.keys = [];
+        this.values = [];
+      }
 
-    var PROPERTIES = ["setGuides", "type", "width", "height", "rulerStyle", "unit", "zoom", "style", "backgroundColor", "lineColor", "container", "className", "textColor"];
+      var __proto = PolyMap.prototype;
 
-    var u$1,r$1,i$1=[],o$1=n.__r,f$1=n.diffed,c$1=n.__c,e$1=n.unmount;function _$1(){i$1.some(function(n){n.__P&&(n.__H.u.forEach(g$1),n.__H.u.forEach(q),n.__H.u=[]);}),i$1=[];}function g$1(n){n.m&&n.m();}function q(n){var t=n.i();"function"==typeof t&&(n.m=t);}n.__r=function(n){o$1&&o$1(n),(u$1=n.__c).__H&&(u$1.__H.u.forEach(g$1),u$1.__H.u.forEach(q),u$1.__H.u=[]);},n.diffed=function(t){f$1&&f$1(t);var u=t.__c;if(u){var o=u.__H;o&&o.u.length&&(1!==i$1.push(u)&&r$1===n.requestAnimationFrame||((r$1=n.requestAnimationFrame)||function(n){var t,u=function(){clearTimeout(r),cancelAnimationFrame(t),setTimeout(n);},r=setTimeout(u,100);"undefined"!=typeof window&&(t=requestAnimationFrame(u));})(_$1));}},n.__c=function(n,t){t.some(function(n){n.__h.forEach(g$1),n.__h=n.__h.filter(function(n){return !n.i||q(n)});}),c$1&&c$1(n,t);},n.unmount=function(n){e$1&&e$1(n);var t=n.__c;if(t){var u=t.__H;u&&u.t.forEach(function(n){return n.m&&n.m()});}};
+      __proto.get = function (key) {
+        return this.values[this.keys.indexOf(key)];
+      };
 
-    function E$1(n,t){for(var e in t)n[e]=t[e];return n}function w$1(n,t){for(var e in n)if("__source"!==e&&!(e in t))return !0;for(var r in t)if("__source"!==r&&n[r]!==t[r])return !0;return !1}var C$1=function(n){var t,e;function r(t){var e;return (e=n.call(this,t)||this).isPureReactComponent=!0,e}return e=n,(t=r).prototype=Object.create(e.prototype),t.prototype.constructor=t,t.__proto__=e,r.prototype.shouldComponentUpdate=function(n,t){return w$1(this.props,n)||w$1(this.state,t)},r}(d);var A$1=n.vnode;n.vnode=function(n){n.type&&n.type.t&&n.ref&&(n.props.ref=n.ref,n.ref=null),A$1&&A$1(n);};var N$1=n.__e;function R(n){return n&&((n=E$1({},n)).__c=null,n.__k=n.__k&&n.__k.map(R)),n}function M(n){this.__u=0,this.__b=null;}function U(n){var t=n.__.__c;return t&&t.o&&t.o(n)}function j$1(){this.u=null,this.i=null;}n.__e=function(n,t,e){if(n.then)for(var r,o=t;o=o.__;)if((r=o.__c)&&r.l)return r.l(n,t.__c);N$1(n,t,e);},(M.prototype=new d).l=function(n,t){var e=this,r=U(e.__v),o=!1,u=function(){o||(o=!0,r?r(i):i());};t.__c=t.componentWillUnmount,t.componentWillUnmount=function(){u(),t.__c&&t.__c();};var i=function(){--e.__u||(e.__v.__k[0]=e.state.o,e.setState({o:e.__b=null}));};e.__u++||e.setState({o:e.__b=e.__v.__k[0]}),n.then(u,u);},M.prototype.render=function(n,t){return this.__b&&(this.__v.__k[0]=R(this.__b),this.__b=null),[h(d,null,t.o?null:n.children),t.o&&n.fallback]};var z$1=function(n,t,e){if(++e[1]===e[0]&&n.i.delete(t),n.props.revealOrder&&("t"!==n.props.revealOrder[0]||!n.i.size))for(e=n.u;e;){for(;e.length>3;)e.pop()();if(e[1]<e[0])break;n.u=e=e[2];}};(j$1.prototype=new d).o=function(n){var t=this,e=U(t.__v),r=t.i.get(n);return r[0]++,function(o){var u=function(){t.props.revealOrder?(r.push(o),z$1(t,n,r)):o();};e?e(u):u();}},j$1.prototype.render=function(n){this.u=null,this.i=new Map;var t=b(n.children);n.revealOrder&&"b"===n.revealOrder[0]&&t.reverse();for(var e=t.length;e--;)this.i.set(t[e],this.u=[1,0,this.u]);return n.children},j$1.prototype.componentDidUpdate=j$1.prototype.componentDidMount=function(){var n=this;n.i.forEach(function(t,e){z$1(n,e,t);});};var L=function(){function n(){}var t=n.prototype;return t.getChildContext=function(){return this.props.context},t.render=function(n){return n.children},n}();function P$1(n){var t=this,e=n.container,r=h(L,{context:t.context},n.vnode);return t.s&&t.s!==e&&(t.h.parentNode&&t.s.removeChild(t.h),A(t.v),t.p=!1),n.vnode?t.p?(e.__k=t.__k,E(r,e),t.__k=e.__k):(t.h=document.createTextNode(""),H("",e),e.appendChild(t.h),t.p=!0,t.s=e,E(r,e,t.h),t.__k=this.h.__k):t.p&&(t.h.parentNode&&t.s.removeChild(t.h),A(t.v)),t.v=r,t.componentWillUnmount=function(){t.h.parentNode&&t.s.removeChild(t.h),A(t.v);},null}function W(n,t){return h(P$1,{vnode:n,container:t})}var D$1=/^(?:accent|alignment|arabic|baseline|cap|clip|color|fill|flood|font|glyph|horiz|marker|overline|paint|stop|strikethrough|stroke|text|underline|unicode|units|v|vector|vert|word|writing|x)[A-Z]/;d.prototype.isReactComponent={};var T$1="undefined"!=typeof Symbol&&Symbol.for&&Symbol.for("react.element")||60103;var H$1=n.event;function I(n,t){n["UNSAFE_"+t]&&!n[t]&&Object.defineProperty(n,t,{configurable:!1,get:function(){return this["UNSAFE_"+t]},set:function(n){this["UNSAFE_"+t]=n;}});}n.event=function(n){return H$1&&(n=H$1(n)),n.persist=function(){},n.nativeEvent=n};var $$1={configurable:!0,get:function(){return this.class}},q$1=n.vnode;n.vnode=function(n){n.$$typeof=T$1;var t=n.type,e=n.props;if("function"!=typeof t){var r,o,u;for(u in e.defaultValue&&(e.value||0===e.value||(e.value=e.defaultValue),delete e.defaultValue),Array.isArray(e.value)&&e.multiple&&"select"===t&&(b(e.children).forEach(function(n){-1!=e.value.indexOf(n.props.value)&&(n.props.selected=!0);}),delete e.value),e)if(r=D$1.test(u))break;if(r)for(u in o=n.props={},e)o[D$1.test(u)?u.replace(/([A-Z0-9])/,"-$1").toLowerCase():u]=e[u];}(e.class||e.className)&&($$1.enumerable="className"in e,e.className&&(e.class=e.className),Object.defineProperty(e,"className",$$1)),function(t){var e=n.type,r=n.props;if(r&&"string"==typeof e){var o={};for(var u in r)/^on(Ani|Tra|Tou)/.test(u)&&(r[u.toLowerCase()]=r[u],delete r[u]),o[u.toLowerCase()]=u;if(o.ondoubleclick&&(r.ondblclick=r[o.ondoubleclick],delete r[o.ondoubleclick]),o.onbeforeinput&&(r.onbeforeinput=r[o.onbeforeinput],delete r[o.onbeforeinput]),o.onchange&&("textarea"===e||"input"===e.toLowerCase()&&!/^fil|che|ra/i.test(r.type))){var i=o.oninput||"oninput";r[i]||(r[i]=r[o.onchange],delete r[o.onchange]);}}}(),"function"==typeof t&&!t.m&&t.prototype&&(I(t.prototype,"componentWillMount"),I(t.prototype,"componentWillReceiveProps"),I(t.prototype,"componentWillUpdate"),t.m=!0),q$1&&q$1(n);};
+      __proto.set = function (key, value) {
+        var keys = this.keys;
+        var values = this.values;
+        var prevIndex = keys.indexOf(key);
+        var index = prevIndex === -1 ? keys.length : prevIndex;
+        keys[index] = key;
+        values[index] = value;
+      };
+
+      return PolyMap;
+    }();
 
     /*
-    Copyright (c) 2019 Daybrush
-    name: preact-ruler
-    license: MIT
-    author: Daybrush
-    repository: https://github.com/daybrush/ruler/blob/master/packages/preact-ruler
-    version: 0.2.1
+    egjs-list-differ
+    Copyright (c) 2019-present NAVER Corp.
+    MIT license
+    */
+    var HashMap =
+    /*#__PURE__*/
+    function () {
+      function HashMap() {
+        this.object = {};
+      }
+
+      var __proto = HashMap.prototype;
+
+      __proto.get = function (key) {
+        return this.object[key];
+      };
+
+      __proto.set = function (key, value) {
+        this.object[key] = value;
+      };
+
+      return HashMap;
+    }();
+
+    /*
+    egjs-list-differ
+    Copyright (c) 2019-present NAVER Corp.
+    MIT license
+    */
+    var SUPPORT_MAP = typeof Map === "function";
+
+    /*
+    egjs-list-differ
+    Copyright (c) 2019-present NAVER Corp.
+    MIT license
+    */
+    var Link =
+    /*#__PURE__*/
+    function () {
+      function Link() {}
+
+      var __proto = Link.prototype;
+
+      __proto.connect = function (prevLink, nextLink) {
+        this.prev = prevLink;
+        this.next = nextLink;
+        prevLink && (prevLink.next = this);
+        nextLink && (nextLink.prev = this);
+      };
+
+      __proto.disconnect = function () {
+        // In double linked list, diconnect the interconnected relationship.
+        var prevLink = this.prev;
+        var nextLink = this.next;
+        prevLink && (prevLink.next = nextLink);
+        nextLink && (nextLink.prev = prevLink);
+      };
+
+      __proto.getIndex = function () {
+        var link = this;
+        var index = -1;
+
+        while (link) {
+          link = link.prev;
+          ++index;
+        }
+
+        return index;
+      };
+
+      return Link;
+    }();
+
+    /*
+    egjs-list-differ
+    Copyright (c) 2019-present NAVER Corp.
+    MIT license
     */
 
+    function orderChanged(changed, fixed) {
+      // It is roughly in the order of these examples.
+      // 4, 6, 0, 2, 1, 3, 5, 7
+      var fromLinks = []; // 0, 1, 2, 3, 4, 5, 6, 7
+
+      var toLinks = [];
+      changed.forEach(function (_a) {
+        var from = _a[0],
+            to = _a[1];
+        var link = new Link();
+        fromLinks[from] = link;
+        toLinks[to] = link;
+      }); // `fromLinks` are connected to each other by double linked list.
+
+      fromLinks.forEach(function (link, i) {
+        link.connect(fromLinks[i - 1]);
+      });
+      return changed.filter(function (_, i) {
+        return !fixed[i];
+      }).map(function (_a, i) {
+        var from = _a[0],
+            to = _a[1];
+
+        if (from === to) {
+          return [0, 0];
+        }
+
+        var fromLink = fromLinks[from];
+        var toLink = toLinks[to - 1];
+        var fromIndex = fromLink.getIndex(); // Disconnect the link connected to `fromLink`.
+
+        fromLink.disconnect(); // Connect `fromLink` to the right of `toLink`.
+
+        if (!toLink) {
+          fromLink.connect(undefined, fromLinks[0]);
+        } else {
+          fromLink.connect(toLink, toLink.next);
+        }
+
+        var toIndex = fromLink.getIndex();
+        return [fromIndex, toIndex];
+      });
+    }
+
+    var Result =
+    /*#__PURE__*/
+    function () {
+      function Result(prevList, list, added, removed, changed, maintained, changedBeforeAdded, fixed) {
+        this.prevList = prevList;
+        this.list = list;
+        this.added = added;
+        this.removed = removed;
+        this.changed = changed;
+        this.maintained = maintained;
+        this.changedBeforeAdded = changedBeforeAdded;
+        this.fixed = fixed;
+      }
+
+      var __proto = Result.prototype;
+      Object.defineProperty(__proto, "ordered", {
+        get: function () {
+          if (!this.cacheOrdered) {
+            this.caculateOrdered();
+          }
+
+          return this.cacheOrdered;
+        },
+        enumerable: true,
+        configurable: true
+      });
+      Object.defineProperty(__proto, "pureChanged", {
+        get: function () {
+          if (!this.cachePureChanged) {
+            this.caculateOrdered();
+          }
+
+          return this.cachePureChanged;
+        },
+        enumerable: true,
+        configurable: true
+      });
+
+      __proto.caculateOrdered = function () {
+        var ordered = orderChanged(this.changedBeforeAdded, this.fixed);
+        var changed = this.changed;
+        var pureChanged = [];
+        this.cacheOrdered = ordered.filter(function (_a, i) {
+          var from = _a[0],
+              to = _a[1];
+          var _b = changed[i],
+              fromBefore = _b[0],
+              toBefore = _b[1];
+
+          if (from !== to) {
+            pureChanged.push([fromBefore, toBefore]);
+            return true;
+          }
+        });
+        this.cachePureChanged = pureChanged;
+      };
+
+      return Result;
+    }();
+
+    /**
+     *
+     * @memberof eg.ListDiffer
+     * @static
+     * @function
+     * @param - Previous List <ko> 이전 목록 </ko>
+     * @param - List to Update <ko> 업데이트 할 목록 </ko>
+     * @param - This callback function returns the key of the item. <ko> 아이템의 키를 반환하는 콜백 함수입니다.</ko>
+     * @return - Returns the diff between `prevList` and `list` <ko> `prevList`와 `list`의 다른 점을 반환한다.</ko>
+     * @example
+     * import { diff } from "@egjs/list-differ";
+     * // script => eg.ListDiffer.diff
+     * const result = diff([0, 1, 2, 3, 4, 5], [7, 8, 0, 4, 3, 6, 2, 1], e => e);
+     * // List before update
+     * // [1, 2, 3, 4, 5]
+     * console.log(result.prevList);
+     * // Updated list
+     * // [4, 3, 6, 2, 1]
+     * console.log(result.list);
+     * // Index array of values added to `list`
+     * // [0, 1, 5]
+     * console.log(result.added);
+     * // Index array of values removed in `prevList`
+     * // [5]
+     * console.log(result.removed);
+     * // An array of index pairs of `prevList` and `list` with different indexes from `prevList` and `list`
+     * // [[0, 2], [4, 3], [3, 4], [2, 6], [1, 7]]
+     * console.log(result.changed);
+     * // The subset of `changed` and an array of index pairs that moved data directly. Indicate an array of absolute index pairs of `ordered`.(Formatted by: Array<[index of prevList, index of list]>)
+     * // [[4, 3], [3, 4], [2, 6]]
+     * console.log(result.pureChanged);
+     * // An array of index pairs to be `ordered` that can synchronize `list` before adding data. (Formatted by: Array<[prevIndex, nextIndex]>)
+     * // [[4, 1], [4, 2], [4, 3]]
+     * console.log(result.ordered);
+     * // An array of index pairs of `prevList` and `list` that have not been added/removed so data is preserved
+     * // [[0, 2], [4, 3], [3, 4], [2, 6], [1, 7]]
+     * console.log(result.maintained);
+     */
+
+    function diff(prevList, list, findKeyCallback) {
+      var mapClass = SUPPORT_MAP ? Map : findKeyCallback ? HashMap : PolyMap;
+
+      var callback = findKeyCallback || function (e) {
+        return e;
+      };
+
+      var added = [];
+      var removed = [];
+      var maintained = [];
+      var prevKeys = prevList.map(callback);
+      var keys = list.map(callback);
+      var prevKeyMap = new mapClass();
+      var keyMap = new mapClass();
+      var changedBeforeAdded = [];
+      var fixed = [];
+      var removedMap = {};
+      var changed = [];
+      var addedCount = 0;
+      var removedCount = 0; // Add prevKeys and keys to the hashmap.
+
+      prevKeys.forEach(function (key, prevListIndex) {
+        prevKeyMap.set(key, prevListIndex);
+      });
+      keys.forEach(function (key, listIndex) {
+        keyMap.set(key, listIndex);
+      }); // Compare `prevKeys` and `keys` and add them to `removed` if they are not in `keys`.
+
+      prevKeys.forEach(function (key, prevListIndex) {
+        var listIndex = keyMap.get(key); // In prevList, but not in list, it is removed.
+
+        if (typeof listIndex === "undefined") {
+          ++removedCount;
+          removed.push(prevListIndex);
+        } else {
+          removedMap[listIndex] = removedCount;
+        }
+      }); // Compare `prevKeys` and `keys` and add them to `added` if they are not in `prevKeys`.
+
+      keys.forEach(function (key, listIndex) {
+        var prevListIndex = prevKeyMap.get(key); // In list, but not in prevList, it is added.
+
+        if (typeof prevListIndex === "undefined") {
+          added.push(listIndex);
+          ++addedCount;
+        } else {
+          maintained.push([prevListIndex, listIndex]);
+          removedCount = removedMap[listIndex] || 0;
+          changedBeforeAdded.push([prevListIndex - removedCount, listIndex - addedCount]);
+          fixed.push(listIndex === prevListIndex);
+
+          if (prevListIndex !== listIndex) {
+            changed.push([prevListIndex, listIndex]);
+          }
+        }
+      }); // Sort by ascending order of 'to(list's index).
+
+      removed.reverse();
+      return new Result(prevList, list, added, removed, changed, maintained, changedBeforeAdded, fixed);
+    }
+
     /*
-    Copyright (c) 2019 Daybrush
-    name: @scena/react-ruler
+    Copyright (c) 2018 Daybrush
+    @name: @daybrush/utils
     license: MIT
     author: Daybrush
-    repository: https://github.com/daybrush/ruler/blob/master/packages/react-ruler
-    version: 0.2.1
+    repository: https://github.com/daybrush/utils
+    @version 0.10.1
+    */
+    /**
+    * get string "string"
+    * @memberof Consts
+    * @example
+    import {STRING} from "@daybrush/utils";
+
+    console.log(STRING); // "string"
+    */
+
+    var STRING = "string";
+    /**
+    * get string "undefined"
+    * @memberof Consts
+    * @example
+    import {UNDEFINED} from "@daybrush/utils";
+
+    console.log(UNDEFINED); // "undefined"
+    */
+
+    var UNDEFINED = "undefined";
+    /**
+    * Check the type that the value is undefined.
+    * @memberof Utils
+    * @param {string} value - Value to check the type
+    * @return {boolean} true if the type is correct, false otherwise
+    * @example
+    import {isUndefined} from "@daybrush/utils";
+
+    console.log(isUndefined(undefined)); // true
+    console.log(isUndefined("")); // false
+    console.log(isUndefined(1)); // false
+    console.log(isUndefined(null)); // false
+    */
+
+    function isUndefined(value) {
+      return typeof value === UNDEFINED;
+    }
+    /**
+    * Check the type that the value is isArray.
+    * @memberof Utils
+    * @param {string} value - Value to check the type
+    * @return {} true if the type is correct, false otherwise
+    * @example
+    import {isArray} from "@daybrush/utils";
+
+    console.log(isArray([])); // true
+    console.log(isArray({})); // false
+    console.log(isArray(undefined)); // false
+    console.log(isArray(null)); // false
+    */
+
+    function isArray(value) {
+      return Array.isArray(value);
+    }
+    /**
+    * Check the type that the value is string.
+    * @memberof Utils
+    * @param {string} value - Value to check the type
+    * @return {} true if the type is correct, false otherwise
+    * @example
+    import {isString} from "@daybrush/utils";
+
+    console.log(isString("1234")); // true
+    console.log(isString(undefined)); // false
+    console.log(isString(1)); // false
+    console.log(isString(null)); // false
+    */
+
+    function isString(value) {
+      return typeof value === STRING;
+    }
+    /**
+    * divide text by comma.
+    * @memberof Utils
+    * @param {string} text - text to divide
+    * @return {Array} divided texts
+    * @example
+    import {splitComma} from "@daybrush/utils";
+
+    console.log(splitComma("a,b,c,d,e,f,g"));
+    // ["a", "b", "c", "d", "e", "f", "g"]
+    console.log(splitComma("'a,b',c,'d,e',f,g"));
+    // ["'a,b'", "c", "'d,e'", "f", "g"]
+    */
+
+    function splitComma(text) {
+      // divide comma(,)
+      // "[^"]*"|'[^']*'
+      var matches = text.match(/("[^"]*"|'[^']*'|[^,\s()]*\((?:[^()]*|\([^()]*\))*\)[^,\s()]*|[^,])+/g);
+      return matches ? matches.map(function (str) {
+        return str.trim();
+      }) : [];
+    }
+    /**
+    * Checks if the specified class value exists in the element's class attribute.
+    * @memberof DOM
+    * @param element - target
+    * @param className - the class name to search
+    * @return {boolean} return false if the class is not found.
+    * @example
+    import {hasClass} from "@daybrush/utils";
+
+    console.log(hasClass(element, "start")); // true or false
+    */
+
+    function hasClass(element, className) {
+      if (element.classList) {
+        return element.classList.contains(className);
+      }
+
+      return !!element.className.match(new RegExp("(\\s|^)" + className + "(\\s|$)"));
+    }
+    /**
+    * Add the specified class value. If these classe already exist in the element's class attribute they are ignored.
+    * @memberof DOM
+    * @param element - target
+    * @param className - the class name to add
+    * @example
+    import {addClass} from "@daybrush/utils";
+
+    addClass(element, "start");
+    */
+
+    function addClass(element, className) {
+      if (element.classList) {
+        element.classList.add(className);
+      } else {
+        element.className += " " + className;
+      }
+    }
+    /**
+    * Removes the specified class value.
+    * @memberof DOM
+    * @param element - target
+    * @param className - the class name to remove
+    * @example
+    import {removeClass} from "@daybrush/utils";
+
+    removeClass(element, "start");
+    */
+
+    function removeClass(element, className) {
+      if (element.classList) {
+        element.classList.remove(className);
+      } else {
+        var reg = new RegExp("(\\s|^)" + className + "(\\s|$)");
+        element.className = element.className.replace(reg, " ");
+      }
+    }
+    /**
+    * Sets up a function that will be called whenever the specified event is delivered to the target
+    * @memberof DOM
+    * @param - event target
+    * @param - A case-sensitive string representing the event type to listen for.
+    * @param - The object which receives a notification (an object that implements the Event interface) when an event of the specified type occurs
+    * @param - An options object that specifies characteristics about the event listener. The available options are:
+    * @example
+    import {addEvent} from "@daybrush/utils";
+
+    addEvent(el, "click", e => {
+      console.log(e);
+    });
+    */
+
+    function addEvent(el, type, listener, options) {
+      el.addEventListener(type, listener, options);
+    }
+    /**
+    * removes from the EventTarget an event listener previously registered with EventTarget.addEventListener()
+    * @memberof DOM
+    * @param - event target
+    * @param - A case-sensitive string representing the event type to listen for.
+    * @param - The EventListener function of the event handler to remove from the event target.
+    * @example
+    import {addEvent, removeEvent} from "@daybrush/utils";
+    const listener = e => {
+      console.log(e);
+    };
+    addEvent(el, "click", listener);
+    removeEvent(el, "click", listener);
+    */
+
+    function removeEvent(el, type, listener) {
+      el.removeEventListener(type, listener);
+    }
+
+    /*
+    Copyright (c) Daybrush
+    name: react-simple-compat
+    license: MIT
+    author: Daybrush
+    repository: git+https://github.com/daybrush/react-simple-compat.git
+    version: 0.1.1
     */
 
     /*! *****************************************************************************
@@ -178,11 +680,820 @@ version: 0.4.2
 
       d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     }
+    var __assign$1 = function () {
+      __assign$1 = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+          s = arguments[i];
+
+          for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+
+        return t;
+      };
+
+      return __assign$1.apply(this, arguments);
+    };
+    function __rest$1(s, e) {
+      var t = {};
+
+      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
+
+      if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+        if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i])) t[p[i]] = s[p[i]];
+      }
+      return t;
+    }
+    function __spreadArrays() {
+      for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+
+      for (var r = Array(s), k = 0, i = 0; i < il; i++) for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++) r[k] = a[j];
+
+      return r;
+    }
+
+    function isDiff(a, b) {
+      if (a === b) {
+        return false;
+      }
+
+      for (var i in a) {
+        if (!(i in b)) {
+          return true;
+        }
+      }
+
+      for (var i in b) {
+        if (a[i] !== b[i]) {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    function diffObject(a, b) {
+      var keys1 = Object.keys(a);
+      var keys2 = Object.keys(b);
+      var result = diff(keys1, keys2, function (key) {
+        return key;
+      });
+      var added = {};
+      var removed = {};
+      var changed = {};
+      result.added.forEach(function (index) {
+        var name = keys2[index];
+        added[name] = b[name];
+      });
+      result.removed.forEach(function (index) {
+        var name = keys1[index];
+        removed[name] = a[name];
+      });
+      result.maintained.forEach(function (_a) {
+        var index = _a[0];
+        var name = keys1[index];
+        var values = [a[name], b[name]];
+
+        if (a[name] !== b[name]) {
+          changed[name] = values;
+        }
+      });
+      return {
+        added: added,
+        removed: removed,
+        changed: changed
+      };
+    }
+
+    function executeHooks(hooks) {
+      hooks.forEach(function (hook) {
+        hook();
+      });
+    }
+
+    function fillKeys(keys) {
+      var index = 0;
+      return keys.map(function (key) {
+        return key == null ? "$compat" + ++index : "" + key;
+      });
+    }
+
+    function createProvider(el, key) {
+      if (isString(el)) {
+        return new TextProvider("text_" + el, key, null, {});
+      }
+
+      var providerClass = typeof el.type === "string" ? ElementProvider : el.type.prototype.render ? ComponentProvider : FunctionProvider;
+      return new providerClass(el.type, key, el.ref, el.props);
+    }
+
+    function flat(arr) {
+      var arr2 = [];
+      arr.forEach(function (el) {
+        arr2 = arr2.concat(isArray(el) ? flat(el) : el);
+      });
+      return arr2;
+    }
+
+    function getAttributes(props) {
+      var className = props.className,
+          otherProps = __rest$1(props, ["className"]);
+
+      if (className != null) {
+        otherProps.class = className;
+      }
+
+      delete otherProps.style;
+      delete otherProps.children;
+      return otherProps;
+    }
+
+    function fillProps(props, defaultProps) {
+      if (!defaultProps) {
+        return props;
+      }
+
+      for (var name in defaultProps) {
+        if (isUndefined(props[name])) {
+          props[name] = defaultProps[name];
+        }
+      }
+
+      return props;
+    }
+
+    function createElement(type, props) {
+      var children = [];
+
+      for (var _i = 2; _i < arguments.length; _i++) {
+        children[_i - 2] = arguments[_i];
+      }
+
+      var _a = props || {},
+          key = _a.key,
+          ref = _a.ref,
+          otherProps = __rest$1(_a, ["key", "ref"]);
+
+      return {
+        type: type,
+        key: key,
+        ref: ref,
+        props: __assign$1(__assign$1({}, otherProps), {
+          children: flat(children).filter(function (child) {
+            return child != null;
+          })
+        })
+      };
+    }
+
+    var Provider =
+    /*#__PURE__*/
+    function () {
+      function Provider(type, key, ref, props) {
+        if (props === void 0) {
+          props = {};
+        }
+
+        this.type = type;
+        this.key = key;
+        this.ref = ref;
+        this.props = props;
+        this._providers = [];
+      }
+
+      var __proto = Provider.prototype;
+
+      __proto._should = function (nextProps, nextState) {
+        return true;
+      };
+
+      __proto._update = function (hooks, nextElement, nextState, isForceUpdate) {
+        if (this.base && !isString(nextElement) && !isForceUpdate && !this._should(nextElement.props, nextState)) {
+          return false;
+        }
+
+        this.original = nextElement;
+
+        this._setState(nextState); // render
+
+
+        var prevProps = this.props;
+
+        if (!isString(nextElement)) {
+          this.props = nextElement.props;
+          this.ref = nextElement.ref;
+        }
+
+        this._render(hooks, this.base ? prevProps : {}, nextState);
+
+        return true;
+      };
+
+      __proto._mounted = function () {
+        var ref = this.ref;
+        ref && ref(this.base);
+      };
+
+      __proto._setState = function (nextstate) {
+        return;
+      };
+
+      __proto._updated = function () {
+        var ref = this.ref;
+        ref && ref(this.base);
+      };
+
+      __proto._destroy = function () {
+        var ref = this.ref;
+        ref && ref(null);
+      };
+
+      return Provider;
+    }();
+
+    function diffAttributes(attrs1, attrs2, el) {
+      var _a = diffObject(attrs1, attrs2),
+          added = _a.added,
+          removed = _a.removed,
+          changed = _a.changed;
+
+      for (var name in added) {
+        el.setAttribute(name, added[name]);
+      }
+
+      for (var name in changed) {
+        el.setAttribute(name, changed[name][1]);
+      }
+
+      for (var name in removed) {
+        el.removeAttribute(name);
+      }
+    }
+
+    function diffEvents(events1, events2, provier) {
+      var _a = diffObject(events1, events2),
+          added = _a.added,
+          removed = _a.removed,
+          changed = _a.changed;
+
+      for (var name in removed) {
+        provier.removeEventListener(name);
+      }
+
+      for (var name in added) {
+        provier.addEventListener(name, added[name]);
+      }
+
+      for (var name in changed) {
+        provier.removeEventListener(name);
+        provier.addEventListener(name, changed[name][1]);
+      }
+
+      for (var name in removed) {
+        provier.removeEventListener(name);
+      }
+    }
+
+    function diffStyle(style1, style2, el) {
+      var style = el.style;
+
+      var _a = diffObject(style1, style2),
+          added = _a.added,
+          removed = _a.removed,
+          changed = _a.changed;
+
+      for (var name in added) {
+        style[name] = added[name];
+      }
+
+      for (var name in changed) {
+        style[name] = changed[name][1];
+      }
+
+      for (var name in removed) {
+        style[name] = "";
+      }
+    }
+
+    function splitProps(props) {
+      var attributes = {};
+      var events = {};
+
+      for (var name in props) {
+        if (name.indexOf("on") === 0) {
+          events[name.replace("on", "").toLowerCase()] = props[name];
+        } else {
+          attributes[name] = props[name];
+        }
+      }
+
+      return {
+        attributes: attributes,
+        events: events
+      };
+    }
+
+    var TextProvider =
+    /*#__PURE__*/
+    function (_super) {
+      __extends$1(TextProvider, _super);
+
+      function TextProvider() {
+        return _super !== null && _super.apply(this, arguments) || this;
+      }
+
+      var __proto = TextProvider.prototype;
+
+      __proto._render = function (hooks) {
+        var _this = this;
+
+        var isMount = !this.base;
+
+        if (isMount) {
+          this.base = document.createTextNode(this.type.replace("text_", ""));
+        }
+
+        hooks.push(function () {
+          if (isMount) {
+            _this._mounted();
+          } else {
+            _this._updated();
+          }
+        });
+        return true;
+      };
+
+      __proto._unmount = function () {
+        this.base.parentNode.removeChild(this.base);
+      };
+
+      return TextProvider;
+    }(Provider);
+
+    var ElementProvider =
+    /*#__PURE__*/
+    function (_super) {
+      __extends$1(ElementProvider, _super);
+
+      function ElementProvider() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+
+        _this.events = {};
+        return _this;
+      }
+
+      var __proto = ElementProvider.prototype;
+
+      __proto.addEventListener = function (name, callback) {
+        var events = this.events;
+
+        events[name] = function (e) {
+          e.nativeEvent = e;
+          callback(e);
+        };
+
+        this.base.addEventListener(name, events[name]);
+      };
+
+      __proto.removeEventListener = function (name) {
+        var events = this.events;
+        this.base.removeEventListener(name, events[name]);
+        delete events[name];
+      };
+
+      __proto._should = function (nextProps) {
+        return isDiff(this.props, nextProps);
+      };
+
+      __proto._render = function (hooks, prevProps) {
+        var _this = this;
+
+        var isMount = !this.base;
+
+        if (isMount) {
+          this.base = document.createElement(this.type);
+        }
+
+        renderProviders(this.props.children, this._providers, hooks, null, this.base);
+        var base = this.base;
+
+        var _a = splitProps(prevProps),
+            prevAttributes = _a.attributes,
+            prevEvents = _a.events;
+
+        var _b = splitProps(this.props),
+            nextAttributes = _b.attributes,
+            nextEvents = _b.events;
+
+        diffAttributes(getAttributes(prevAttributes), getAttributes(nextAttributes), base);
+        diffEvents(prevEvents, nextEvents, this);
+        diffStyle(prevProps.style || {}, this.props.style || {}, base);
+        hooks.push(function () {
+          if (isMount) {
+            _this._mounted();
+          } else {
+            _this._updated();
+          }
+        });
+        return true;
+      };
+
+      __proto._unmount = function () {
+        var events = this.events;
+        var base = this.base;
+
+        for (var name in events) {
+          base.removeEventListener(name, events[name]);
+        }
+
+        this._providers.forEach(function (provider) {
+          provider._unmount();
+        });
+
+        this.events = {};
+        base.parentNode.removeChild(base);
+      };
+
+      return ElementProvider;
+    }(Provider);
+    function findDOMNode(comp) {
+      if (!comp) {
+        return null;
+      }
+
+      if (comp instanceof Node) {
+        return comp;
+      }
+
+      var providers = comp._provider._providers;
+
+      if (!providers.length) {
+        return null;
+      }
+
+      return findDOMNode(providers[0].base);
+    }
+
+    var FunctionProvider =
+    /*#__PURE__*/
+    function (_super) {
+      __extends$1(FunctionProvider, _super);
+
+      function FunctionProvider() {
+        return _super !== null && _super.apply(this, arguments) || this;
+      }
+
+      var __proto = FunctionProvider.prototype;
+
+      __proto._render = function (hooks) {
+        var template = this.type(this.props);
+        renderProviders(template ? [template] : [], this._providers, hooks);
+        return true;
+      };
+
+      __proto._unmount = function () {
+        this._providers.forEach(function (provider) {
+          provider._unmount();
+        });
+      };
+
+      return FunctionProvider;
+    }(Provider);
+
+    var ComponentProvider =
+    /*#__PURE__*/
+    function (_super) {
+      __extends$1(ComponentProvider, _super);
+
+      function ComponentProvider(type, key, ref, props) {
+        if (props === void 0) {
+          props = {};
+        }
+
+        return _super.call(this, type, key, ref, fillProps(props, type.defaultProps)) || this;
+      }
+
+      var __proto = ComponentProvider.prototype;
+
+      __proto._should = function (nextProps, nextState) {
+        return this.base.shouldComponentUpdate(fillProps(nextProps, this.type.defaultProps), nextState || this.base.state);
+      };
+
+      __proto._render = function (hooks, prevProps, nextState) {
+        var _this = this;
+
+        this.props = fillProps(this.props, this.type.defaultProps);
+        var isMount = !this.base;
+
+        if (isMount) {
+          this.base = new this.type(this.props);
+          this.base._provider = this;
+        } else {
+          this.base.props = this.props;
+        }
+
+        var base = this.base;
+        var prevState = base.state;
+        var template = base.render();
+
+        if (template && template.props && !template.props.children.length) {
+          template.props.children = this.props.children;
+        }
+
+        renderProviders(template ? [template] : [], this._providers, hooks, nextState, null);
+        hooks.push(function () {
+          if (isMount) {
+            _this._mounted();
+
+            base.componentDidMount();
+          } else {
+            _this._updated();
+
+            base.componentDidUpdate(prevProps, prevState);
+          }
+        });
+      };
+
+      __proto._setState = function (nextState) {
+        if (!nextState) {
+          return;
+        }
+
+        var base = this.base;
+        base.state = nextState;
+      };
+
+      __proto._unmount = function () {
+        this._providers.forEach(function (provider) {
+          provider._unmount();
+        });
+
+        this.base.componentWillUnmount();
+      };
+
+      return ComponentProvider;
+    }(Provider);
+
+    var Component =
+    /*#__PURE__*/
+    function () {
+      function Component(props) {
+        if (props === void 0) {
+          props = {};
+        }
+
+        this.props = props;
+        this.state = {};
+      }
+
+      var __proto = Component.prototype;
+
+      __proto.shouldComponentUpdate = function (props, state) {
+        return true;
+      };
+
+      __proto.render = function () {
+        return null;
+      };
+
+      __proto.setState = function (state, callback, isForceUpdate) {
+        var hooks = [];
+        var provider = this._provider;
+        var isUpdate = renderProviders([provider.original], [provider], hooks, __assign$1(__assign$1({}, this.state), state), null, isForceUpdate);
+
+        if (isUpdate) {
+          if (callback) {
+            hooks.push(callback);
+          }
+
+          executeHooks(hooks);
+        }
+      };
+
+      __proto.forceUpdate = function (callback) {
+        this.setState(this.state, callback, true);
+      };
+
+      __proto.componentDidMount = function () {};
+
+      __proto.componentDidUpdate = function (prevProps, prevState) {};
+
+      __proto.componentWillUnmount = function () {};
+
+      return Component;
+    }();
+
+    var PureComponent =
+    /*#__PURE__*/
+    function (_super) {
+      __extends$1(PureComponent, _super);
+
+      function PureComponent() {
+        return _super !== null && _super.apply(this, arguments) || this;
+      }
+
+      var __proto = PureComponent.prototype;
+
+      __proto.shouldComponentUpdate = function (props, state) {
+        return isDiff(this.props, props) || isDiff(this.state, state);
+      };
+
+      return PureComponent;
+    }(Component);
+
+    var _Portal =
+    /*#__PURE__*/
+    function (_super) {
+      __extends$1(_Portal, _super);
+
+      function _Portal() {
+        return _super !== null && _super.apply(this, arguments) || this;
+      }
+
+      var __proto = _Portal.prototype;
+
+      __proto.componentDidMount = function () {
+        var _a = this.props,
+            element = _a.element,
+            container = _a.container;
+        this._portalProvider = renderProvider(element, container);
+      };
+
+      __proto.componentDidUpdate = function () {
+        var _a = this.props,
+            element = _a.element,
+            container = _a.container;
+        this._portalProvider = renderProvider(element, container);
+      };
+
+      __proto.componentWillUnmount = function () {
+        var container = this.props.container;
+        this._portalProvider = null;
+        renderProvider(null, container);
+      };
+
+      return _Portal;
+    }(PureComponent);
+
+    function updateProviders(children, providers, nextState, container) {
+      var hooks = [];
+      renderProviders(children, providers, hooks, nextState, container);
+      executeHooks(hooks);
+    }
+
+    function renderProviders(children, providers, updatedHooks, nextState, container, isForceUpdate) {
+      var childrenKeys = children.map(function (p) {
+        return isString(p) ? null : p.key;
+      });
+      var keys1 = fillKeys(providers.map(function (p) {
+        return p.key;
+      }));
+      var keys2 = fillKeys(childrenKeys);
+      var result = diff(keys1, keys2, function (key) {
+        return key;
+      });
+      result.removed.forEach(function (index) {
+        providers.splice(index, 1)[0]._unmount();
+      });
+      result.ordered.forEach(function (_a) {
+        var from = _a[0],
+            to = _a[1];
+        var childrenProvider = providers.splice(from, 1)[0];
+        providers.splice(to, 0, childrenProvider);
+        var el = findDOMNode(childrenProvider.base);
+        var next = findDOMNode(providers[to + 1] && providers[to + 1].base);
+
+        if (el) {
+          el.parentNode.insertBefore(el, next);
+        }
+      });
+      result.added.forEach(function (index) {
+        providers.splice(index, 0, createProvider(children[index], childrenKeys[index]));
+      });
+      var changed = result.maintained.filter(function (_a) {
+        var _ = _a[0],
+            to = _a[1];
+        var el = children[to];
+        var childProvider = providers[to];
+        var type = isString(el) ? "text_" + el : el.type;
+
+        if (type !== childProvider.type) {
+          childProvider._unmount();
+
+          providers.splice(to, 1, createProvider(el, childrenKeys[to]));
+          return true;
+        }
+
+        return false;
+      });
+      var updated = providers.filter(function (childProvider, i) {
+        var el = children[i];
+        return childProvider._update(updatedHooks, el, nextState, isForceUpdate);
+      });
+
+      if (container) {
+        __spreadArrays(result.added, changed.map(function (_a) {
+          var _ = _a[0],
+              to = _a[1];
+          return to;
+        })).forEach(function (index) {
+          var el = findDOMNode(providers[index].base);
+
+          if (!el) {
+            return;
+          }
+
+          var nextProvider = providers[index + 1];
+
+          if (container !== el && !el.parentNode) {
+            var nextElement = findDOMNode(nextProvider && nextProvider.base);
+            container.insertBefore(el, nextElement && nextElement.parentNode ? nextElement : null);
+          }
+        });
+      }
+
+      return updated.length > 0;
+    }
+    function renderProvider(element, container, provider) {
+      if (provider === void 0) {
+        provider = container.__REACT_COMPAT__;
+      }
+
+      var providers = provider ? [provider] : [];
+      updateProviders(element ? [element] : [], providers, null, container);
+      provider = providers[0];
+      container.__REACT_COMPAT__ = provider;
+      return provider;
+    }
+    function render(element, container, callback) {
+      var provider = container.__REACT_COMPAT__;
+
+      if (element && !provider) {
+        container.innerHTML = "";
+      }
+
+      renderProvider(element, container, provider);
+      callback && callback();
+    }
+    function createPortal(el, container) {
+      return createElement(_Portal, {
+        element: el,
+        container: container
+      });
+    }
+
+    var PROPERTIES = ["setGuides", "type", "width", "height", "rulerStyle", "unit", "zoom", "style", "backgroundColor", "lineColor", "container", "className", "textColor"];
+
+    /*
+    Copyright (c) 2019 Daybrush
+    name: @scena/react-ruler
+    license: MIT
+    author: Daybrush
+    repository: https://github.com/daybrush/ruler/blob/master/packages/react-ruler
+    version: 0.2.1
+    */
+
+    /*! *****************************************************************************
+    Copyright (c) Microsoft Corporation. All rights reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+    this file except in compliance with the License. You may obtain a copy of the
+    License at http://www.apache.org/licenses/LICENSE-2.0
+
+    THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+    WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+    MERCHANTABLITY OR NON-INFRINGEMENT.
+
+    See the Apache Version 2.0 License for specific language governing permissions
+    and limitations under the License.
+    ***************************************************************************** */
+
+    /* global Reflect, Promise */
+    var extendStatics$2 = function (d, b) {
+      extendStatics$2 = Object.setPrototypeOf || {
+        __proto__: []
+      } instanceof Array && function (d, b) {
+        d.__proto__ = b;
+      } || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+      };
+
+      return extendStatics$2(d, b);
+    };
+
+    function __extends$2(d, b) {
+      extendStatics$2(d, b);
+
+      function __() {
+        this.constructor = d;
+      }
+
+      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    }
 
     var Ruler =
     /*#__PURE__*/
     function (_super) {
-      __extends$1(Ruler, _super);
+      __extends$2(Ruler, _super);
 
       function Ruler() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -198,7 +1509,7 @@ version: 0.4.2
       var __proto = Ruler.prototype;
 
       __proto.render = function () {
-        return h("canvas", {
+        return createElement("canvas", {
           ref: ref(this, "canvasElement"),
           style: this.props.style
         });
@@ -320,130 +1631,7 @@ version: 0.4.2
         lineColor: "#777777"
       };
       return Ruler;
-    }(C$1);
-
-    /*
-    Copyright (c) 2018 Daybrush
-    @name: @daybrush/utils
-    license: MIT
-    author: Daybrush
-    repository: https://github.com/daybrush/utils
-    @version 0.10.1
-    */
-    /**
-    * divide text by comma.
-    * @memberof Utils
-    * @param {string} text - text to divide
-    * @return {Array} divided texts
-    * @example
-    import {splitComma} from "@daybrush/utils";
-
-    console.log(splitComma("a,b,c,d,e,f,g"));
-    // ["a", "b", "c", "d", "e", "f", "g"]
-    console.log(splitComma("'a,b',c,'d,e',f,g"));
-    // ["'a,b'", "c", "'d,e'", "f", "g"]
-    */
-
-    function splitComma(text) {
-      // divide comma(,)
-      // "[^"]*"|'[^']*'
-      var matches = text.match(/("[^"]*"|'[^']*'|[^,\s()]*\((?:[^()]*|\([^()]*\))*\)[^,\s()]*|[^,])+/g);
-      return matches ? matches.map(function (str) {
-        return str.trim();
-      }) : [];
-    }
-    /**
-    * Checks if the specified class value exists in the element's class attribute.
-    * @memberof DOM
-    * @param element - target
-    * @param className - the class name to search
-    * @return {boolean} return false if the class is not found.
-    * @example
-    import {hasClass} from "@daybrush/utils";
-
-    console.log(hasClass(element, "start")); // true or false
-    */
-
-    function hasClass(element, className) {
-      if (element.classList) {
-        return element.classList.contains(className);
-      }
-
-      return !!element.className.match(new RegExp("(\\s|^)" + className + "(\\s|$)"));
-    }
-    /**
-    * Add the specified class value. If these classe already exist in the element's class attribute they are ignored.
-    * @memberof DOM
-    * @param element - target
-    * @param className - the class name to add
-    * @example
-    import {addClass} from "@daybrush/utils";
-
-    addClass(element, "start");
-    */
-
-    function addClass(element, className) {
-      if (element.classList) {
-        element.classList.add(className);
-      } else {
-        element.className += " " + className;
-      }
-    }
-    /**
-    * Removes the specified class value.
-    * @memberof DOM
-    * @param element - target
-    * @param className - the class name to remove
-    * @example
-    import {removeClass} from "@daybrush/utils";
-
-    removeClass(element, "start");
-    */
-
-    function removeClass(element, className) {
-      if (element.classList) {
-        element.classList.remove(className);
-      } else {
-        var reg = new RegExp("(\\s|^)" + className + "(\\s|$)");
-        element.className = element.className.replace(reg, " ");
-      }
-    }
-    /**
-    * Sets up a function that will be called whenever the specified event is delivered to the target
-    * @memberof DOM
-    * @param - event target
-    * @param - A case-sensitive string representing the event type to listen for.
-    * @param - The object which receives a notification (an object that implements the Event interface) when an event of the specified type occurs
-    * @param - An options object that specifies characteristics about the event listener. The available options are:
-    * @example
-    import {addEvent} from "@daybrush/utils";
-
-    addEvent(el, "click", e => {
-      console.log(e);
-    });
-    */
-
-    function addEvent(el, type, listener, options) {
-      el.addEventListener(type, listener, options);
-    }
-    /**
-    * removes from the EventTarget an event listener previously registered with EventTarget.addEventListener()
-    * @memberof DOM
-    * @param - event target
-    * @param - A case-sensitive string representing the event type to listen for.
-    * @param - The EventListener function of the event handler to remove from the event target.
-    * @example
-    import {addEvent, removeEvent} from "@daybrush/utils";
-    const listener = e => {
-      console.log(e);
-    };
-    addEvent(el, "click", listener);
-    removeEvent(el, "click", listener);
-    */
-
-    function removeEvent(el, type, listener) {
-      el.removeEventListener(type, listener);
-    }
+    }(PureComponent);
 
     /*
     Copyright (c) 2019 Daybrush
@@ -451,7 +1639,7 @@ version: 0.4.2
     license: MIT
     author: Daybrush
     repository: git+https://github.com/daybrush/drag.git
-    version: 0.11.1
+    version: 0.12.0
     */
 
     /*! *****************************************************************************
@@ -468,8 +1656,8 @@ version: 0.4.2
     See the Apache Version 2.0 License for specific language governing permissions
     and limitations under the License.
     ***************************************************************************** */
-    var __assign$1 = function () {
-      __assign$1 = Object.assign || function __assign(t) {
+    var __assign$2 = function () {
+      __assign$2 = Object.assign || function __assign(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
           s = arguments[i];
 
@@ -479,7 +1667,7 @@ version: 0.4.2
         return t;
       };
 
-      return __assign$1.apply(this, arguments);
+      return __assign$2.apply(this, arguments);
     };
 
     function getPinchDragPosition(clients, prevClients, startClients, startPinchClients) {
@@ -563,9 +1751,16 @@ version: 0.4.2
       };
     }
 
+    /**
+     * You can set up drag events in any browser.
+     */
+
     var Dragger =
     /*#__PURE__*/
     function () {
+      /**
+       *
+       */
       function Dragger(el, options) {
         var _this = this;
 
@@ -588,6 +1783,9 @@ version: 0.4.2
         this.startPinchClients = [];
         this.startDistance = 0;
         this.customDist = [0, 0];
+        /**
+         * @method
+         */
 
         this.onDragStart = function (e) {
           if (!_this.flag && e.cancelable === false) {
@@ -619,9 +1817,10 @@ version: 0.4.2
           var position = getPosition(clients[0], _this.prevClients[0], _this.startClients[0]);
           var _a = _this.options,
               dragstart = _a.dragstart,
-              preventRightClick = _a.preventRightClick;
+              preventRightClick = _a.preventRightClick,
+              preventDefault = _a.preventDefault;
 
-          if (preventRightClick && e.which === 3 || (dragstart && dragstart(__assign$1({
+          if (preventRightClick && e.which === 3 || (dragstart && dragstart(__assign$2({
             datas: _this.datas,
             inputEvent: e
           }, position))) === false) {
@@ -630,7 +1829,7 @@ version: 0.4.2
             _this.flag = false;
           }
 
-          _this.flag && e.preventDefault();
+          _this.flag && preventDefault && e.preventDefault();
         };
 
         this.onDrag = function (e, isScroll) {
@@ -651,7 +1850,7 @@ version: 0.4.2
           }
 
           var drag = _this.options.drag;
-          drag && drag(__assign$1({}, result, {
+          drag && drag(__assign$2({}, result, {
             isScroll: !!isScroll,
             inputEvent: e
           }));
@@ -673,16 +1872,17 @@ version: 0.4.2
           var position = _this.pinchFlag ? getPinchDragPosition(prevClients, prevClients, startClients, _this.startPinchClients) : getPosition(prevClients[0], prevClients[0], startClients[0]);
           _this.startClients = [];
           _this.prevClients = [];
-          dragend && dragend(__assign$1({
+          dragend && dragend(__assign$2({
             datas: _this.datas,
             isDrag: _this.isDrag,
             inputEvent: e
           }, position));
         };
 
-        this.options = __assign$1({
+        this.options = __assign$2({
           container: el,
           preventRightClick: true,
+          preventDefault: true,
           pinchThreshold: 0,
           events: ["touch", "mouse"]
         }, options);
@@ -708,16 +1908,36 @@ version: 0.4.2
           addEvent(container, "touchend", this.onDragEnd, passive);
         }
       }
+      /**
+       *
+       */
+
 
       var __proto = Dragger.prototype;
 
       __proto.isDragging = function () {
         return this.isDrag;
       };
+      /**
+       *
+       */
+
+
+      __proto.isFlag = function () {
+        return this.flag;
+      };
+      /**
+       *
+       */
+
 
       __proto.isPinching = function () {
         return this.isPinch;
       };
+      /**
+       *
+       */
+
 
       __proto.scrollBy = function (deltaX, deltaY, e, isCallDrag) {
         if (isCallDrag === void 0) {
@@ -762,7 +1982,7 @@ version: 0.4.2
         this.movement += Math.sqrt(positionDeltaX * positionDeltaX + positionDeltaY * positionDeltaY);
         this.prevClients = clients;
         this.isDrag = true;
-        return __assign$1({
+        return __assign$2({
           datas: this.datas
         }, position, {
           isScroll: false,
@@ -798,7 +2018,7 @@ version: 0.4.2
         var startClients = this.prevClients;
         var startAverageClient = getAverageClient(startClients);
         var centerPosition = getPosition(startAverageClient, startAverageClient, startAverageClient);
-        pinchstart(__assign$1({
+        pinchstart(__assign$2({
           datas: this.datas,
           touches: getPositions(startClients, startClients, startClients)
         }, centerPosition, {
@@ -822,7 +2042,7 @@ version: 0.4.2
         var startClients = this.startClients;
         var centerPosition = getPosition(getAverageClient(clients), getAverageClient(prevClients), getAverageClient(startClients));
         var distance = getDist(clients);
-        pinch(__assign$1({
+        pinch(__assign$2({
           datas: this.datas,
           touches: getPositions(clients, prevClients, startClients),
           scale: distance / this.startDistance,
@@ -849,7 +2069,7 @@ version: 0.4.2
         var prevClients = this.prevClients;
         var startClients = this.startClients;
         var centerPosition = getPosition(getAverageClient(prevClients), getAverageClient(prevClients), getAverageClient(startClients));
-        pinchend(__assign$1({
+        pinchend(__assign$2({
           datas: this.datas,
           isPinch: isPinch,
           touches: getPositions(prevClients, prevClients, startClients)
@@ -859,6 +2079,10 @@ version: 0.4.2
         this.isPinch = false;
         this.pinchFlag = false;
       };
+      /**
+       *
+       */
+
 
       __proto.unset = function () {
         var el = this.el;
@@ -983,140 +2207,11 @@ version: 0.4.2
 
     /*
     Copyright (c) 2019 Daybrush
-    name: preact-css-styled
-    license: MIT
-    author: Daybrush
-    repository: https://github.com/daybrush/css-styled/tree/master/packages/preact-css-styled
-    version: 0.1.2
-    */
-
-    /*
-    Copyright (c) 2019 Daybrush
     name: react-css-styled
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/css-styled/tree/master/packages/react-css-styled
-    version: 0.1.3
-    */
-
-    /*! *****************************************************************************
-    Copyright (c) Microsoft Corporation. All rights reserved.
-    Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-    this file except in compliance with the License. You may obtain a copy of the
-    License at http://www.apache.org/licenses/LICENSE-2.0
-
-    THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-    WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-    MERCHANTABLITY OR NON-INFRINGEMENT.
-
-    See the Apache Version 2.0 License for specific language governing permissions
-    and limitations under the License.
-    ***************************************************************************** */
-
-    /* global Reflect, Promise */
-    var extendStatics$2 = function (d, b) {
-      extendStatics$2 = Object.setPrototypeOf || {
-        __proto__: []
-      } instanceof Array && function (d, b) {
-        d.__proto__ = b;
-      } || function (d, b) {
-        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-      };
-
-      return extendStatics$2(d, b);
-    };
-
-    function __extends$2(d, b) {
-      extendStatics$2(d, b);
-
-      function __() {
-        this.constructor = d;
-      }
-
-      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    }
-    var __assign$2 = function () {
-      __assign$2 = Object.assign || function __assign(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-          s = arguments[i];
-
-          for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-        }
-
-        return t;
-      };
-
-      return __assign$2.apply(this, arguments);
-    };
-    function __rest$1(s, e) {
-      var t = {};
-
-      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
-
-      if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-        if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i])) t[p[i]] = s[p[i]];
-      }
-      return t;
-    }
-
-    function styled$1(Tag, css) {
-      var injector = styled(css);
-      return (
-        /*#__PURE__*/
-        function (_super) {
-          __extends$2(Styled, _super);
-
-          function Styled() {
-            return _super !== null && _super.apply(this, arguments) || this;
-          }
-
-          Styled.prototype.render = function () {
-            var _a = this.props,
-                _b = _a.className,
-                className = _b === void 0 ? "" : _b,
-                attributes = __rest$1(_a, ["className"]);
-
-            return h(Tag, __assign$2({
-              ref: ref(this, "element"),
-              className: className + " " + injector.className
-            }, attributes));
-          };
-
-          Styled.prototype.componentDidMount = function () {
-            this.injectResult = injector.inject(this.element);
-          };
-
-          Styled.prototype.componentWillUnmount = function () {
-            this.injectResult.destroy();
-            this.injectResult = null;
-          };
-
-          Styled.prototype.getElement = function () {
-            return this.element;
-          };
-
-          return Styled;
-        }(d)
-      );
-    }
-
-    /*
-    Copyright (c) 2019 Daybrush
-    name: preact-guides
-    license: MIT
-    author: Daybrush
-    repository: https://github.com/daybrush/guides/blob/master/packages/preact-guides
-    version: 0.3.2
-    */
-
-    /*
-    Copyright (c) 2019 Daybrush
-    name: @scena/react-guides
-    license: MIT
-    author: Daybrush
-    repository: https://github.com/daybrush/guides/blob/master/packages/react-guides
-    version: 0.3.1
+    version: 0.1.4
     */
 
     /*! *****************************************************************************
@@ -1156,6 +2251,117 @@ version: 0.4.2
 
       d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     }
+    var __assign$3 = function () {
+      __assign$3 = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+          s = arguments[i];
+
+          for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+
+        return t;
+      };
+
+      return __assign$3.apply(this, arguments);
+    };
+    function __rest$2(s, e) {
+      var t = {};
+
+      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
+
+      if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+        if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i])) t[p[i]] = s[p[i]];
+      }
+      return t;
+    }
+
+    function styled$1(Tag, css) {
+      var injector = styled(css);
+      return (
+        /*#__PURE__*/
+        function (_super) {
+          __extends$3(Styled, _super);
+
+          function Styled() {
+            return _super !== null && _super.apply(this, arguments) || this;
+          }
+
+          Styled.prototype.render = function () {
+            var _a = this.props,
+                _b = _a.className,
+                className = _b === void 0 ? "" : _b,
+                attributes = __rest$2(_a, ["className"]);
+
+            return createElement(Tag, __assign$3({
+              ref: ref(this, "element"),
+              className: className + " " + injector.className
+            }, attributes));
+          };
+
+          Styled.prototype.componentDidMount = function () {
+            this.injectResult = injector.inject(this.element);
+          };
+
+          Styled.prototype.componentWillUnmount = function () {
+            this.injectResult.destroy();
+            this.injectResult = null;
+          };
+
+          Styled.prototype.getElement = function () {
+            return this.element;
+          };
+
+          return Styled;
+        }(Component)
+      );
+    }
+
+    /*
+    Copyright (c) 2019 Daybrush
+    name: @scena/react-guides
+    license: MIT
+    author: Daybrush
+    repository: https://github.com/daybrush/guides/blob/master/packages/react-guides
+    version: 0.3.2
+    */
+
+    /*! *****************************************************************************
+    Copyright (c) Microsoft Corporation. All rights reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+    this file except in compliance with the License. You may obtain a copy of the
+    License at http://www.apache.org/licenses/LICENSE-2.0
+
+    THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+    WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+    MERCHANTABLITY OR NON-INFRINGEMENT.
+
+    See the Apache Version 2.0 License for specific language governing permissions
+    and limitations under the License.
+    ***************************************************************************** */
+
+    /* global Reflect, Promise */
+    var extendStatics$4 = function (d, b) {
+      extendStatics$4 = Object.setPrototypeOf || {
+        __proto__: []
+      } instanceof Array && function (d, b) {
+        d.__proto__ = b;
+      } || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+      };
+
+      return extendStatics$4(d, b);
+    };
+
+    function __extends$4(d, b) {
+      extendStatics$4(d, b);
+
+      function __() {
+        this.constructor = d;
+      }
+
+      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    }
 
     function prefix() {
       var classNames = [];
@@ -1178,7 +2384,7 @@ version: 0.4.2
     var Guides =
     /*#__PURE__*/
     function (_super) {
-      __extends$3(Guides, _super);
+      __extends$4(Guides, _super);
 
       function Guides() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1281,11 +2487,11 @@ version: 0.4.2
             backgroundColor = _a.backgroundColor,
             lineColor = _a.lineColor,
             textColor = _a.textColor;
-        return h(GuidesElement, {
+        return createElement(GuidesElement, {
           ref: ref(this, "manager"),
           className: prefix("manager", type) + " " + className,
           style: style
-        }, h(Ruler, {
+        }, createElement(Ruler, {
           ref: ref(this, "ruler"),
           type: type,
           width: width,
@@ -1296,10 +2502,10 @@ version: 0.4.2
           lineColor: lineColor,
           style: rulerStyle,
           textColor: textColor
-        }), h("div", {
+        }), createElement("div", {
           className: GUIDES,
           ref: ref(this, "guidesElement")
-        }, h("div", {
+        }, createElement("div", {
           className: ADDER,
           ref: ref(this, "adderElement")
         }), this.renderGuides()));
@@ -1315,7 +2521,7 @@ version: 0.4.2
         var guides = this.state.guides;
         this.guideElements = [];
         return guides.map(function (pos, i) {
-          return h("div", {
+          return createElement("div", {
             className: prefix("guide", type),
             ref: refs(_this, "guideElements", i),
             key: i,
@@ -1398,7 +2604,7 @@ version: 0.4.2
         }
       };
       return Guides;
-    }(C$1);
+    }(PureComponent);
 
     var InnerGuides =
     /*#__PURE__*/
@@ -1420,13 +2626,13 @@ version: 0.4.2
             container = _a.container,
             state = __rest(_a, ["container"]);
 
-        return W(h(Guides, __assign({
-          ref: ref(this, "preactGuides")
+        return createPortal(createElement(Guides, __assign({
+          ref: ref(this, "guides")
         }, state)), container);
       };
 
       return InnerGuides;
-    }(d);
+    }(Component);
 
     var Guides$1 =
     /*#__PURE__*/
@@ -1437,7 +2643,7 @@ version: 0.4.2
         }
 
         this.tempElement = document.createElement("div");
-        E(h(InnerGuides, __assign({
+        render(createElement(InnerGuides, __assign({
           ref: ref(this, "innerGuides")
         }, options, {
           container: container
@@ -1467,13 +2673,13 @@ version: 0.4.2
       };
 
       __proto.destroy = function () {
-        E("", this.tempElement);
+        render(null, this.tempElement);
         this.tempElement = null;
         this.innerGuides = null;
       };
 
       __proto.getPreactGuides = function () {
-        return this.innerGuides.preactGuides;
+        return this.innerGuides.guides;
       };
 
       Guides = __decorate([Properties(PROPERTIES, function (prototype, property) {
@@ -1491,6 +2697,441 @@ version: 0.4.2
         });
       })], Guides);
       return Guides;
+    }();
+
+    /*
+    Copyright (c) 2019 Daybrush
+    name: @daybrush/drag
+    license: MIT
+    author: Daybrush
+    repository: git+https://github.com/daybrush/drag.git
+    version: 0.11.1
+    */
+
+    /*! *****************************************************************************
+    Copyright (c) Microsoft Corporation. All rights reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+    this file except in compliance with the License. You may obtain a copy of the
+    License at http://www.apache.org/licenses/LICENSE-2.0
+
+    THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+    WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+    MERCHANTABLITY OR NON-INFRINGEMENT.
+
+    See the Apache Version 2.0 License for specific language governing permissions
+    and limitations under the License.
+    ***************************************************************************** */
+    var __assign$4 = function () {
+      __assign$4 = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+          s = arguments[i];
+
+          for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+
+        return t;
+      };
+
+      return __assign$4.apply(this, arguments);
+    };
+
+    function getPinchDragPosition$1(clients, prevClients, startClients, startPinchClients) {
+      var nowCenter = getAverageClient$1(clients);
+      var prevCenter = getAverageClient$1(prevClients);
+      var startCenter = getAverageClient$1(startPinchClients);
+      var pinchClient = getAddClient$1(startPinchClients[0], getMinusClient$1(nowCenter, startCenter));
+      var pinchPrevClient = getAddClient$1(startPinchClients[0], getMinusClient$1(prevCenter, startCenter));
+      return getPosition$1(pinchClient, pinchPrevClient, startClients[0]);
+    }
+    function isMultiTouch$1(e) {
+      return e.touches && e.touches.length >= 2;
+    }
+    function getPositionEvent$1(e) {
+      if (e.touches) {
+        return getClients$1(e.touches);
+      } else {
+        return [getClient$1(e)];
+      }
+    }
+    function getPosition$1(client, prevClient, startClient) {
+      var clientX = client.clientX,
+          clientY = client.clientY;
+      var prevX = prevClient.clientX,
+          prevY = prevClient.clientY;
+      var startX = startClient.clientX,
+          startY = startClient.clientY;
+      var deltaX = clientX - prevX;
+      var deltaY = clientY - prevY;
+      var distX = clientX - startX;
+      var distY = clientY - startY;
+      return {
+        clientX: clientX,
+        clientY: clientY,
+        deltaX: deltaX,
+        deltaY: deltaY,
+        distX: distX,
+        distY: distY
+      };
+    }
+    function getDist$1(clients) {
+      return Math.sqrt(Math.pow(clients[0].clientX - clients[1].clientX, 2) + Math.pow(clients[0].clientY - clients[1].clientY, 2));
+    }
+    function getPositions$1(clients, prevClients, startClients) {
+      return clients.map(function (client, i) {
+        return getPosition$1(client, prevClients[i], startClients[i]);
+      });
+    }
+    function getClients$1(touches) {
+      var length = Math.min(touches.length, 2);
+      var clients = [];
+
+      for (var i = 0; i < length; ++i) {
+        clients.push(getClient$1(touches[i]));
+      }
+
+      return clients;
+    }
+    function getClient$1(e) {
+      return {
+        clientX: e.clientX,
+        clientY: e.clientY
+      };
+    }
+    function getAverageClient$1(clients) {
+      return {
+        clientX: (clients[0].clientX + clients[1].clientX) / 2,
+        clientY: (clients[0].clientY + clients[1].clientY) / 2
+      };
+    }
+    function getAddClient$1(client1, client2) {
+      return {
+        clientX: client1.clientX + client2.clientX,
+        clientY: client1.clientY + client2.clientY
+      };
+    }
+    function getMinusClient$1(client1, client2) {
+      return {
+        clientX: client1.clientX - client2.clientX,
+        clientY: client1.clientY - client2.clientY
+      };
+    }
+
+    var Dragger$1 =
+    /*#__PURE__*/
+    function () {
+      function Dragger(el, options) {
+        var _this = this;
+
+        if (options === void 0) {
+          options = {};
+        }
+
+        this.el = el;
+        this.options = {};
+        this.flag = false;
+        this.pinchFlag = false;
+        this.datas = {};
+        this.isDrag = false;
+        this.isPinch = false;
+        this.isMouse = false;
+        this.isTouch = false;
+        this.prevClients = [];
+        this.startClients = [];
+        this.movement = 0;
+        this.startPinchClients = [];
+        this.startDistance = 0;
+        this.customDist = [0, 0];
+
+        this.onDragStart = function (e) {
+          if (!_this.flag && e.cancelable === false) {
+            return;
+          }
+
+          if (isMultiTouch$1(e)) {
+            if (!_this.flag && e.touches.length !== e.changedTouches.length) {
+              return;
+            }
+
+            if (!_this.pinchFlag) {
+              _this.onPinchStart(e);
+            }
+          }
+
+          if (_this.flag) {
+            return;
+          }
+
+          var clients = _this.startClients[0] ? _this.startClients : getPositionEvent$1(e);
+          _this.customDist = [0, 0];
+          _this.flag = true;
+          _this.isDrag = false;
+          _this.startClients = clients;
+          _this.prevClients = clients;
+          _this.datas = {};
+          _this.movement = 0;
+          var position = getPosition$1(clients[0], _this.prevClients[0], _this.startClients[0]);
+          var _a = _this.options,
+              dragstart = _a.dragstart,
+              preventRightClick = _a.preventRightClick;
+
+          if (preventRightClick && e.which === 3 || (dragstart && dragstart(__assign$4({
+            datas: _this.datas,
+            inputEvent: e
+          }, position))) === false) {
+            _this.startClients = [];
+            _this.prevClients = [];
+            _this.flag = false;
+          }
+
+          _this.flag && e.preventDefault();
+        };
+
+        this.onDrag = function (e, isScroll) {
+          if (!_this.flag) {
+            return;
+          }
+
+          var clients = getPositionEvent$1(e);
+
+          if (_this.pinchFlag) {
+            _this.onPinch(e, clients);
+          }
+
+          var result = _this.move([0, 0], e, clients);
+
+          if (!result || !result.deltaX && !result.deltaY) {
+            return;
+          }
+
+          var drag = _this.options.drag;
+          drag && drag(__assign$4({}, result, {
+            isScroll: !!isScroll,
+            inputEvent: e
+          }));
+        };
+
+        this.onDragEnd = function (e) {
+          if (!_this.flag) {
+            return;
+          }
+
+          if (_this.pinchFlag) {
+            _this.onPinchEnd(e);
+          }
+
+          _this.flag = false;
+          var dragend = _this.options.dragend;
+          var prevClients = _this.prevClients;
+          var startClients = _this.startClients;
+          var position = _this.pinchFlag ? getPinchDragPosition$1(prevClients, prevClients, startClients, _this.startPinchClients) : getPosition$1(prevClients[0], prevClients[0], startClients[0]);
+          _this.startClients = [];
+          _this.prevClients = [];
+          dragend && dragend(__assign$4({
+            datas: _this.datas,
+            isDrag: _this.isDrag,
+            inputEvent: e
+          }, position));
+        };
+
+        this.options = __assign$4({
+          container: el,
+          preventRightClick: true,
+          pinchThreshold: 0,
+          events: ["touch", "mouse"]
+        }, options);
+        var _a = this.options,
+            container = _a.container,
+            events = _a.events;
+        this.isTouch = events.indexOf("touch") > -1;
+        this.isMouse = events.indexOf("mouse") > -1;
+        this.customDist = [0, 0];
+
+        if (this.isMouse) {
+          addEvent(el, "mousedown", this.onDragStart);
+          addEvent(container, "mousemove", this.onDrag);
+          addEvent(container, "mouseup", this.onDragEnd);
+        }
+
+        if (this.isTouch) {
+          var passive = {
+            passive: false
+          };
+          addEvent(el, "touchstart", this.onDragStart, passive);
+          addEvent(container, "touchmove", this.onDrag, passive);
+          addEvent(container, "touchend", this.onDragEnd, passive);
+        }
+      }
+
+      var __proto = Dragger.prototype;
+
+      __proto.isDragging = function () {
+        return this.isDrag;
+      };
+
+      __proto.isPinching = function () {
+        return this.isPinch;
+      };
+
+      __proto.scrollBy = function (deltaX, deltaY, e, isCallDrag) {
+        if (isCallDrag === void 0) {
+          isCallDrag = true;
+        }
+
+        if (!this.flag) {
+          return;
+        }
+
+        this.startClients.forEach(function (client) {
+          client.clientX -= deltaX;
+          client.clientY -= deltaY;
+        });
+        this.prevClients.forEach(function (client) {
+          client.clientX -= deltaX;
+          client.clientY -= deltaY;
+        });
+        isCallDrag && this.onDrag(e, true);
+      };
+
+      __proto.move = function (_a, inputEvent, clients) {
+        var deltaX = _a[0],
+            deltaY = _a[1];
+
+        if (clients === void 0) {
+          clients = this.prevClients;
+        }
+
+        var customDist = this.customDist;
+        var prevClients = this.prevClients;
+        var startClients = this.startClients;
+        var position = this.pinchFlag ? getPinchDragPosition$1(clients, prevClients, startClients, this.startPinchClients) : getPosition$1(clients[0], prevClients[0], startClients[0]);
+        customDist[0] += deltaX;
+        customDist[1] += deltaY;
+        position.deltaX += deltaX;
+        position.deltaY += deltaY;
+        var positionDeltaX = position.deltaX,
+            positionDeltaY = position.deltaY;
+        position.distX += customDist[0];
+        position.distY += customDist[1];
+        this.movement += Math.sqrt(positionDeltaX * positionDeltaX + positionDeltaY * positionDeltaY);
+        this.prevClients = clients;
+        this.isDrag = true;
+        return __assign$4({
+          datas: this.datas
+        }, position, {
+          isScroll: false,
+          inputEvent: inputEvent
+        });
+      };
+
+      __proto.onPinchStart = function (e) {
+        var _a, _b;
+
+        var _c = this.options,
+            pinchstart = _c.pinchstart,
+            pinchThreshold = _c.pinchThreshold;
+
+        if (this.isDrag && this.movement > pinchThreshold) {
+          return;
+        }
+
+        var pinchClients = getClients$1(e.changedTouches);
+        this.pinchFlag = true;
+
+        (_a = this.startClients).push.apply(_a, pinchClients);
+
+        (_b = this.prevClients).push.apply(_b, pinchClients);
+
+        this.startDistance = getDist$1(this.prevClients);
+        this.startPinchClients = this.prevClients.slice();
+
+        if (!pinchstart) {
+          return;
+        }
+
+        var startClients = this.prevClients;
+        var startAverageClient = getAverageClient$1(startClients);
+        var centerPosition = getPosition$1(startAverageClient, startAverageClient, startAverageClient);
+        pinchstart(__assign$4({
+          datas: this.datas,
+          touches: getPositions$1(startClients, startClients, startClients)
+        }, centerPosition, {
+          inputEvent: e
+        }));
+      };
+
+      __proto.onPinch = function (e, clients) {
+        if (!this.flag || !this.pinchFlag) {
+          return;
+        }
+
+        this.isPinch = true;
+        var pinch = this.options.pinch;
+
+        if (!pinch) {
+          return;
+        }
+
+        var prevClients = this.prevClients;
+        var startClients = this.startClients;
+        var centerPosition = getPosition$1(getAverageClient$1(clients), getAverageClient$1(prevClients), getAverageClient$1(startClients));
+        var distance = getDist$1(clients);
+        pinch(__assign$4({
+          datas: this.datas,
+          touches: getPositions$1(clients, prevClients, startClients),
+          scale: distance / this.startDistance,
+          distance: distance
+        }, centerPosition, {
+          inputEvent: e
+        }));
+      };
+
+      __proto.onPinchEnd = function (e) {
+        if (!this.flag || !this.pinchFlag) {
+          return;
+        }
+
+        var isPinch = this.isPinch;
+        this.isPinch = false;
+        this.pinchFlag = false;
+        var pinchend = this.options.pinchend;
+
+        if (!pinchend) {
+          return;
+        }
+
+        var prevClients = this.prevClients;
+        var startClients = this.startClients;
+        var centerPosition = getPosition$1(getAverageClient$1(prevClients), getAverageClient$1(prevClients), getAverageClient$1(startClients));
+        pinchend(__assign$4({
+          datas: this.datas,
+          isPinch: isPinch,
+          touches: getPositions$1(prevClients, prevClients, startClients)
+        }, centerPosition, {
+          inputEvent: e
+        }));
+        this.isPinch = false;
+        this.pinchFlag = false;
+      };
+
+      __proto.unset = function () {
+        var el = this.el;
+        var container = this.options.container;
+
+        if (this.isMouse) {
+          removeEvent(el, "mousedown", this.onDragStart);
+          removeEvent(container, "mousemove", this.onDrag);
+          removeEvent(container, "mouseup", this.onDragEnd);
+        }
+
+        if (this.isTouch) {
+          removeEvent(el, "touchstart", this.onDragStart);
+          removeEvent(container, "touchmove", this.onDrag);
+          removeEvent(container, "touchend", this.onDragEnd);
+        }
+      };
+
+      return Dragger;
     }();
 
     var guides1 = new Guides$1(document.querySelector(".ruler.horizontal"), {
@@ -1516,7 +3157,7 @@ version: 0.4.2
     var scrollX = 0;
     var scrollY = 0;
     var box = document.querySelector(".box");
-    new Dragger(document.body, {
+    new Dragger$1(document.body, {
       dragstart: function (e) {
         if (e.inputEvent.target === box) {
           return false;
