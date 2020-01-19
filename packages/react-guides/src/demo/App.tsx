@@ -7,6 +7,10 @@ import { ref } from "framework-utils";
 import Dragger from "@daybrush/drag";
 
 export default class App extends Component<{}> {
+    public state = {
+        zoom: 1,
+        unit: 50,
+    };
     private scene: Scene = new Scene();
     // private editor!: Editor;
     private guides1: Guides;
@@ -19,6 +23,8 @@ export default class App extends Component<{}> {
             <div className="ruler horizontal">
                 <Guides ref={ref(this, "guides1")}
                     type="horizontal"
+                    zoom={this.state.zoom}
+                    unit={this.state.unit}
                     rulerStyle={{ left: "30px", width: "calc(100% - 30px)", height: "100%" }}
                     setGuides={(guides) => {
                         console.log("horizontal", guides);
@@ -28,6 +34,8 @@ export default class App extends Component<{}> {
             <div className="ruler vertical">
                 <Guides ref={ref(this, "guides2")}
                     type="vertical"
+                    zoom={this.state.zoom}
+                    unit={this.state.unit}
                     rulerStyle={{ top: "30px", height: "calc(100% - 30px)", width: "100%" }}
                     setGuides={(guides) => {
                         console.log("vertical", guides);
@@ -37,6 +45,17 @@ export default class App extends Component<{}> {
             <div className="container">
                 <img src="https://daybrush.com/guides/images/guides.png" width="200" alt="guides" />
                 <p className="dragit">Drag Screen & Rulers!</p>
+                <p><button onClick={() => {
+                    this.setState({
+                        zoom: this.state.zoom / 2,
+                        unit: this.state.unit * 2,
+                    });
+                }}>-</button> / <button onClick={() => {
+                    this.setState({
+                        zoom: this.state.zoom * 2,
+                        unit: this.state.unit / 2,
+                    });
+                }}>+</button></p>
                 <p className="badges">
                     <a href="https://www.npmjs.com/package/svelte-guides" target="_blank">
                         <img src="https://img.shields.io/npm/v/svelte-guides.svg?style=flat-square&color=007acc&label=version"

@@ -10,7 +10,8 @@
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "start": "react-scripts start",
     "build": "rollup -c && npm run declaration && print-sizes ./dist ",
-    "declaration": "rm -rf declaration && tsc -p tsconfig.declaration.json"
+    "declaration": "rm -rf declaration && tsc -p tsconfig.declaration.json",
+    "packages": "pvu --path=../ --update=preact-guides,react-compat-guides --build=preact-guides,react-compat-guides --publish=preact-guides,react-compat-guides"
   },
   "keywords": [
     "scene",
