@@ -13,5 +13,6 @@ export interface GuidesInterface {
     getGuides(): number[];
     scroll(pos: number): void;
     scrollGuides(pos: number): void;
+    loadGuides(guides: number[]): void;
     resize(): void;
 }

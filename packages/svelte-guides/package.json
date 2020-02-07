@@ -1,6 +1,6 @@
 {
     "name": "svelte-guides",
-    "version": "0.3.5",
+    "version": "0.4.2",
     "description": "A Svelte Guides component that can draw ruler and manage guidelines.",
     "main": "./dist/guides.cjs.js",
     "module": "./dist/guides.esm.js",
@@ -34,7 +34,7 @@
         "typescript": "^3.6.4"
     },
     "dependencies": {
-        "@scena/guides": "^0.4.4"
+        "@scena/guides": "^0.5.2"
     },
     "scripts": {
         "build": "rollup -c rollup.build.config.js",

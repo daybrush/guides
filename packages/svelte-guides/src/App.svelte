@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Guides from "./Guides.svelte";
+  import Guides from "./index";
   import { onMount } from "svelte";
   import Dragger from "@daybrush/drag";
 

@@ -1,6 +1,6 @@
 {
   "name": "@scena/react-guides",
-  "version": "0.3.2",
+  "version": "0.4.1",
   "description": "A React Guides component that can draw ruler and manage guidelines.",
   "main": "./dist/guides.cjs.js",
   "module": "./dist/guides.esm.js",
@@ -11,7 +11,10 @@
     "start": "react-scripts start",
     "build": "rollup -c && npm run declaration && print-sizes ./dist ",
     "declaration": "rm -rf declaration && tsc -p tsconfig.declaration.json",
-    "packages": "pvu --path=../ --update=preact-guides,react-compat-guides --build=preact-guides,react-compat-guides --publish=preact-guides,react-compat-guides"
+    "packages": "npm run packages:update && npm run packages:build && npm run packages:publish",
+    "packages:update": "pvu --path=../ --update=preact-guides,react-compat-guides",
+    "packages:build": "pvu --path=../ --build=preact-guides,react-compat-guides",
+    "packages:publish": "pvu --path=../ --publish=preact-guides,react-compat-guides"
   },
   "keywords": [
     "scene",
@@ -41,6 +44,7 @@
     "@types/react-color": "^3.0.1",
     "@types/react-dom": "^16.8.4",
     "print-sizes": "0.0.4",
+    "pvu": "^0.3.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "^3.0.1",

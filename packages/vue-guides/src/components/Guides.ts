@@ -1,11 +1,11 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
-import VanillaGuides, { GuidesInterface, GuidesProps, PROPERTIES } from "@scena/guides";
+import VanillaGuides, { GuidesInterface, GuidesProps, PROPERTIES, METHODS } from "@scena/guides";
+import { withMethods } from "framework-utils";
 import { IObject } from "@daybrush/utils";
 
 @Component({
 })
-export default class Guides extends Vue implements GuidesInterface, GuidesProps {
-
+export default class Guides extends Vue implements GuidesProps {
     @Prop() public className?: string;
     @Prop() public container?: HTMLElement;
     @Prop() public setGuides?: ((guides: number[]) => any) | undefined;
@@ -19,21 +19,10 @@ export default class Guides extends Vue implements GuidesInterface, GuidesProps 
     @Prop() public backgroundColor?: string;
     @Prop() public lineColor?: string;
     @Prop() public textColor?: string;
+    @withMethods(METHODS as any)
     private guides!: VanillaGuides;
     private options!: Partial<GuidesProps>;
 
-    public scroll(scrollPos: number) {
-        this.guides.scroll(scrollPos);
-    }
-    public resize() {
-        this.guides.resize();
-    }
-    public getGuides(): number[] {
-        return this.guides.getGuides();
-    }
-    public scrollGuides(pos: number): void {
-        this.guides.scrollGuides(pos);
-    }
     public setStyle() {
         const el = this.$refs.guidesElement as HTMLElement;
         const elStyle = el.style as any;
@@ -80,3 +69,4 @@ export default class Guides extends Vue implements GuidesInterface, GuidesProps 
         guides && this.setStyle();
     }
 }
+export default interface Guides extends GuidesInterface {}

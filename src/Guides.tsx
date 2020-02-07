@@ -1,11 +1,24 @@
 import { ref, Properties } from "framework-utils";
 import * as React from "react";
 import { render } from "react-dom";
-import { PROPERTIES } from "./consts";
+import { PROPERTIES, METHODS } from "./consts";
 import { GuidesInterface } from "@scena/react-guides/declaration/types";
 import InnerGuides from "./InnerGuides";
 import { GuidesOptions } from "./types";
 
+@Properties(METHODS as any, (prototype, property) => {
+    if (prototype[property]) {
+        return;
+    }
+    prototype[property] = function(...args) {
+        const self = this.getPreactGuides();
+
+        if (!self || !self[property]) {
+            return;
+        }
+        return self[property](...args);
+    };
+})
 @Properties(PROPERTIES, (prototype, property) => {
     Object.defineProperty(prototype, property, {
         get() {
@@ -20,7 +33,7 @@ import { GuidesOptions } from "./types";
         configurable: true,
     });
 })
-class Guides implements GuidesInterface {
+class Guides {
     private tempElement = document.createElement("div");
     private innerGuides!: InnerGuides;
 
@@ -30,18 +43,6 @@ class Guides implements GuidesInterface {
                 {...options} container={container} />,
             this.tempElement,
         );
-    }
-    public scroll(scrollPos: number) {
-        this.getPreactGuides().scroll(scrollPos);
-    }
-    public scrollGuides(scrollPos: number) {
-        this.getPreactGuides().scrollGuides(scrollPos);
-    }
-    public resize() {
-        this.getPreactGuides().resize();
-    }
-    public getGuides() {
-        return this.getPreactGuides().getGuides();
     }
     public setState(state: any, callback?: () => void) {
         this.innerGuides.setState(state, callback);
@@ -55,5 +56,6 @@ class Guides implements GuidesInterface {
         return this.innerGuides.guides;
     }
 }
+interface Guides extends GuidesInterface {}
 
 export default Guides;

@@ -55,17 +55,8 @@
     guides.destroy();
   });
 
-  export function resize() {
-    guides.resize();
-  }
-  export function scroll(scrollPos: number) {
-    guides.scroll(scrollPos);
-  }
-  export function scrollGuides(scrollPos: number) {
-    guides.scrollGuides(scrollPos);
-  }
-  export function getGuides() {
-    return guides.getGuides();
+  export function getInstance() {
+    return guides;
   }
 </script>
 {#if !options.container}

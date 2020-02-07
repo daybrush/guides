@@ -8,3 +8,11 @@ export const PROPERTIES: Array<keyof GuidesOptions> = [
     "className",
     "textColor",
 ];
+
+export const METHODS = [
+    "getGuides",
+    "loadGuides",
+    "scroll",
+    "scrollGuides",
+    "resize",
+] as const;

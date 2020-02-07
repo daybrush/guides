@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, AfterViewInit, ViewChild, ElementRef, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
-import Guides, { GuidesInterface, GuidesProps } from '@scena/guides';
+import Guides, { GuidesProps } from '@scena/guides';
 import { IObject } from '@daybrush/utils';
+import { NgxGuidesInterface } from './ngx-guides.interface';
 
 @Component({
   selector: 'ngx-guides',
@@ -9,7 +10,7 @@ import { IObject } from '@daybrush/utils';
   `,
   styles: []
 })
-export class NgxGuidesComponent implements GuidesInterface, GuidesProps, AfterViewInit, OnChanges, OnDestroy {
+export class NgxGuidesComponent extends NgxGuidesInterface implements GuidesProps, AfterViewInit, OnChanges, OnDestroy {
   @ViewChild('guidesRef', { static: false }) private guidesRef: ElementRef;
   @Input() public className?: string;
   @Input() public type?: 'horizontal' | 'vertical';
@@ -23,19 +24,7 @@ export class NgxGuidesComponent implements GuidesInterface, GuidesProps, AfterVi
   @Input() public textColor?: string;
   @Input() public setGuides?: (guides: number[]) => any;
   @Input() public rulerStyle?: IObject<any>;
-  private guides: Guides;
-  public getGuides(): number[] {
-    return this.guides.getGuides();
-  }
-  public scrollGuides(pos: number): void {
-    this.guides.scrollGuides(pos);
-  }
-  public scroll(scrollPos: number) {
-    this.guides.scroll(scrollPos);
-  }
-  public resize() {
-    this.guides.resize();
-  }
+
   ngOnChanges(changes: SimpleChanges): void {
     const guides = this.guides;
 

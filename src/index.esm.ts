@@ -1,4 +1,4 @@
 import Guides from "./Guides";
 
-export { PROPERTIES } from "./consts";
+export * from "./consts";
 export default Guides;

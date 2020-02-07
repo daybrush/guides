@@ -174,6 +174,11 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     public componentWillUnmount() {
         this.dragger.unset();
     }
+    public loadGuides(guides: number[]) {
+        this.setState({
+            guides,
+        });
+    }
     public getGuides() {
         return this.state.guides;
     }

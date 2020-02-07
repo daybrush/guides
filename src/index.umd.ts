@@ -1,6 +1,7 @@
-import Guides from "./Guides";
-import { PROPERTIES } from "./consts";
+import Guides, * as others from "./index.esm";
 
-(Guides as any).PROPERTIES = PROPERTIES;
+for (const name in others) {
+    (Guides as any)[name] = others[name];
+}
 
 export default Guides;
