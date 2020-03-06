@@ -55,7 +55,7 @@
   "dependencies": {
     "@daybrush/drag": "^0.12.0",
     "@daybrush/utils": "^0.10.1",
-    "@scena/react-ruler": "^0.2.1",
+    "@scena/react-ruler": "^0.3.0",
     "framework-utils": "^0.3.0",
     "react-css-styled": "^0.1.3"
   },
