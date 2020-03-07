@@ -4,7 +4,7 @@ name: @scena/guides
 license: MIT
 author: Daybrush
 repository: git+https://github.com/daybrush/guides.git
-version: 0.5.2
+version: 0.6.0
 */
 (function () {
     'use strict';
@@ -640,7 +640,7 @@ version: 0.5.2
     license: MIT
     author: Daybrush
     repository: git+https://github.com/daybrush/react-simple-compat.git
-    version: 0.1.2
+    version: 0.1.4
     */
 
     /*! *****************************************************************************
@@ -1357,20 +1357,21 @@ version: 0.5.2
         var _a = this.props,
             element = _a.element,
             container = _a.container;
-        this._portalProvider = renderProvider(element, container);
+        this._portalProvider = new ContainerProvider(container);
+        renderProvider(element, container, this._portalProvider);
       };
 
       __proto.componentDidUpdate = function () {
         var _a = this.props,
             element = _a.element,
             container = _a.container;
-        this._portalProvider = renderProvider(element, container);
+        renderProvider(element, container, this._portalProvider);
       };
 
       __proto.componentWillUnmount = function () {
         var container = this.props.container;
+        renderProvider(null, container, this._portalProvider);
         this._portalProvider = null;
-        renderProvider(null, container);
       };
 
       return _Portal;
@@ -1481,12 +1482,18 @@ version: 0.5.2
         provider = container.__REACT_COMPAT__;
       }
 
+      var isProvider = !!provider;
+
       if (!provider) {
         provider = new ContainerProvider(container);
       }
 
       updateProvider(provider, element ? [element] : []);
-      container.__REACT_COMPAT__ = provider;
+
+      if (!isProvider) {
+        container.__REACT_COMPAT__ = provider;
+      }
+
       return provider;
     }
 
@@ -1507,7 +1514,7 @@ version: 0.5.2
       });
     }
 
-    var PROPERTIES = ["setGuides", "type", "width", "height", "rulerStyle", "unit", "zoom", "style", "backgroundColor", "lineColor", "container", "className", "textColor"];
+    var PROPERTIES = ["setGuides", "type", "width", "height", "rulerStyle", "unit", "zoom", "style", "backgroundColor", "lineColor", "snaps", "snapThreshold", "direction", "container", "className", "textColor"];
     var METHODS = ["getGuides", "loadGuides", "scroll", "scrollGuides", "resize"];
 
     /*
@@ -1516,7 +1523,7 @@ version: 0.5.2
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/ruler/blob/master/packages/react-ruler
-    version: 0.2.1
+    version: 0.3.0
     */
 
     /*! *****************************************************************************
@@ -1620,13 +1627,15 @@ version: 0.5.2
             type = _a.type,
             backgroundColor = _a.backgroundColor,
             lineColor = _a.lineColor,
-            textColor = _a.textColor;
+            textColor = _a.textColor,
+            direction = _a.direction;
         var width = this.width;
         var height = this.height;
         var state = this.state;
         state.scrollPos = scrollPos;
         var context = this.canvasContext;
         var isHorizontal = type === "horizontal";
+        var isDirectionStart = direction === "start";
         context.rect(0, 0, width * 2, height * 2);
         context.fillStyle = backgroundColor;
         context.fill();
@@ -1636,6 +1645,11 @@ version: 0.5.2
         context.lineWidth = 1;
         context.font = "10px sans-serif";
         context.fillStyle = textColor;
+
+        if (isDirectionStart) {
+          context.textBaseline = "top";
+        }
+
         context.translate(0.5, 0);
         context.beginPath();
         var size = isHorizontal ? width : height;
@@ -1648,8 +1662,9 @@ version: 0.5.2
           var startPos = ((i + minRange) * unit - scrollPos) * zoom;
 
           if (startPos >= -zoomUnit && startPos < size) {
-            var startX = isHorizontal ? startPos + 3 : width - 18;
-            var startY = isHorizontal ? height - 18 : startPos - 4;
+            var _b = isHorizontal ? [startPos + 3, isDirectionStart ? 17 : height - 17] : [isDirectionStart ? 17 : width - 17, startPos - 4],
+                startX = _b[0],
+                startY = _b[1];
 
             if (isHorizontal) {
               context.fillText("" + (i + minRange) * unit, startX, startY);
@@ -1670,10 +1685,15 @@ version: 0.5.2
             }
 
             var lineSize = j === 0 ? isHorizontal ? height : width : j % 2 === 0 ? 10 : 7;
-            var x1 = isHorizontal ? pos : width - lineSize;
-            var x2 = isHorizontal ? pos : width;
-            var y1 = isHorizontal ? height - lineSize : pos;
-            var y2 = isHorizontal ? height : pos;
+
+            var _c = isHorizontal ? [pos, isDirectionStart ? 0 : height - lineSize] : [isDirectionStart ? 0 : width - lineSize, pos],
+                x1 = _c[0],
+                y1 = _c[1];
+
+            var _d = isHorizontal ? [x1, y1 + lineSize] : [x1 + lineSize, y1],
+                x2 = _d[0],
+                y2 = _d[1];
+
             context.moveTo(x1, y1);
             context.lineTo(x2, y2);
           }
@@ -1689,6 +1709,7 @@ version: 0.5.2
         width: 0,
         height: 0,
         unit: 50,
+        direction: "end",
         style: {
           width: "100%",
           height: "100%"
@@ -2389,7 +2410,7 @@ version: 0.5.2
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/guides/blob/master/packages/react-guides
-    version: 0.4.1
+    version: 0.5.0
     */
 
     /*! *****************************************************************************
@@ -2488,9 +2509,22 @@ version: 0.5.2
           var datas = _a.datas,
               clientX = _a.clientX,
               clientY = _a.clientY;
-          var type = _this.props.type;
+          var _b = _this.props,
+              type = _b.type,
+              zoom = _b.zoom,
+              snaps = _b.snaps,
+              snapThreshold = _b.snapThreshold;
           var isHorizontal = type === "horizontal";
           var nextPos = Math.round((isHorizontal ? clientY : clientX) - datas.offset);
+          var guidePos = Math.round(nextPos / zoom);
+          var guideSnaps = snaps.slice().sort(function (a, b) {
+            return Math.abs(guidePos - a) - Math.abs(guidePos - b);
+          });
+
+          if (guideSnaps.length && Math.abs(guideSnaps[0] - guidePos) < snapThreshold) {
+            nextPos = guideSnaps[0] * zoom;
+          }
+
           datas.target.style.transform = _this.getTranslateName() + "(" + nextPos + "px)";
           return nextPos;
         };
@@ -2522,8 +2556,10 @@ version: 0.5.2
           } else {
             var index = datas.target.getAttribute("data-index");
 
-            if (pos < _this.scrollPos || guides.indexOf(guidePos) > -1) {
+            if (pos < _this.scrollPos) {
               guides.splice(index, 1);
+            } else if (guides.indexOf(guidePos) > -1) {
+              return;
             } else {
               guides[index] = guidePos;
             }
@@ -2553,7 +2589,8 @@ version: 0.5.2
             rulerStyle = _a.rulerStyle,
             backgroundColor = _a.backgroundColor,
             lineColor = _a.lineColor,
-            textColor = _a.textColor;
+            textColor = _a.textColor,
+            direction = _a.direction;
         return createElement(GuidesElement, {
           ref: ref(this, "manager"),
           className: prefix("manager", type) + " " + className,
@@ -2568,7 +2605,8 @@ version: 0.5.2
           backgroundColor: backgroundColor,
           lineColor: lineColor,
           style: rulerStyle,
-          textColor: textColor
+          textColor: textColor,
+          direction: direction
         }), createElement("div", {
           className: GUIDES,
           ref: ref(this, "guidesElement")
@@ -2674,7 +2712,9 @@ version: 0.5.2
         style: {
           width: "100%",
           height: "100%"
-        }
+        },
+        snapThreshold: 0,
+        snaps: []
       };
       return Guides;
     }(PureComponent);
