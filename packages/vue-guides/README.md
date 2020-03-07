@@ -65,25 +65,36 @@ $ npm i vue-guides
 
 ```ts
 
-export interface GuidesProps {
+
+export interface RulerProps {
     type?: "horizontal" | "vertical";
     width?: number;
     height?: number;
     unit?: number;
     zoom?: number;
+    direction?: "start" | "end";
     style?: IObject<any>;
     backgroundColor?: string;
     lineColor?: string;
     textColor?: string;
+}
+
+export interface GuidesProps extends RulerProps {
+    className?: string;
     setGuides?: (guides: number[]) => any;
     rulerStyle?: IObject<any>;
+    snapThreshold?: number;
+    snaps?: number[];
 }
+
 export interface GuidesInterface {
     getGuides(): number[];
     scroll(pos: number): void;
     scrollGuides(pos: number): void;
+    loadGuides(guides: number[]): void;
     resize(): void;
 }
+
 ```
 
 

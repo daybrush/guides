@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, AfterViewInit, ViewChild, ElementRef, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
-import Guides, { GuidesProps } from '@scena/guides';
+import Guides, { GuidesOptions } from '@scena/guides';
 import { IObject } from '@daybrush/utils';
 import { NgxGuidesInterface } from './ngx-guides.interface';
 
@@ -10,7 +10,7 @@ import { NgxGuidesInterface } from './ngx-guides.interface';
   `,
   styles: []
 })
-export class NgxGuidesComponent extends NgxGuidesInterface implements GuidesProps, AfterViewInit, OnChanges, OnDestroy {
+export class NgxGuidesComponent extends NgxGuidesInterface implements GuidesOptions, AfterViewInit, OnChanges, OnDestroy {
   @ViewChild('guidesRef', { static: false }) private guidesRef: ElementRef;
   @Input() public className?: string;
   @Input() public type?: 'horizontal' | 'vertical';
@@ -18,6 +18,9 @@ export class NgxGuidesComponent extends NgxGuidesInterface implements GuidesProp
   @Input() public height?: number;
   @Input() public unit?: number;
   @Input() public zoom?: number;
+  @Input() public direction?: GuidesOptions['direction'];
+  @Input() public snapThreshold?: GuidesOptions['snapThreshold'];
+  @Input() public snaps?: GuidesOptions['snaps'];
   @Input() public style: IObject<any> = { width: '100%', height: '100%' };
   @Input() public backgroundColor?: string;
   @Input() public lineColor?: string;

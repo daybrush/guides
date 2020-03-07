@@ -1,32 +1,22 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
-import VanillaGuides, { GuidesInterface, GuidesProps, PROPERTIES, METHODS } from "@scena/guides";
-import { withMethods } from "framework-utils";
+import VanillaGuides, { GuidesInterface, GuidesProps, PROPERTIES, METHODS, GuidesOptions } from "@scena/guides";
+import { withMethods, Properties } from "framework-utils";
 import { IObject } from "@daybrush/utils";
 
 @Component({
 })
-export default class Guides extends Vue implements GuidesProps {
-    @Prop() public className?: string;
-    @Prop() public container?: HTMLElement;
-    @Prop() public setGuides?: ((guides: number[]) => any) | undefined;
-    @Prop() public rulerStyle?: IObject<any> | undefined;
-    @Prop() public type?: "horizontal" | "vertical";
-    @Prop() public width?: number;
-    @Prop() public height?: number;
-    @Prop() public unit?: number;
-    @Prop() public zoom?: number;
-    @Prop({ default: () => ({ width: "100%", height: "100%" }) }) public style?: IObject<any>;
-    @Prop() public backgroundColor?: string;
-    @Prop() public lineColor?: string;
-    @Prop() public textColor?: string;
+@Properties(PROPERTIES as any, (prototype, name) => {
+    Prop()(prototype, name);
+})
+export default class Guides extends Vue {
     @withMethods(METHODS as any)
     private guides!: VanillaGuides;
-    private options!: Partial<GuidesProps>;
+    private options!: Partial<GuidesOptions>;
 
     public setStyle() {
         const el = this.$refs.guidesElement as HTMLElement;
         const elStyle = el.style as any;
-        const style = this.style;
+        const style = this.style || { width: "100%", height: "100%" };
 
         for (const name in style) {
             if (elStyle[name] === style[name]) {
@@ -69,4 +59,5 @@ export default class Guides extends Vue implements GuidesProps {
         guides && this.setStyle();
     }
 }
-export default interface Guides extends GuidesInterface {}
+
+export default interface Guides extends GuidesInterface, GuidesOptions {}
