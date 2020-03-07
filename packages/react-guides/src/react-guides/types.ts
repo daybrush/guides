@@ -8,6 +8,8 @@ export interface GuidesProps extends RulerProps {
     className?: string;
     setGuides?: (guides: number[]) => any;
     rulerStyle?: IObject<any>;
+    snapThreshold?: number;
+    snaps?: number[];
 }
 export interface GuidesInterface {
     getGuides(): number[];

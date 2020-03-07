@@ -83,6 +83,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         setGuides: () => { },
         zoom: 1,
         style: { width: "100%", height: "100%" },
+        snapThreshold: 0,
+        snaps: [],
     };
     public state: GuidesState = {
         guides: [],
@@ -114,7 +116,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             ref={ref(this, "manager")}
             className={`${prefix("manager", type)} ${className}`}
             style={style}
-            >
+        >
             <Ruler
                 ref={ref(this, "ruler")}
                 type={type}
@@ -216,9 +218,17 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         inputEvent.preventDefault();
     }
     private onDrag = ({ datas, clientX, clientY }: any) => {
-        const type = this.props.type;
+        const { type, zoom, snaps, snapThreshold } = this.props;
         const isHorizontal = type === "horizontal";
-        const nextPos = Math.round((isHorizontal ? clientY : clientX) - datas.offset);
+        let nextPos = Math.round((isHorizontal ? clientY : clientX) - datas.offset);
+        const guidePos = Math.round(nextPos / zoom!);
+        const guideSnaps = snaps!.slice().sort((a, b) => {
+            return Math.abs(guidePos - a) - Math.abs(guidePos - b);
+        });
+
+        if (guideSnaps.length && Math.abs(guideSnaps[0] - guidePos) < snapThreshold!) {
+            nextPos = guideSnaps[0] * zoom!;
+        }
 
         datas.target.style.transform = `${this.getTranslateName()}(${nextPos}px)`;
 
@@ -243,8 +253,10 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         } else {
             const index = datas.target.getAttribute("data-index");
 
-            if (pos < this.scrollPos || guides.indexOf(guidePos) > -1) {
+            if (pos < this.scrollPos) {
                 guides.splice(index, 1);
+            } else if (guides.indexOf(guidePos) > -1) {
+                return;
             } else {
                 guides[index] = guidePos;
             }
