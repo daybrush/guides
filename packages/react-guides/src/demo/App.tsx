@@ -28,7 +28,8 @@ export default class App extends Component<{}> {
                     snapThreshold={5}
                     snaps={[100, 200, 400]}
                     rulerStyle={{ left: "30px", width: "calc(100% - 30px)", height: "100%" }}
-                    setGuides={guides => {
+                    displayDragPos={true}
+                    onChangeGuides={({ guides }) => {
                         console.log("horizontal", guides);
                     }}
                 />
@@ -39,7 +40,8 @@ export default class App extends Component<{}> {
                     zoom={this.state.zoom}
                     unit={this.state.unit}
                     rulerStyle={{ top: "30px", height: "calc(100% - 30px)", width: "100%" }}
-                    setGuides={(guides) => {
+                    displayDragPos={true}
+                    onChangeGuides={({ guides }) => {
                         console.log("vertical", guides);
                     }}
                 />

@@ -4,12 +4,20 @@ import { IObject } from "@daybrush/utils";
 export interface GuidesState {
     guides: number[];
 }
-export interface GuidesProps extends RulerProps {
+export interface GuideOptions extends RulerProps {
     className?: string;
     setGuides?: (guides: number[]) => any;
     rulerStyle?: IObject<any>;
     snapThreshold?: number;
     snaps?: number[];
+    displayDragPos?: boolean;
+    dragPosFormat?: (value: number) => string | number;
+}
+export interface GuidesProps extends GuideOptions {
+    onChangeGuides?: (e: OnChangeGuides) => any;
+}
+export interface OnChangeGuides {
+    guides: number[];
 }
 export interface GuidesInterface {
     getGuides(): number[];
