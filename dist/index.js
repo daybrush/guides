@@ -4,7 +4,7 @@ name: @scena/guides
 license: MIT
 author: Daybrush
 repository: git+https://github.com/daybrush/guides.git
-version: 0.6.0
+version: 0.7.0
 */
 (function () {
     'use strict';
@@ -542,6 +542,24 @@ version: 0.6.0
       }) : [];
     }
     /**
+    * transform strings to camel-case
+    * @memberof Utils
+    * @param {String} text - string
+    * @return {String} camel-case string
+    * @example
+    import {camelize} from "@daybrush/utils";
+
+    console.log(camelize("transform-origin")); // transformOrigin
+    console.log(camelize("abcd_efg")); // abcdEfg
+    console.log(camelize("abcd efg")); // abcdEfg
+    */
+
+    function camelize(str) {
+      return str.replace(/[\s-_]([a-z])/g, function (all, letter) {
+        return letter.toUpperCase();
+      });
+    }
+    /**
     * Checks if the specified class value exists in the element's class attribute.
     * @memberof DOM
     * @param element - target
@@ -640,7 +658,7 @@ version: 0.6.0
     license: MIT
     author: Daybrush
     repository: git+https://github.com/daybrush/react-simple-compat.git
-    version: 0.1.4
+    version: 0.1.6
     */
 
     /*! *****************************************************************************
@@ -839,7 +857,7 @@ version: 0.6.0
         ref: ref,
         props: __assign$1(__assign$1({}, otherProps), {
           children: flat(children).filter(function (child) {
-            return child != null;
+            return child != null && child !== false;
           })
         })
       };
@@ -964,15 +982,27 @@ version: 0.6.0
           changed = _a.changed;
 
       for (var name in added) {
-        style[name] = added[name];
+        if (style.setProperty) {
+          style.setProperty(name, added[name]);
+        } else {
+          style[name] = added[name];
+        }
       }
 
       for (var name in changed) {
-        style[name] = changed[name][1];
+        if (style.setProperty) {
+          style.setProperty(name, changed[name][1]);
+        } else {
+          style[name] = changed[name][1];
+        }
       }
 
       for (var name in removed) {
-        style[name] = "";
+        if (style.removeProperty) {
+          style.removeProperty(name);
+        } else {
+          style[name] = "";
+        }
       }
     }
 
@@ -1514,8 +1544,9 @@ version: 0.6.0
       });
     }
 
-    var PROPERTIES = ["setGuides", "type", "width", "height", "rulerStyle", "unit", "zoom", "style", "backgroundColor", "lineColor", "snaps", "snapThreshold", "direction", "container", "className", "textColor"];
+    var PROPERTIES = ["setGuides", "type", "width", "height", "rulerStyle", "unit", "zoom", "style", "backgroundColor", "lineColor", "snaps", "snapThreshold", "direction", "container", "className", "textColor", "displayDragPos", "dragPosFormat"];
     var METHODS = ["getGuides", "loadGuides", "scroll", "scrollGuides", "resize"];
+    var EVENTS = ["changeGuides"];
 
     /*
     Copyright (c) 2019 Daybrush
@@ -2410,7 +2441,7 @@ version: 0.6.0
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/guides/blob/master/packages/react-guides
-    version: 0.5.0
+    version: 0.6.0
     */
 
     /*! *****************************************************************************
@@ -2466,8 +2497,10 @@ version: 0.6.0
     var GUIDES = prefix("guides");
     var GUIDE = prefix("guide");
     var DRAGGING = prefix("dragging");
+    var DISPLAY_DRAG = prefix("display-drag");
+    var GUIDES_CSS = prefixCSS("scena-", "\n{\n    position: relative;\n}\ncanvas {\n    position: relative;\n}\n.guides {\n    position: absolute;\n    top: 0;\n    left: 0;\n    will-change: transform;\n    z-index: 2000;\n}\n.display-drag {\n    position: absolute;\n    will-change: transform;\n    z-index: 2000;\n    font-weight: bold;\n    font-size: 12px;\n    display: none;\n    left: 20px;\n    top: -20px;\n    color: #f33;\n}\n:host.horizontal .guides {\n    width: 100%;\n    height: 0;\n    top: 30px;\n}\n:host.vertical .guides {\n    height: 100%;\n    width: 0;\n    left: 30px;\n}\n.guide {\n    position: absolute;\n    background: #f33;\n    z-index: 2;\n}\n.guide.dragging:before {\n    position: absolute;\n    content: \"\";\n    width: 100%;\n    height: 100%;\n    top: 50%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n}\n:host.horizontal .guide {\n    width: 100%;\n    height: 1px;\n    cursor: row-resize;\n}\n:host.vertical .guide {\n    width: 1px;\n    height: 100%;\n    cursor: col-resize;\n}\n.mobile :host.horizontal .guide {\n    transform: scale(1, 2);\n}\n.mobile :host.vertical .guide {\n    transform: scale(2, 1);\n}\n:host.horizontal .guide:before {\n    height: 20px;\n}\n:host.vertical .guide:before {\n    width: 20px;\n}\n.adder {\n    display: none;\n}\n.adder.dragging {\n    display: block;\n}\n");
 
-    var GuidesElement = styled$1("div", prefixCSS("scena-", "\n{\n    position: relative;\n}\ncanvas {\n    position: relative;\n}\n.guides {\n    position: absolute;\n    top: 0;\n    left: 0;\n    will-change: transform;\n    z-index: 2000;\n}\n:host.horizontal .guides {\n    width: 100%;\n    height: 0;\n    top: 30px;\n}\n:host.vertical .guides {\n    height: 100%;\n    width: 0;\n    left: 30px;\n}\n.guide {\n    position: absolute;\n    background: #f33;\n    z-index: 2;\n}\n.guide.dragging:before {\n    position: absolute;\n    content: \"\";\n    width: 100%;\n    height: 100%;\n    top: 50%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n}\n:host.horizontal .guide {\n    width: 100%;\n    height: 1px;\n    cursor: row-resize;\n}\n:host.vertical .guide {\n    width: 1px;\n    height: 100%;\n    cursor: col-resize;\n}\n.mobile :host.horizontal .guide {\n    transform: scale(1, 2);\n}\n.mobile :host.vertical .guide {\n    transform: scale(2, 1);\n}\n:host.horizontal .guide:before {\n    height: 20px;\n}\n:host.vertical .guide:before {\n    width: 20px;\n}\n.adder {\n    display: none;\n}\n.adder.dragging {\n    display: block;\n}\n"));
+    var GuidesElement = styled$1("div", GUIDES_CSS);
 
     var Guides =
     /*#__PURE__*/
@@ -2492,6 +2525,7 @@ version: 0.6.0
 
           var rect = _this.guidesElement.getBoundingClientRect();
 
+          datas.rect = rect;
           datas.offset = isHorizontal ? rect.top : rect.left;
           addClass(datas.target, DRAGGING);
 
@@ -2513,7 +2547,9 @@ version: 0.6.0
               type = _b.type,
               zoom = _b.zoom,
               snaps = _b.snaps,
-              snapThreshold = _b.snapThreshold;
+              snapThreshold = _b.snapThreshold,
+              displayDragPos = _b.displayDragPos,
+              dragPosFormat = _b.dragPosFormat;
           var isHorizontal = type === "horizontal";
           var nextPos = Math.round((isHorizontal ? clientY : clientX) - datas.offset);
           var guidePos = Math.round(nextPos / zoom);
@@ -2523,6 +2559,15 @@ version: 0.6.0
 
           if (guideSnaps.length && Math.abs(guideSnaps[0] - guidePos) < snapThreshold) {
             nextPos = guideSnaps[0] * zoom;
+          }
+
+          if (displayDragPos) {
+            var rect = datas.rect;
+            var displayPos = type === "horizontal" ? [clientX - rect.left, guidePos] : [guidePos, clientY - rect.top];
+            _this.displayElement.style.cssText += "display: block;transform: translate(-50%, -50%) translate(" + displayPos.map(function (v) {
+              return v + "px";
+            }).join(", ") + ")";
+            _this.displayElement.innerHTML = "" + dragPosFormat(guidePos);
           }
 
           datas.target.style.transform = _this.getTranslateName() + "(" + nextPos + "px)";
@@ -2541,8 +2586,17 @@ version: 0.6.0
           });
 
           var guides = _this.state.guides;
-          var setGuides = _this.props.setGuides;
-          var guidePos = Math.round(pos / _this.props.zoom);
+          var _b = _this.props,
+              setGuides = _b.setGuides,
+              onChangeGuides = _b.onChangeGuides,
+              zoom = _b.zoom,
+              displayDragPos = _b.displayDragPos;
+          var guidePos = Math.round(pos / zoom);
+
+          if (displayDragPos) {
+            _this.displayElement.style.cssText += "display: none;";
+          }
+
           removeClass(datas.target, DRAGGING);
 
           if (datas.fromRuler) {
@@ -2550,6 +2604,9 @@ version: 0.6.0
               _this.setState({
                 guides: guides.concat([guidePos])
               }, function () {
+                onChangeGuides({
+                  guides: _this.state.guides
+                });
                 setGuides(_this.state.guides);
               });
             }
@@ -2590,7 +2647,8 @@ version: 0.6.0
             backgroundColor = _a.backgroundColor,
             lineColor = _a.lineColor,
             textColor = _a.textColor,
-            direction = _a.direction;
+            direction = _a.direction,
+            displayDragPos = _a.displayDragPos;
         return createElement(GuidesElement, {
           ref: ref(this, "manager"),
           className: prefix("manager", type) + " " + className,
@@ -2610,7 +2668,10 @@ version: 0.6.0
         }), createElement("div", {
           className: GUIDES,
           ref: ref(this, "guidesElement")
-        }, createElement("div", {
+        }, displayDragPos ? createElement("div", {
+          className: DISPLAY_DRAG,
+          ref: ref(this, "displayElement")
+        }) : null, createElement("div", {
           className: ADDER,
           ref: ref(this, "adderElement")
         }), this.renderGuides()));
@@ -2713,8 +2774,13 @@ version: 0.6.0
           width: "100%",
           height: "100%"
         },
-        snapThreshold: 0,
-        snaps: []
+        snapThreshold: 5,
+        snaps: [],
+        onChangeGuides: function () {},
+        displayDragPos: false,
+        dragPosFormat: function (v) {
+          return v;
+        }
       };
       return Guides;
     }(PureComponent);
@@ -2747,20 +2813,320 @@ version: 0.6.0
       return InnerGuides;
     }(Component);
 
-    var Guides$1 =
+    /*
+    Copyright (c) 2017 NAVER Corp.
+    @egjs/component project is licensed under the MIT license
+
+    @egjs/component JavaScript library
+    https://naver.github.io/egjs-component
+
+    @version 2.1.2
+    */
+    /**
+     * Copyright (c) 2015 NAVER Corp.
+     * egjs projects are licensed under the MIT license
+     */
+    function isUndefined$1(value) {
+      return typeof value === "undefined";
+    }
+    /**
+     * A class used to manage events in a component
+     * @ko 컴포넌트의 이벤트을 관리할 수 있게 하는 클래스
+     * @alias eg.Component
+     */
+
+
+    var Component$1 =
     /*#__PURE__*/
     function () {
+      var Component =
+      /*#__PURE__*/
+      function () {
+        /**
+        * Version info string
+        * @ko 버전정보 문자열
+        * @name VERSION
+        * @static
+        * @type {String}
+        * @example
+        * eg.Component.VERSION;  // ex) 2.0.0
+        * @memberof eg.Component
+        */
+
+        /**
+         * @support {"ie": "7+", "ch" : "latest", "ff" : "latest",  "sf" : "latest", "edge" : "latest", "ios" : "7+", "an" : "2.1+ (except 3.x)"}
+         */
+        function Component() {
+          this._eventHandler = {};
+          this.options = {};
+        }
+        /**
+         * Triggers a custom event.
+         * @ko 커스텀 이벤트를 발생시킨다
+         * @param {String} eventName The name of the custom event to be triggered <ko>발생할 커스텀 이벤트의 이름</ko>
+         * @param {Object} customEvent Event data to be sent when triggering a custom event <ko>커스텀 이벤트가 발생할 때 전달할 데이터</ko>
+         * @return {Boolean} Indicates whether the event has occurred. If the stop() method is called by a custom event handler, it will return false and prevent the event from occurring. <a href="https://github.com/naver/egjs-component/wiki/How-to-make-Component-event-design%3F">Ref</a> <ko>이벤트 발생 여부. 커스텀 이벤트 핸들러에서 stop() 메서드를 호출하면 'false'를 반환하고 이벤트 발생을 중단한다. <a href="https://github.com/naver/egjs-component/wiki/How-to-make-Component-event-design%3F">참고</a></ko>
+         * @example
+        class Some extends eg.Component {
+         some(){
+         	if(this.trigger("beforeHi")){ // When event call to stop return false.
+        	this.trigger("hi");// fire hi event.
+         	}
+         }
+        }
+        const some = new Some();
+        some.on("beforeHi", (e) => {
+        if(condition){
+        	e.stop(); // When event call to stop, `hi` event not call.
+        }
+        });
+        some.on("hi", (e) => {
+        // `currentTarget` is component instance.
+        console.log(some === e.currentTarget); // true
+        });
+        // If you want to more know event design. You can see article.
+        // https://github.com/naver/egjs-component/wiki/How-to-make-Component-event-design%3F
+         */
+
+
+        var _proto = Component.prototype;
+
+        _proto.trigger = function trigger(eventName, customEvent) {
+          if (customEvent === void 0) {
+            customEvent = {};
+          }
+
+          var handlerList = this._eventHandler[eventName] || [];
+          var hasHandlerList = handlerList.length > 0;
+
+          if (!hasHandlerList) {
+            return true;
+          } // If detach method call in handler in first time then handler list calls.
+
+
+          handlerList = handlerList.concat();
+          customEvent.eventType = eventName;
+          var isCanceled = false;
+          var arg = [customEvent];
+          var i = 0;
+
+          customEvent.stop = function () {
+            isCanceled = true;
+          };
+
+          customEvent.currentTarget = this;
+
+          for (var _len = arguments.length, restParam = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+            restParam[_key - 2] = arguments[_key];
+          }
+
+          if (restParam.length >= 1) {
+            arg = arg.concat(restParam);
+          }
+
+          for (i = 0; handlerList[i]; i++) {
+            handlerList[i].apply(this, arg);
+          }
+
+          return !isCanceled;
+        };
+        /**
+         * Executed event just one time.
+         * @ko 이벤트가 한번만 실행된다.
+         * @param {eventName} eventName The name of the event to be attached <ko>등록할 이벤트의 이름</ko>
+         * @param {Function} handlerToAttach The handler function of the event to be attached <ko>등록할 이벤트의 핸들러 함수</ko>
+         * @return {eg.Component} An instance of a component itself<ko>컴포넌트 자신의 인스턴스</ko>
+         * @example
+        class Some extends eg.Component {
+         hi() {
+           alert("hi");
+         }
+         thing() {
+           this.once("hi", this.hi);
+         }
+        }
+        var some = new Some();
+        some.thing();
+        some.trigger("hi");
+        // fire alert("hi");
+        some.trigger("hi");
+        // Nothing happens
+         */
+
+
+        _proto.once = function once(eventName, handlerToAttach) {
+          if (typeof eventName === "object" && isUndefined$1(handlerToAttach)) {
+            var eventHash = eventName;
+            var i;
+
+            for (i in eventHash) {
+              this.once(i, eventHash[i]);
+            }
+
+            return this;
+          } else if (typeof eventName === "string" && typeof handlerToAttach === "function") {
+            var self = this;
+            this.on(eventName, function listener() {
+              for (var _len2 = arguments.length, arg = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+                arg[_key2] = arguments[_key2];
+              }
+
+              handlerToAttach.apply(self, arg);
+              self.off(eventName, listener);
+            });
+          }
+
+          return this;
+        };
+        /**
+         * Checks whether an event has been attached to a component.
+         * @ko 컴포넌트에 이벤트가 등록됐는지 확인한다.
+         * @param {String} eventName The name of the event to be attached <ko>등록 여부를 확인할 이벤트의 이름</ko>
+         * @return {Boolean} Indicates whether the event is attached. <ko>이벤트 등록 여부</ko>
+         * @example
+        class Some extends eg.Component {
+         some() {
+           this.hasOn("hi");// check hi event.
+         }
+        }
+         */
+
+
+        _proto.hasOn = function hasOn(eventName) {
+          return !!this._eventHandler[eventName];
+        };
+        /**
+         * Attaches an event to a component.
+         * @ko 컴포넌트에 이벤트를 등록한다.
+         * @param {eventName} eventName The name of the event to be attached <ko>등록할 이벤트의 이름</ko>
+         * @param {Function} handlerToAttach The handler function of the event to be attached <ko>등록할 이벤트의 핸들러 함수</ko>
+         * @return {eg.Component} An instance of a component itself<ko>컴포넌트 자신의 인스턴스</ko>
+         * @example
+        class Some extends eg.Component {
+         hi() {
+           console.log("hi");
+         }
+         some() {
+           this.on("hi",this.hi); //attach event
+         }
+        }
+        */
+
+
+        _proto.on = function on(eventName, handlerToAttach) {
+          if (typeof eventName === "object" && isUndefined$1(handlerToAttach)) {
+            var eventHash = eventName;
+            var name;
+
+            for (name in eventHash) {
+              this.on(name, eventHash[name]);
+            }
+
+            return this;
+          } else if (typeof eventName === "string" && typeof handlerToAttach === "function") {
+            var handlerList = this._eventHandler[eventName];
+
+            if (isUndefined$1(handlerList)) {
+              this._eventHandler[eventName] = [];
+              handlerList = this._eventHandler[eventName];
+            }
+
+            handlerList.push(handlerToAttach);
+          }
+
+          return this;
+        };
+        /**
+         * Detaches an event from the component.
+         * @ko 컴포넌트에 등록된 이벤트를 해제한다
+         * @param {eventName} eventName The name of the event to be detached <ko>해제할 이벤트의 이름</ko>
+         * @param {Function} handlerToDetach The handler function of the event to be detached <ko>해제할 이벤트의 핸들러 함수</ko>
+         * @return {eg.Component} An instance of a component itself <ko>컴포넌트 자신의 인스턴스</ko>
+         * @example
+        class Some extends eg.Component {
+         hi() {
+           console.log("hi");
+         }
+         some() {
+           this.off("hi",this.hi); //detach event
+         }
+        }
+         */
+
+
+        _proto.off = function off(eventName, handlerToDetach) {
+          // All event detach.
+          if (isUndefined$1(eventName)) {
+            this._eventHandler = {};
+            return this;
+          } // All handler of specific event detach.
+
+
+          if (isUndefined$1(handlerToDetach)) {
+            if (typeof eventName === "string") {
+              this._eventHandler[eventName] = undefined;
+              return this;
+            } else {
+              var eventHash = eventName;
+              var name;
+
+              for (name in eventHash) {
+                this.off(name, eventHash[name]);
+              }
+
+              return this;
+            }
+          } // The handler of specific event detach.
+
+
+          var handlerList = this._eventHandler[eventName];
+
+          if (handlerList) {
+            var k;
+            var handlerFunction;
+
+            for (k = 0; (handlerFunction = handlerList[k]) !== undefined; k++) {
+              if (handlerFunction === handlerToDetach) {
+                handlerList = handlerList.splice(k, 1);
+                break;
+              }
+            }
+          }
+
+          return this;
+        };
+
+        return Component;
+      }();
+
+      Component.VERSION = "2.1.2";
+      return Component;
+    }();
+
+    var Guides$1 =
+    /*#__PURE__*/
+    function (_super) {
+      __extends(Guides, _super);
+
       function Guides(container, options) {
         if (options === void 0) {
           options = {};
         }
 
-        this.tempElement = document.createElement("div");
-        render(createElement(InnerGuides, __assign({
-          ref: ref(this, "innerGuides")
-        }, options, {
-          container: container
-        })), this.tempElement);
+        var _this = _super.call(this) || this;
+
+        _this.tempElement = document.createElement("div");
+        var events = {};
+        EVENTS.forEach(function (name) {
+          events[camelize("on " + name)] = function (e) {
+            return _this.trigger(name, e);
+          };
+        });
+        render(createElement(InnerGuides, __assign({}, options, events, {
+          container: container,
+          ref: ref(_this, "innerGuides")
+        })), _this.tempElement);
+        return _this;
       }
 
       var __proto = Guides.prototype;
@@ -2814,7 +3180,7 @@ version: 0.6.0
         });
       })], Guides);
       return Guides;
-    }();
+    }(Component$1);
 
     /*
     Copyright (c) 2019 Daybrush
@@ -3253,6 +3619,7 @@ version: 0.6.0
 
     var guides1 = new Guides$1(document.querySelector(".ruler.horizontal"), {
       type: "horizontal",
+      displayDragPos: true,
       rulerStyle: {
         left: "30px",
         width: "calc(100% - 30px)",
@@ -3261,6 +3628,7 @@ version: 0.6.0
     });
     var guides2 = new Guides$1(document.querySelector(".ruler.vertical"), {
       type: "vertical",
+      displayDragPos: true,
       rulerStyle: {
         top: "30px",
         height: "calc(100% - 30px)",
@@ -3276,7 +3644,7 @@ version: 0.6.0
     var box = document.querySelector(".box");
     new Dragger$1(document.body, {
       dragstart: function (e) {
-        if (e.inputEvent.target === box) {
+        if (e.inputEvent.target === box || e.inputEvent.target.nodeName === "A") {
           return false;
         }
       },

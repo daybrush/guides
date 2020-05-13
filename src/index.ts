@@ -4,10 +4,12 @@ import "./index.css";
 
 const guides1 = new Guides(document.querySelector(".ruler.horizontal"), {
     type: "horizontal",
+    displayDragPos: true,
     rulerStyle: { left: "30px", width: "calc(100% - 30px)", height: "100%" },
 });
 const guides2 = new Guides(document.querySelector(".ruler.vertical"), {
     type: "vertical",
+    displayDragPos: true,
     rulerStyle: { top: "30px", height: "calc(100% - 30px)", width: "100%" },
 });
 
@@ -23,7 +25,7 @@ const box = document.querySelector(".box");
 
 new Dragger(document.body, {
     dragstart: e => {
-        if (e.inputEvent.target === box) {
+        if (e.inputEvent.target === box || e.inputEvent.target.nodeName === "A") {
             return false;
         }
     },
