@@ -49,7 +49,8 @@ export class AppModule { }
 ```html
 <ngx-guides
   #guides
-  type="horizontal"></ngx-guides>
+  type="horizontal"
+  (changeGuides)="onChangeGuides($event)"></ngx-guides>
 ```
 
 ### Component
@@ -80,6 +81,9 @@ export class AppComponent implements AfterViewInit {
 
     this.onResize();
   }
+  onChangeGuides(e) {
+    console.log(e.guides);
+  }
   onResize = () => {
     this.guides1.resize();
     this.guides2.resize();
@@ -104,12 +108,14 @@ export interface RulerProps {
     textColor?: string;
 }
 
-export interface GuidesProps extends RulerProps {
+export interface GuidesOptions extends RulerProps {
     className?: string;
     setGuides?: (guides: number[]) => any;
     rulerStyle?: IObject<any>;
     snapThreshold?: number;
     snaps?: number[];
+    displayDragPos?: boolean;
+    dragPosFormat?: (value: number) => string | number;
 }
 
 export interface GuidesInterface {

@@ -33,7 +33,10 @@ $ npm i vue-guides
 ```html
 <template>
     <div class="guides">
-        <vue-guides type="horizontal" ref="guides"/>
+        <vue-guides
+            type="horizontal" ref="guides"
+            v-on:changeGuides="onChangeGuides"
+            />
     </div>
 </template>
 <script>
@@ -42,6 +45,11 @@ $ npm i vue-guides
     export default {
         components: {
             "vue-guides": Guides,
+        },
+        methods: {
+            onChangeGuides(e) {
+                console.log(e.guides);
+            },
         },
         mounted() {
             const guides = this.$refs.guides;
@@ -79,12 +87,14 @@ export interface RulerProps {
     textColor?: string;
 }
 
-export interface GuidesProps extends RulerProps {
+export interface GuidesOptions extends RulerProps {
     className?: string;
     setGuides?: (guides: number[]) => any;
     rulerStyle?: IObject<any>;
     snapThreshold?: number;
     snaps?: number[];
+    displayDragPos?: boolean;
+    dragPosFormat?: (value: number) => string | number;
 }
 
 export interface GuidesInterface {

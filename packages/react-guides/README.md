@@ -42,7 +42,7 @@ export default class App extends React.Component {
                 this.guides = e;
             }}
             type="horizontal"
-            setGuides={guides => {
+            onChangeGuides={({ guides }) => {
                 console.log(guides);
             }}
         />);
@@ -78,12 +78,14 @@ export interface RulerProps {
     textColor?: string;
 }
 
-export interface GuidesProps extends RulerProps {
+export interface GuidesOptions extends RulerProps {
     className?: string;
     setGuides?: (guides: number[]) => any;
     rulerStyle?: IObject<any>;
     snapThreshold?: number;
     snaps?: number[];
+    displayDragPos?: boolean;
+    dragPosFormat?: (value: number) => string | number;
 }
 
 export interface GuidesInterface {

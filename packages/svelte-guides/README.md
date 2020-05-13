@@ -55,7 +55,12 @@ onMount(() => {
 })
 </script>
 <div class="guides">
-    <Guides type="horizontal" bind:this={guides}/>
+    <Guides
+        type="horizontal" bind:this={guides}
+        on:changeGuides={({ detail: e }) => {
+            console.log(e.guides);
+        }}
+        />
 </div>
 
 ```
@@ -74,12 +79,14 @@ export interface RulerProps {
     textColor?: string;
 }
 
-export interface GuidesProps extends RulerProps {
+export interface GuidesOptions extends RulerProps {
     className?: string;
     setGuides?: (guides: number[]) => any;
     rulerStyle?: IObject<any>;
     snapThreshold?: number;
     snaps?: number[];
+    displayDragPos?: boolean;
+    dragPosFormat?: (value: number) => string | number;
 }
 
 export interface GuidesInterface {
