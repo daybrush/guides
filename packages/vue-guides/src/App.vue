@@ -12,7 +12,9 @@
       <Guides
         ref="guides2"
         type="vertical"
+        displayDragPos="true"
         v-bind:rulerStyle="{ top: '30px', height: 'calc(100% - 30px)', width: '30px'}"
+        v-on:changeGuides="onChange"
       />
     </div>
 
@@ -134,6 +136,9 @@ export default class App extends Vue {
 
     guides1.resize();
     guides2.resize();
+  }
+  onChange(e) {
+      console.log(e);
   }
   onRestore() {
       console.log(this.scrollX, this.scrollY);

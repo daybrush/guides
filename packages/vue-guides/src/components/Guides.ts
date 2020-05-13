@@ -1,10 +1,17 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
-import VanillaGuides, { GuidesInterface, GuidesProps, PROPERTIES, METHODS, GuidesOptions } from "@scena/guides";
+import VanillaGuides, { GuidesInterface, GuidesProps, PROPERTIES, METHODS, GuidesOptions, EVENTS } from "@scena/guides";
 import { withMethods, Properties } from "framework-utils";
 import { IObject } from "@daybrush/utils";
 
-@Component({
-})
+const watches: IObject<any> = {};
+
+PROPERTIES.forEach(name => {
+    watches[name] = function(this: Guides, val: any) {
+        this.updateProperty(name, val);
+    };
+});
+
+@Component({ watch: watches })
 @Properties(PROPERTIES as any, (prototype, name) => {
     Prop()(prototype, name);
 })
@@ -25,6 +32,15 @@ export default class Guides extends Vue {
             elStyle[name] = style[name];
         }
     }
+    public updateProperty(name: string, value: any) {
+        if (name === "style") {
+            this.setStyle();
+            return;
+        }
+        const guides = this.guides;
+
+        (guides as any)[name] = value;
+    }
     protected render(h: any) {
         return h("div", { ref: "guidesElement" });
       }
@@ -34,6 +50,13 @@ export default class Guides extends Vue {
     protected mounted() {
         this.updateOptions();
         this.guides = new VanillaGuides(this.$refs.guidesElement as HTMLElement, this.options);
+
+        const guides = this.guides;
+        EVENTS.forEach((name, i) => {
+            guides.on(name, e => {
+                this.$emit(name, { ...e });
+            });
+        });
         this.setStyle();
     }
     protected beforeDestroy() {
@@ -49,10 +72,8 @@ export default class Guides extends Vue {
                 return;
             }
             const value = this[name];
+
             options[name] = value;
-            if (guides && prevOptions[name] !== value) {
-                guides[name] = value;
-            }
         });
 
         this.options = options;

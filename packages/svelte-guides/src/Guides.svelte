@@ -1,7 +1,8 @@
 <script lang="ts">
   import VanillaGuides, {
     GuidesOptions,
-    PROPERTIES
+    PROPERTIES,
+    EVENTS
   } from "@scena/guides";
 
   import {
@@ -9,8 +10,10 @@
     onDestroy,
     beforeUpdate,
     afterUpdate,
+    createEventDispatcher,
     tick
   } from "svelte";
+  const dispatch = createEventDispatcher();
 
   export let style = { width: "100%", height: "100%"};
 
@@ -43,13 +46,18 @@
       }
     });
     if (guides) {
-      guides.setState(options);
       setStyle();
     }
   });
   onMount(() => {
     setStyle();
     guides = new VanillaGuides(options.container || guidesElement, options);
+
+    EVENTS.forEach((name, i) => {
+      guides.on(name, e => {
+        dispatch(name, e);
+      });
+    });
   });
   onDestroy(() => {
     guides.destroy();

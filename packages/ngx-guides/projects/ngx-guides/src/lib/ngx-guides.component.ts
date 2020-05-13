@@ -1,7 +1,12 @@
-import { Component, OnInit, Input, AfterViewInit, ViewChild, ElementRef, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
-import Guides, { GuidesOptions } from '@scena/guides';
+import {
+  Component, Input, AfterViewInit, ViewChild,
+  ElementRef, OnChanges, SimpleChanges,
+  OnDestroy, Output, EventEmitter
+} from '@angular/core';
+import Guides, { GuidesOptions, EVENTS } from '@scena/guides';
 import { IObject } from '@daybrush/utils';
 import { NgxGuidesInterface } from './ngx-guides.interface';
+import { NgxGuidesEvents } from './types';
 
 @Component({
   selector: 'ngx-guides',
@@ -10,7 +15,7 @@ import { NgxGuidesInterface } from './ngx-guides.interface';
   `,
   styles: []
 })
-export class NgxGuidesComponent extends NgxGuidesInterface implements GuidesOptions, AfterViewInit, OnChanges, OnDestroy {
+export class NgxGuidesComponent extends NgxGuidesInterface implements GuidesOptions, NgxGuidesEvents, AfterViewInit, OnChanges, OnDestroy {
   @ViewChild('guidesRef', { static: false }) private guidesRef: ElementRef;
   @Input() public className?: string;
   @Input() public type?: 'horizontal' | 'vertical';
@@ -26,8 +31,17 @@ export class NgxGuidesComponent extends NgxGuidesInterface implements GuidesOpti
   @Input() public lineColor?: string;
   @Input() public textColor?: string;
   @Input() public setGuides?: (guides: number[]) => any;
-  @Input() public rulerStyle?: IObject<any>;
+  @Input() public rulerStyle?: GuidesOptions['rulerStyle'];
+  @Input() public displayDragPos?: GuidesOptions['displayDragPos'];
+  @Input() public dragPosFormat?: GuidesOptions['dragPosFormat'];
+  @Output() public changeGuides: NgxGuidesEvents['changeGuides'];
 
+  constructor() {
+    super();
+    EVENTS.forEach(name => {
+      (this as any)[name] = new EventEmitter();
+    });
+  }
   ngOnChanges(changes: SimpleChanges): void {
     const guides = this.guides;
 

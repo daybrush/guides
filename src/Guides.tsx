@@ -1,10 +1,12 @@
 import { ref, Properties } from "framework-utils";
 import * as React from "react";
 import { render } from "react-dom";
-import { PROPERTIES, METHODS } from "./consts";
+import { PROPERTIES, METHODS, EVENTS } from "./consts";
 import { GuidesInterface } from "@scena/react-guides/declaration/types";
 import InnerGuides from "./InnerGuides";
-import { GuidesOptions } from "./types";
+import { GuidesOptions, GuidesEvents } from "./types";
+import Component from "@egjs/component";
+import { camelize } from "@daybrush/utils";
 
 @Properties(METHODS as any, (prototype, property) => {
     if (prototype[property]) {
@@ -33,14 +35,20 @@ import { GuidesOptions } from "./types";
         configurable: true,
     });
 })
-class Guides {
+class Guides extends Component {
     private tempElement = document.createElement("div");
     private innerGuides!: InnerGuides;
 
     constructor(container: HTMLElement, options: Partial<GuidesOptions> = {}) {
+        super();
+        const events: any = {};
+
+        EVENTS.forEach(name => {
+            events[camelize(`on ${name}`)] = (e: any) => this.trigger(name, e);
+        });
+
         render(
-            <InnerGuides ref={ref(this, "innerGuides")}
-                {...options} container={container} />,
+            <InnerGuides  {...options} {...events} container={container} ref={ref(this, "innerGuides")} />,
             this.tempElement,
         );
     }
@@ -56,6 +64,10 @@ class Guides {
         return this.innerGuides.guides;
     }
 }
-interface Guides extends GuidesInterface {}
+interface Guides extends GuidesInterface {
+    on<T extends keyof GuidesEvents>(eventName: T, handlerToAttach: (event: GuidesEvents[T]) => any): this;
+    on(eventName: string, handlerToAttach: (event: { [key: string]: any }) => any): this;
+    on(events: { [key: string]: (event: { [key: string]: any }) => any }): this;
+}
 
 export default Guides;

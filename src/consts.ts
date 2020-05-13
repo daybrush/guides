@@ -8,6 +8,8 @@ export const PROPERTIES: Array<keyof GuidesOptions> = [
     "container",
     "className",
     "textColor",
+    "displayDragPos",
+    "dragPosFormat",
 ];
 
 export const METHODS = [
@@ -16,4 +18,8 @@ export const METHODS = [
     "scroll",
     "scrollGuides",
     "resize",
+] as const;
+
+export const EVENTS = [
+    "changeGuides",
 ] as const;
