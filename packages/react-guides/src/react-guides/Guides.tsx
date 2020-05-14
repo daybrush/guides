@@ -87,6 +87,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                 ref={refs(this, "guideElements", i)}
                 key={i}
                 data-index={i}
+                data-pos={pos}
                 style={{
                     transform: `${translateName}(${pos * zoom}px)`,
                 }}></div>);
@@ -163,13 +164,14 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         const { type, zoom, snaps, snapThreshold, displayDragPos, dragPosFormat } = this.props;
         const isHorizontal = type === "horizontal";
         let nextPos = Math.round((isHorizontal ? clientY : clientX) - datas.offset);
-        const guidePos = Math.round(nextPos / zoom!);
+        let guidePos = Math.round(nextPos / zoom!);
         const guideSnaps = snaps!.slice().sort((a, b) => {
             return Math.abs(guidePos - a) - Math.abs(guidePos - b);
         });
 
         if (guideSnaps.length && Math.abs(guideSnaps[0] - guidePos) < snapThreshold!) {
-            nextPos = guideSnaps[0] * zoom!;
+            guidePos = guideSnaps[0];
+            nextPos = guidePos * zoom!;
         }
         if (displayDragPos) {
             const rect = datas.rect;
@@ -181,6 +183,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             })`;
             this.displayElement.innerHTML = `${dragPosFormat!(guidePos)}`;
         }
+        datas.target.setAttribute("data-pos", guidePos);
         datas.target.style.transform = `${this.getTranslateName()}(${nextPos}px)`;
 
         return nextPos;
