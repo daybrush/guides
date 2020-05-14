@@ -4,7 +4,7 @@ name: @scena/guides
 license: MIT
 author: Daybrush
 repository: git+https://github.com/daybrush/guides.git
-version: 0.7.0
+version: 0.7.1
 */
 (function () {
     'use strict';
@@ -2441,7 +2441,7 @@ version: 0.7.0
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/guides/blob/master/packages/react-guides
-    version: 0.6.0
+    version: 0.6.1
     */
 
     /*! *****************************************************************************
@@ -2558,7 +2558,8 @@ version: 0.7.0
           });
 
           if (guideSnaps.length && Math.abs(guideSnaps[0] - guidePos) < snapThreshold) {
-            nextPos = guideSnaps[0] * zoom;
+            guidePos = guideSnaps[0];
+            nextPos = guidePos * zoom;
           }
 
           if (displayDragPos) {
@@ -2570,6 +2571,7 @@ version: 0.7.0
             _this.displayElement.innerHTML = "" + dragPosFormat(guidePos);
           }
 
+          datas.target.setAttribute("data-pos", guidePos);
           datas.target.style.transform = _this.getTranslateName() + "(" + nextPos + "px)";
           return nextPos;
         };
@@ -2668,10 +2670,10 @@ version: 0.7.0
         }), createElement("div", {
           className: GUIDES,
           ref: ref(this, "guidesElement")
-        }, displayDragPos ? createElement("div", {
+        }, displayDragPos && createElement("div", {
           className: DISPLAY_DRAG,
           ref: ref(this, "displayElement")
-        }) : null, createElement("div", {
+        }), createElement("div", {
           className: ADDER,
           ref: ref(this, "adderElement")
         }), this.renderGuides()));
@@ -2692,6 +2694,7 @@ version: 0.7.0
             ref: refs(_this, "guideElements", i),
             key: i,
             "data-index": i,
+            "data-pos": pos,
             style: {
               transform: translateName + "(" + pos * zoom + "px)"
             }
@@ -3107,6 +3110,10 @@ version: 0.7.0
     /*#__PURE__*/
     function (_super) {
       __extends(Guides, _super);
+      /**
+       * @sort 1
+       */
+
 
       function Guides(container, options) {
         if (options === void 0) {
@@ -3128,12 +3135,21 @@ version: 0.7.0
         })), _this.tempElement);
         return _this;
       }
+      /**
+       * @param state
+       * @param callback
+       */
+
 
       var __proto = Guides.prototype;
 
       __proto.setState = function (state, callback) {
         this.innerGuides.setState(state, callback);
       };
+      /**
+       * destroy guides
+       */
+
 
       __proto.destroy = function () {
         render(null, this.tempElement);
@@ -3178,7 +3194,12 @@ version: 0.7.0
           enumerable: true,
           configurable: true
         });
-      })], Guides);
+      })
+      /**
+       * @sort 1
+       * @extends eg.Component
+       */
+      ], Guides);
       return Guides;
     }(Component$1);
 
