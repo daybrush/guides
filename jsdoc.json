@@ -1,0 +1,44 @@
+{
+    "plugins": [],
+    "recurseDepth": 10,
+    "opts": {
+        "template": "./node_modules/daybrush-jsdoc-template",
+        "destination": "./doc/"
+    },
+    "source": {
+        "include": [
+            "./src",
+            "./packages/react-guides/src/react-guides/",
+            "README.md",
+            "node_modules/@egjs/component/src/Component.js"
+        ],
+        "includePattern": "(.+\\.js(doc|x)?|.+\\.ts(doc|x)?)$",
+        "excludePattern": "(^|\\/|\\\\)_"
+    },
+    "sourceType": "module",
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": [
+            "jsdoc",
+            "closure"
+        ]
+    },
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": false
+    },
+    "linkMap": {
+        "IObject": "https://daybrush.com/utils/release/latest/doc/global.html#ObjectInterface",
+        "OnDragStart": "https://daybrush.com/drag/release/latest/doc/Dragger.html#.OnDragStart"
+    },
+    "docdash": {
+        "menu": {
+            "Github repo": {
+                "href": "https://github.com/daybrush/guides",
+                "target": "_blank",
+                "class": "menu-item",
+                "id": "repository"
+            }
+        }
+    }
+}

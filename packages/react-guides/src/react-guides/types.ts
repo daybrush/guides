@@ -4,6 +4,7 @@ import { IObject } from "@daybrush/utils";
 export interface GuidesState {
     guides: number[];
 }
+
 export interface GuideOptions extends RulerProps {
     className?: string;
     setGuides?: (guides: number[]) => any;

@@ -119,14 +119,29 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     public componentWillUnmount() {
         this.dragger.unset();
     }
+    /**
+     * Load the current guidelines.
+     * @memberof Guides
+     * @instance
+     */
     public loadGuides(guides: number[]) {
         this.setState({
             guides,
         });
     }
-    public getGuides() {
+    /**
+     * Get current guidelines.
+     * @memberof Guides
+     * @instance
+     */
+    public getGuides(): number[] {
         return this.state.guides;
     }
+    /**
+     * Scroll the positions of the guidelines opposite the ruler.
+     * @memberof Guides
+     * @instance
+     */
     public scrollGuides(pos: number) {
         const { zoom } = this.props as Required<GuidesProps>;
         const guidesElement = this.guidesElement;
@@ -142,9 +157,19 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             el.style.display = -pos + guides[i] < 0 ? "none" : "block";
         });
     }
+    /**
+     * Recalculate the size of the ruler.
+     * @memberof Guides
+     * @instance
+     */
     public resize() {
         this.ruler.resize();
     }
+    /**
+     * Scroll the position of the ruler.
+     * @memberof Guides
+     * @instance
+     */
     public scroll(pos: number) {
         this.ruler.scroll(pos);
     }
@@ -199,6 +224,12 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         }
         removeClass(datas.target, DRAGGING);
 
+         /**
+         * The `changeGuides` event occurs when the guideline is added / removed / changed.
+         * @memberof Guides
+         * @event changeGuides
+         * @param {OnChangeGuides} - Parameters for the changeGuides event
+         */
         if (datas.fromRuler) {
             if (pos >= this.scrollPos && guides.indexOf(guidePos) < 0) {
                 this.setState({

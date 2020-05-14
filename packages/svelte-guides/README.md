@@ -19,6 +19,7 @@
 <p align="middle">A Svelte Guides component that can draw ruler and manage guidelines.</p>
 <p align="middle">
     <a href="https://daybrush.com/guides" target="_blank"><strong>Demo</strong></a> /
+    <a href="https://daybrush.com/guides/release/latest/doc/" target="_blank"><strong>API</strong></a> /
     <a href="https://github.com/daybrush/scenejs-editor" target="_blank"><strong>Main Project</strong></a>
 </p>
 

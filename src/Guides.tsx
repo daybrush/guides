@@ -2,7 +2,7 @@ import { ref, Properties } from "framework-utils";
 import * as React from "react";
 import { render } from "react-dom";
 import { PROPERTIES, METHODS, EVENTS } from "./consts";
-import { GuidesInterface } from "@scena/react-guides/declaration/types";
+import { GuidesInterface, GuideOptions } from "@scena/react-guides/declaration/types";
 import InnerGuides from "./InnerGuides";
 import { GuidesOptions, GuidesEvents } from "./types";
 import Component from "@egjs/component";
@@ -35,10 +35,16 @@ import { camelize } from "@daybrush/utils";
         configurable: true,
     });
 })
+/**
+ * @sort 1
+ * @extends eg.Component
+ */
 class Guides extends Component {
     private tempElement = document.createElement("div");
     private innerGuides!: InnerGuides;
-
+    /**
+     * @sort 1
+     */
     constructor(container: HTMLElement, options: Partial<GuidesOptions> = {}) {
         super();
         const events: any = {};
@@ -52,9 +58,16 @@ class Guides extends Component {
             this.tempElement,
         );
     }
-    public setState(state: any, callback?: () => void) {
+    /**
+     * @param state
+     * @param callback
+     */
+    public setState(state: Partial<GuideOptions>, callback?: () => void) {
         this.innerGuides.setState(state, callback);
     }
+    /**
+     * destroy guides
+     */
     public destroy() {
         render(null, this.tempElement);
         this.tempElement = null;

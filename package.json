@@ -1,6 +1,6 @@
 {
     "name": "@scena/guides",
-    "version": "0.7.0",
+    "version": "0.7.1",
     "description": "A Vanilla Guides component that can draw ruler and manage guidelines.",
     "main": "./dist/guides.cjs.js",
     "module": "./dist/guides.esm.js",
@@ -13,9 +13,9 @@
         "doc": "rm -rf ./doc && jsdoc -c jsdoc.json",
         "demo:start": "rollup -c rollup.config.demo.js -w",
         "demo:build": "rollup -c rollup.config.demo.js",
-        "prerelease": "npm run build && npm run demo:build && prerelease --dirs=dist",
-        "release": "npm run build && npm run demo:build && release --dirs=dist",
-        "release:init": "npm run build && npm run demo:build && release -i --dirs=dist",
+        "prerelease": "npm run build && npm run demo:build && prerelease --dirs=dist,doc",
+        "release": "npm run build && npm run demo:build && release --dirs=dist,doc",
+        "release:init": "npm run build && npm run demo:build && release -i --dirs=dist,doc",
         "deploy": "gh-pages -d ./demo --dest=./ --add --remote origin",
         "packages": "npm run packages:update && npm run packages:build && npm run packages:publish",
         "packages:update": "pvu --update=svelte-guides,ngx-guides/projects/ngx-guides,vue-guides",
@@ -65,6 +65,6 @@
     },
     "dependencies": {
         "@egjs/component": "^2.1.2",
-        "react-compat-guides": "^0.4.1"
+        "react-compat-guides": "^0.4.2"
     }
 }
