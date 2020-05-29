@@ -4,7 +4,7 @@ import { preprocess } from "@pyoner/svelte-ts-preprocess";
 
 const defaultOptions = {
     tsconfig: "",
-    input: './src/Guides.svelte',
+    input: './src/index.js',
     commonjs: true,
     external: {
         "svelte": "svelte",
