@@ -4,7 +4,7 @@ name: @scena/guides
 license: MIT
 author: Daybrush
 repository: git+https://github.com/daybrush/guides.git
-version: 0.7.2
+version: 0.8.0
 */
 (function () {
     'use strict';
@@ -560,60 +560,26 @@ version: 0.7.2
       });
     }
     /**
-    * Checks if the specified class value exists in the element's class attribute.
-    * @memberof DOM
-    * @param element - target
-    * @param className - the class name to search
-    * @return {boolean} return false if the class is not found.
+    * transform a camelized string into a lowercased string.
+    * @memberof Utils
+    * @param {string} text - a camel-cased string
+    * @param {string} [separator="-"] - a separator
+    * @return {string}  a lowercased string
     * @example
-    import {hasClass} from "@daybrush/utils";
+    import {decamelize} from "@daybrush/utils";
 
-    console.log(hasClass(element, "start")); // true or false
+    console.log(decamelize("transformOrigin")); // transform-origin
+    console.log(decamelize("abcdEfg", "_")); // abcd_efg
     */
 
-    function hasClass(element, className) {
-      if (element.classList) {
-        return element.classList.contains(className);
+    function decamelize(str, separator) {
+      if (separator === void 0) {
+        separator = "-";
       }
 
-      return !!element.className.match(new RegExp("(\\s|^)" + className + "(\\s|$)"));
-    }
-    /**
-    * Add the specified class value. If these classe already exist in the element's class attribute they are ignored.
-    * @memberof DOM
-    * @param element - target
-    * @param className - the class name to add
-    * @example
-    import {addClass} from "@daybrush/utils";
-
-    addClass(element, "start");
-    */
-
-    function addClass(element, className) {
-      if (element.classList) {
-        element.classList.add(className);
-      } else {
-        element.className += " " + className;
-      }
-    }
-    /**
-    * Removes the specified class value.
-    * @memberof DOM
-    * @param element - target
-    * @param className - the class name to remove
-    * @example
-    import {removeClass} from "@daybrush/utils";
-
-    removeClass(element, "start");
-    */
-
-    function removeClass(element, className) {
-      if (element.classList) {
-        element.classList.remove(className);
-      } else {
-        var reg = new RegExp("(\\s|^)" + className + "(\\s|$)");
-        element.className = element.className.replace(reg, " ");
-      }
+      return str.replace(/([a-z])([A-Z])/g, function (all, letter, letter2) {
+        return "" + letter + separator + letter2.toLowerCase();
+      });
     }
     /**
     * Sets up a function that will be called whenever the specified event is delivered to the target
@@ -658,7 +624,7 @@ version: 0.7.2
     license: MIT
     author: Daybrush
     repository: git+https://github.com/daybrush/react-simple-compat.git
-    version: 0.1.6
+    version: 0.1.8
     */
 
     /*! *****************************************************************************
@@ -981,23 +947,29 @@ version: 0.7.2
           removed = _a.removed,
           changed = _a.changed;
 
-      for (var name in added) {
+      for (var beforeName in added) {
+        var name = decamelize(beforeName, "-");
+
         if (style.setProperty) {
-          style.setProperty(name, added[name]);
+          style.setProperty(name, added[beforeName]);
         } else {
-          style[name] = added[name];
+          style[name] = added[beforeName];
         }
       }
 
-      for (var name in changed) {
+      for (var beforeName in changed) {
+        var name = decamelize(beforeName, "-");
+
         if (style.setProperty) {
-          style.setProperty(name, changed[name][1]);
+          style.setProperty(name, changed[beforeName][1]);
         } else {
-          style[name] = changed[name][1];
+          style[name] = changed[beforeName][1];
         }
       }
 
-      for (var name in removed) {
+      for (var beforeName in removed) {
+        var name = decamelize(beforeName, "-");
+
         if (style.removeProperty) {
           style.removeProperty(name);
         } else {
@@ -1753,12 +1725,126 @@ version: 0.7.2
     }(PureComponent);
 
     /*
+    Copyright (c) 2018 Daybrush
+    @name: @daybrush/utils
+    license: MIT
+    author: Daybrush
+    repository: https://github.com/daybrush/utils
+    @version 0.10.4
+    */
+    /**
+    * Date.now() method
+    * @memberof CrossBrowser
+    * @return {number} milliseconds
+    * @example
+    import {now} from "@daybrush/utils";
+
+    console.log(now()); // 12121324241(milliseconds)
+    */
+
+    function now() {
+      return Date.now ? Date.now() : new Date().getTime();
+    }
+    /**
+    * Checks if the specified class value exists in the element's class attribute.
+    * @memberof DOM
+    * @param element - target
+    * @param className - the class name to search
+    * @return {boolean} return false if the class is not found.
+    * @example
+    import {hasClass} from "@daybrush/utils";
+
+    console.log(hasClass(element, "start")); // true or false
+    */
+
+    function hasClass(element, className) {
+      if (element.classList) {
+        return element.classList.contains(className);
+      }
+
+      return !!element.className.match(new RegExp("(\\s|^)" + className + "(\\s|$)"));
+    }
+    /**
+    * Add the specified class value. If these classe already exist in the element's class attribute they are ignored.
+    * @memberof DOM
+    * @param element - target
+    * @param className - the class name to add
+    * @example
+    import {addClass} from "@daybrush/utils";
+
+    addClass(element, "start");
+    */
+
+    function addClass(element, className) {
+      if (element.classList) {
+        element.classList.add(className);
+      } else {
+        element.className += " " + className;
+      }
+    }
+    /**
+    * Removes the specified class value.
+    * @memberof DOM
+    * @param element - target
+    * @param className - the class name to remove
+    * @example
+    import {removeClass} from "@daybrush/utils";
+
+    removeClass(element, "start");
+    */
+
+    function removeClass(element, className) {
+      if (element.classList) {
+        element.classList.remove(className);
+      } else {
+        var reg = new RegExp("(\\s|^)" + className + "(\\s|$)");
+        element.className = element.className.replace(reg, " ");
+      }
+    }
+    /**
+    * Sets up a function that will be called whenever the specified event is delivered to the target
+    * @memberof DOM
+    * @param - event target
+    * @param - A case-sensitive string representing the event type to listen for.
+    * @param - The object which receives a notification (an object that implements the Event interface) when an event of the specified type occurs
+    * @param - An options object that specifies characteristics about the event listener. The available options are:
+    * @example
+    import {addEvent} from "@daybrush/utils";
+
+    addEvent(el, "click", e => {
+      console.log(e);
+    });
+    */
+
+    function addEvent$1(el, type, listener, options) {
+      el.addEventListener(type, listener, options);
+    }
+    /**
+    * removes from the EventTarget an event listener previously registered with EventTarget.addEventListener()
+    * @memberof DOM
+    * @param - event target
+    * @param - A case-sensitive string representing the event type to listen for.
+    * @param - The EventListener function of the event handler to remove from the event target.
+    * @example
+    import {addEvent, removeEvent} from "@daybrush/utils";
+    const listener = e => {
+      console.log(e);
+    };
+    addEvent(el, "click", listener);
+    removeEvent(el, "click", listener);
+    */
+
+    function removeEvent$1(el, type, listener) {
+      el.removeEventListener(type, listener);
+    }
+
+    /*
     Copyright (c) 2019 Daybrush
     name: @daybrush/drag
     license: MIT
     author: Daybrush
     repository: git+https://github.com/daybrush/drag.git
-    version: 0.12.0
+    version: 0.16.1
     */
 
     /*! *****************************************************************************
@@ -1793,8 +1879,8 @@ version: 0.7.2
       var nowCenter = getAverageClient(clients);
       var prevCenter = getAverageClient(prevClients);
       var startCenter = getAverageClient(startPinchClients);
-      var pinchClient = getAddClient(startPinchClients[0], getMinusClient(nowCenter, startCenter));
-      var pinchPrevClient = getAddClient(startPinchClients[0], getMinusClient(prevCenter, startCenter));
+      var pinchClient = plueClient(startPinchClients[0], minusClient(nowCenter, startCenter));
+      var pinchPrevClient = plueClient(startPinchClients[0], minusClient(prevCenter, startCenter));
       return getPosition(pinchClient, pinchPrevClient, startClients[0]);
     }
     function isMultiTouch(e) {
@@ -1852,18 +1938,22 @@ version: 0.7.2
       };
     }
     function getAverageClient(clients) {
+      if (clients.length === 1) {
+        return clients[0];
+      }
+
       return {
         clientX: (clients[0].clientX + clients[1].clientX) / 2,
         clientY: (clients[0].clientY + clients[1].clientY) / 2
       };
     }
-    function getAddClient(client1, client2) {
+    function plueClient(client1, client2) {
       return {
         clientX: client1.clientX + client2.clientX,
         clientY: client1.clientY + client2.clientY
       };
     }
-    function getMinusClient(client1, client2) {
+    function minusClient(client1, client2) {
       return {
         clientX: client1.clientX - client2.clientX,
         clientY: client1.clientY - client2.clientY
@@ -1880,14 +1970,13 @@ version: 0.7.2
       /**
        *
        */
-      function Dragger(el, options) {
+      function Dragger(targets, options) {
         var _this = this;
 
         if (options === void 0) {
           options = {};
         }
 
-        this.el = el;
         this.options = {};
         this.flag = false;
         this.pinchFlag = false;
@@ -1902,6 +1991,9 @@ version: 0.7.2
         this.startPinchClients = [];
         this.startDistance = 0;
         this.customDist = [0, 0];
+        this.targets = [];
+        this.prevTime = 0;
+        this.isDouble = false;
         /**
          * @method
          */
@@ -1909,6 +2001,24 @@ version: 0.7.2
         this.onDragStart = function (e) {
           if (!_this.flag && e.cancelable === false) {
             return;
+          }
+
+          var _a = _this.options,
+              container = _a.container,
+              pinchOutside = _a.pinchOutside,
+              dragstart = _a.dragstart,
+              preventRightClick = _a.preventRightClick,
+              preventDefault = _a.preventDefault;
+          var isTouch = _this.isTouch;
+
+          if (!_this.flag && isTouch && pinchOutside) {
+            setTimeout(function () {
+              addEvent$1(container, "touchstart", _this.onDragStart);
+            });
+          }
+
+          if (_this.flag && isTouch && pinchOutside) {
+            removeEvent$1(container, "touchstart", _this.onDragStart);
           }
 
           if (isMultiTouch(e)) {
@@ -1934,12 +2044,9 @@ version: 0.7.2
           _this.datas = {};
           _this.movement = 0;
           var position = getPosition(clients[0], _this.prevClients[0], _this.startClients[0]);
-          var _a = _this.options,
-              dragstart = _a.dragstart,
-              preventRightClick = _a.preventRightClick,
-              preventDefault = _a.preventDefault;
 
-          if (preventRightClick && e.which === 3 || (dragstart && dragstart(__assign$2({
+          if (preventRightClick && (e.which === 3 || e.button === 2) || (dragstart && dragstart(__assign$2({
+            type: "dragstart",
             datas: _this.datas,
             inputEvent: e
           }, position))) === false) {
@@ -1948,6 +2055,7 @@ version: 0.7.2
             _this.flag = false;
           }
 
+          _this.isDouble = now() - _this.prevTime < 200;
           _this.flag && preventDefault && e.preventDefault();
         };
 
@@ -1980,26 +2088,40 @@ version: 0.7.2
             return;
           }
 
+          var _a = _this.options,
+              dragend = _a.dragend,
+              pinchOutside = _a.pinchOutside,
+              container = _a.container;
+
+          if (_this.isTouch && pinchOutside) {
+            removeEvent$1(container, "touchstart", _this.onDragStart);
+          }
+
           if (_this.pinchFlag) {
             _this.onPinchEnd(e);
           }
 
           _this.flag = false;
-          var dragend = _this.options.dragend;
           var prevClients = _this.prevClients;
           var startClients = _this.startClients;
           var position = _this.pinchFlag ? getPinchDragPosition(prevClients, prevClients, startClients, _this.startPinchClients) : getPosition(prevClients[0], prevClients[0], startClients[0]);
+          var currentTime = now();
+          var isDouble = !_this.isDrag && _this.isDouble;
+          _this.prevTime = _this.isDrag || isDouble ? 0 : currentTime;
           _this.startClients = [];
           _this.prevClients = [];
           dragend && dragend(__assign$2({
+            type: "dragend",
             datas: _this.datas,
+            isDouble: isDouble,
             isDrag: _this.isDrag,
             inputEvent: e
           }, position));
         };
 
+        var elements = [].concat(targets);
         this.options = __assign$2({
-          container: el,
+          container: elements.length > 1 ? window : elements[0],
           preventRightClick: true,
           preventDefault: true,
           pinchThreshold: 0,
@@ -2011,20 +2133,27 @@ version: 0.7.2
         this.isTouch = events.indexOf("touch") > -1;
         this.isMouse = events.indexOf("mouse") > -1;
         this.customDist = [0, 0];
+        this.targets = elements;
 
         if (this.isMouse) {
-          addEvent(el, "mousedown", this.onDragStart);
-          addEvent(container, "mousemove", this.onDrag);
-          addEvent(container, "mouseup", this.onDragEnd);
+          elements.forEach(function (el) {
+            addEvent$1(el, "mousedown", _this.onDragStart);
+          });
+          addEvent$1(container, "mousemove", this.onDrag);
+          addEvent$1(container, "mouseup", this.onDragEnd);
+          addEvent$1(container, "contextmenu", this.onDragEnd);
         }
 
         if (this.isTouch) {
-          var passive = {
+          var passive_1 = {
             passive: false
           };
-          addEvent(el, "touchstart", this.onDragStart, passive);
-          addEvent(container, "touchmove", this.onDrag, passive);
-          addEvent(container, "touchend", this.onDragEnd, passive);
+          elements.forEach(function (el) {
+            addEvent$1(el, "touchstart", _this.onDragStart, passive_1);
+          });
+          addEvent$1(container, "touchmove", this.onDrag, passive_1);
+          addEvent$1(container, "touchend", this.onDragEnd, passive_1);
+          addEvent$1(container, "touchcancel", this.onDragEnd, passive_1);
         }
       }
       /**
@@ -2044,6 +2173,14 @@ version: 0.7.2
 
       __proto.isFlag = function () {
         return this.flag;
+      };
+      /**
+       *
+       */
+
+
+      __proto.isPinchFlag = function () {
+        return this.pinchFlag;
       };
       /**
        *
@@ -2102,8 +2239,12 @@ version: 0.7.2
         this.prevClients = clients;
         this.isDrag = true;
         return __assign$2({
+          type: "drag",
           datas: this.datas
         }, position, {
+          movement: this.movement,
+          isDrag: this.isDrag,
+          isPinch: this.isPinch,
           isScroll: false,
           inputEvent: inputEvent
         });
@@ -2138,6 +2279,7 @@ version: 0.7.2
         var startAverageClient = getAverageClient(startClients);
         var centerPosition = getPosition(startAverageClient, startAverageClient, startAverageClient);
         pinchstart(__assign$2({
+          type: "pinchstart",
           datas: this.datas,
           touches: getPositions(startClients, startClients, startClients)
         }, centerPosition, {
@@ -2146,7 +2288,7 @@ version: 0.7.2
       };
 
       __proto.onPinch = function (e, clients) {
-        if (!this.flag || !this.pinchFlag) {
+        if (!this.flag || !this.pinchFlag || clients.length < 2) {
           return;
         }
 
@@ -2162,7 +2304,9 @@ version: 0.7.2
         var centerPosition = getPosition(getAverageClient(clients), getAverageClient(prevClients), getAverageClient(startClients));
         var distance = getDist(clients);
         pinch(__assign$2({
+          type: "pinch",
           datas: this.datas,
+          movement: this.movement,
           touches: getPositions(clients, prevClients, startClients),
           scale: distance / this.startDistance,
           distance: distance
@@ -2189,6 +2333,7 @@ version: 0.7.2
         var startClients = this.startClients;
         var centerPosition = getPosition(getAverageClient(prevClients), getAverageClient(prevClients), getAverageClient(startClients));
         pinchend(__assign$2({
+          type: "pinchend",
           datas: this.datas,
           isPinch: isPinch,
           touches: getPositions(prevClients, prevClients, startClients)
@@ -2204,19 +2349,28 @@ version: 0.7.2
 
 
       __proto.unset = function () {
-        var el = this.el;
+        var _this = this;
+
+        var targets = this.targets;
         var container = this.options.container;
 
         if (this.isMouse) {
-          removeEvent(el, "mousedown", this.onDragStart);
-          removeEvent(container, "mousemove", this.onDrag);
-          removeEvent(container, "mouseup", this.onDragEnd);
+          targets.forEach(function (target) {
+            removeEvent$1(target, "mousedown", _this.onDragStart);
+          });
+          removeEvent$1(container, "mousemove", this.onDrag);
+          removeEvent$1(container, "mouseup", this.onDragEnd);
+          removeEvent$1(container, "contextmenu", this.onDragEnd);
         }
 
         if (this.isTouch) {
-          removeEvent(el, "touchstart", this.onDragStart);
-          removeEvent(container, "touchmove", this.onDrag);
-          removeEvent(container, "touchend", this.onDragEnd);
+          targets.forEach(function (target) {
+            removeEvent$1(target, "touchstart", _this.onDragStart);
+          });
+          removeEvent$1(container, "touchstart", this.onDragStart);
+          removeEvent$1(container, "touchmove", this.onDrag);
+          removeEvent$1(container, "touchend", this.onDragEnd);
+          removeEvent$1(container, "touchcancel", this.onDragEnd);
         }
       };
 
@@ -2441,7 +2595,7 @@ version: 0.7.2
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/guides/blob/master/packages/react-guides
-    version: 0.6.1
+    version: 0.7.0
     */
 
     /*! *****************************************************************************
@@ -2579,7 +2733,8 @@ version: 0.7.2
         _this.onDragEnd = function (_a) {
           var datas = _a.datas,
               clientX = _a.clientX,
-              clientY = _a.clientY;
+              clientY = _a.clientY,
+              isDouble = _a.isDouble;
 
           var pos = _this.onDrag({
             datas: datas,
@@ -2600,6 +2755,12 @@ version: 0.7.2
           }
 
           removeClass(datas.target, DRAGGING);
+          /**
+          * The `changeGuides` event occurs when the guideline is added / removed / changed.
+          * @memberof Guides
+          * @event changeGuides
+          * @param {OnChangeGuides} - Parameters for the changeGuides event
+          */
 
           if (datas.fromRuler) {
             if (pos >= _this.scrollPos && guides.indexOf(guidePos) < 0) {
@@ -2615,7 +2776,7 @@ version: 0.7.2
           } else {
             var index = datas.target.getAttribute("data-index");
 
-            if (pos < _this.scrollPos) {
+            if (isDouble || pos < _this.scrollPos) {
               guides.splice(index, 1);
             } else if (guides.indexOf(guidePos) > -1) {
               return;
@@ -2626,7 +2787,11 @@ version: 0.7.2
             _this.setState({
               guides: guides.slice()
             }, function () {
-              setGuides(_this.state.guides);
+              var nextGuides = _this.state.guides;
+              setGuides(nextGuides);
+              onChangeGuides({
+                guides: nextGuides
+              });
             });
           }
         };
@@ -2730,16 +2895,34 @@ version: 0.7.2
       __proto.componentWillUnmount = function () {
         this.dragger.unset();
       };
+      /**
+       * Load the current guidelines.
+       * @memberof Guides
+       * @instance
+       */
+
 
       __proto.loadGuides = function (guides) {
         this.setState({
           guides: guides
         });
       };
+      /**
+       * Get current guidelines.
+       * @memberof Guides
+       * @instance
+       */
+
 
       __proto.getGuides = function () {
         return this.state.guides;
       };
+      /**
+       * Scroll the positions of the guidelines opposite the ruler.
+       * @memberof Guides
+       * @instance
+       */
+
 
       __proto.scrollGuides = function (pos) {
         var zoom = this.props.zoom;
@@ -2755,10 +2938,22 @@ version: 0.7.2
           el.style.display = -pos + guides[i] < 0 ? "none" : "block";
         });
       };
+      /**
+       * Recalculate the size of the ruler.
+       * @memberof Guides
+       * @instance
+       */
+
 
       __proto.resize = function () {
         this.ruler.resize();
       };
+      /**
+       * Scroll the position of the ruler.
+       * @memberof Guides
+       * @instance
+       */
+
 
       __proto.scroll = function (pos) {
         this.ruler.scroll(pos);
@@ -3244,8 +3439,8 @@ version: 0.7.2
       var nowCenter = getAverageClient$1(clients);
       var prevCenter = getAverageClient$1(prevClients);
       var startCenter = getAverageClient$1(startPinchClients);
-      var pinchClient = getAddClient$1(startPinchClients[0], getMinusClient$1(nowCenter, startCenter));
-      var pinchPrevClient = getAddClient$1(startPinchClients[0], getMinusClient$1(prevCenter, startCenter));
+      var pinchClient = getAddClient(startPinchClients[0], getMinusClient(nowCenter, startCenter));
+      var pinchPrevClient = getAddClient(startPinchClients[0], getMinusClient(prevCenter, startCenter));
       return getPosition$1(pinchClient, pinchPrevClient, startClients[0]);
     }
     function isMultiTouch$1(e) {
@@ -3308,13 +3503,13 @@ version: 0.7.2
         clientY: (clients[0].clientY + clients[1].clientY) / 2
       };
     }
-    function getAddClient$1(client1, client2) {
+    function getAddClient(client1, client2) {
       return {
         clientX: client1.clientX + client2.clientX,
         clientY: client1.clientY + client2.clientY
       };
     }
-    function getMinusClient$1(client1, client2) {
+    function getMinusClient(client1, client2) {
       return {
         clientX: client1.clientX - client2.clientX,
         clientY: client1.clientY - client2.clientY
