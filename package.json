@@ -1,6 +1,6 @@
 {
     "name": "@scena/guides",
-    "version": "0.7.2",
+    "version": "0.8.0",
     "description": "A Vanilla Guides component that can draw ruler and manage guidelines.",
     "main": "./dist/guides.cjs.js",
     "module": "./dist/guides.esm.js",
@@ -65,6 +65,6 @@
     },
     "dependencies": {
         "@egjs/component": "^2.1.2",
-        "react-compat-guides": "^0.4.3"
+        "react-compat-guides": "^0.5.0"
     }
 }
