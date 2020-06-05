@@ -1,7 +1,7 @@
 import * as React from "react";
 import Ruler from "@scena/react-ruler";
 import { ref, refs } from "framework-utils";
-import Dragger from "@daybrush/drag";
+import Dragger, { OnDragEnd } from "@daybrush/drag";
 import styled, { StyledInterface } from "react-css-styled";
 import { GUIDES, GUIDE, DRAGGING, ADDER, DISPLAY_DRAG, GUIDES_CSS } from "./consts";
 import { prefix } from "./utils";
@@ -213,7 +213,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
 
         return nextPos;
     }
-    private onDragEnd = ({ datas, clientX, clientY }: any) => {
+    private onDragEnd = ({ datas, clientX, clientY, isDouble }: OnDragEnd) => {
         const pos = this.onDrag({ datas, clientX, clientY });
         const guides = this.state.guides;
         const { setGuides, onChangeGuides, zoom, displayDragPos } = this.props;
@@ -244,7 +244,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         } else {
             const index = datas.target.getAttribute("data-index");
 
-            if (pos < this.scrollPos) {
+            if (isDouble || pos < this.scrollPos) {
                 guides.splice(index, 1);
             } else if (guides.indexOf(guidePos) > -1) {
                 return;
@@ -254,7 +254,11 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             this.setState({
                 guides: [...guides],
             }, () => {
-                setGuides!(this.state.guides);
+                const nextGuides = this.state.guides;
+                setGuides!(nextGuides);
+                onChangeGuides!({
+                    guides: nextGuides,
+                });
             });
         }
     }
