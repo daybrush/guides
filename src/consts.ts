@@ -22,4 +22,7 @@ export const METHODS = [
 
 export const EVENTS = [
     "changeGuides",
+    "dragStart",
+    "drag",
+    "dragEnd",
 ] as const;

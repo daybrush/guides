@@ -11,11 +11,16 @@ PROPERTIES.forEach(name => {
     };
 });
 
+watches.vueStyle = function(this: Guides, val: any) {
+    this.updateProperty("style", val);
+};
+
 @Component({ watch: watches })
 @Properties(PROPERTIES as any, (prototype, name) => {
     Prop()(prototype, name);
 })
 export default class Guides extends Vue {
+    @Prop() public vueStyle: any;
     @withMethods(METHODS as any)
     private guides!: VanillaGuides;
     private options!: Partial<GuidesOptions>;
@@ -23,7 +28,7 @@ export default class Guides extends Vue {
     public setStyle() {
         const el = this.$refs.guidesElement as HTMLElement;
         const elStyle = el.style as any;
-        const style = this.style || { width: "100%", height: "100%" };
+        const style = this.style || this.vueStyle || { width: "100%", height: "100%" };
 
         for (const name in style) {
             if (elStyle[name] === style[name]) {
@@ -43,7 +48,7 @@ export default class Guides extends Vue {
     }
     protected render(h: any) {
         return h("div", { ref: "guidesElement" });
-      }
+    }
     protected updated() {
         this.updateOptions();
     }
@@ -81,4 +86,4 @@ export default class Guides extends Vue {
     }
 }
 
-export default interface Guides extends GuidesInterface, GuidesOptions {}
+export default interface Guides extends GuidesInterface, GuidesOptions { }

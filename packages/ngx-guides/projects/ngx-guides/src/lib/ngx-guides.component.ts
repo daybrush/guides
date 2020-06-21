@@ -35,6 +35,10 @@ export class NgxGuidesComponent extends NgxGuidesInterface implements GuidesOpti
   @Input() public displayDragPos?: GuidesOptions['displayDragPos'];
   @Input() public dragPosFormat?: GuidesOptions['dragPosFormat'];
   @Output() public changeGuides: NgxGuidesEvents['changeGuides'];
+  @Output() public dragStart: NgxGuidesEvents['dragStart'];
+  // tslint:disable-next-line: no-output-native
+  @Output() public drag: NgxGuidesEvents['drag'];
+  @Output() public dragEnd: NgxGuidesEvents['dragEnd'];
 
   constructor() {
     super();

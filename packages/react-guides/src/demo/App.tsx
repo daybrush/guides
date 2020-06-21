@@ -32,6 +32,15 @@ export default class App extends Component<{}> {
                     onChangeGuides={({ guides }) => {
                         console.log("horizontal", guides);
                     }}
+                    onDragStart={e => {
+                        console.log(e);
+                    }}
+                    onDrag={e => {
+                        console.log(e);
+                    }}
+                    onDragEnd={e => {
+                        console.log(e);
+                    }}
                 />
             </div>
             <div className="ruler vertical">

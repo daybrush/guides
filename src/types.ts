@@ -1,4 +1,4 @@
-import { GuideOptions, OnChangeGuides } from "@scena/react-guides/declaration/types";
+import { GuideOptions, OnChangeGuides, OnDragStart, OnDrag, OnDragEnd } from "@scena/react-guides/declaration/types";
 
 export interface GuidesOptions extends GuideOptions {
     container?: HTMLElement;
@@ -6,6 +6,9 @@ export interface GuidesOptions extends GuideOptions {
 
 export interface GuidesEvents {
     changeGuides: OnChangeGuides;
+    dragStart: OnDragStart;
+    drag: OnDrag;
+    dragEnd: OnDragEnd;
 }
 
 /**
