@@ -4,7 +4,7 @@ name: @scena/guides
 license: MIT
 author: Daybrush
 repository: git+https://github.com/daybrush/guides.git
-version: 0.8.0
+version: 0.9.0
 */
 (function () {
     'use strict';
@@ -1518,7 +1518,7 @@ version: 0.8.0
 
     var PROPERTIES = ["setGuides", "type", "width", "height", "rulerStyle", "unit", "zoom", "style", "backgroundColor", "lineColor", "snaps", "snapThreshold", "direction", "container", "className", "textColor", "displayDragPos", "dragPosFormat"];
     var METHODS = ["getGuides", "loadGuides", "scroll", "scrollGuides", "resize"];
-    var EVENTS = ["changeGuides"];
+    var EVENTS = ["changeGuides", "dragStart", "drag", "dragEnd"];
 
     /*
     Copyright (c) 2019 Daybrush
@@ -1730,7 +1730,7 @@ version: 0.8.0
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/utils
-    @version 0.10.4
+    @version 0.10.5
     */
     /**
     * Date.now() method
@@ -1844,7 +1844,7 @@ version: 0.8.0
     license: MIT
     author: Daybrush
     repository: git+https://github.com/daybrush/drag.git
-    version: 0.16.1
+    version: 0.18.6
     */
 
     /*! *****************************************************************************
@@ -1875,6 +1875,15 @@ version: 0.8.0
       return __assign$2.apply(this, arguments);
     };
 
+    function getRad(pos1, pos2) {
+      var distX = pos2[0] - pos1[0];
+      var distY = pos2[1] - pos1[1];
+      var rad = Math.atan2(distY, distX);
+      return rad >= 0 ? rad : rad + Math.PI * 2;
+    }
+    function getRotatiion(touches) {
+      return getRad([touches[0].clientX, touches[0].clientY], [touches[1].clientX, touches[1].clientY]) / Math.PI * 180;
+    }
     function getPinchDragPosition(clients, prevClients, startClients, startPinchClients) {
       var nowCenter = getAverageClient(clients);
       var prevCenter = getAverageClient(prevClients);
@@ -1960,6 +1969,7 @@ version: 0.8.0
       };
     }
 
+    var INPUT_TAGNAMES = ["textarea", "input"];
     /**
      * You can set up drag events in any browser.
      */
@@ -1994,6 +2004,7 @@ version: 0.8.0
         this.targets = [];
         this.prevTime = 0;
         this.isDouble = false;
+        this.startRotate = 0;
         /**
          * @method
          */
@@ -2008,12 +2019,40 @@ version: 0.8.0
               pinchOutside = _a.pinchOutside,
               dragstart = _a.dragstart,
               preventRightClick = _a.preventRightClick,
-              preventDefault = _a.preventDefault;
+              preventDefault = _a.preventDefault,
+              checkInput = _a.checkInput;
           var isTouch = _this.isTouch;
+
+          if (!_this.flag) {
+            var activeElement = document.activeElement;
+            var target = e.target;
+            var tagName = target.tagName.toLowerCase();
+            var hasInput = INPUT_TAGNAMES.indexOf(tagName) > -1;
+            var hasContentEditable = target.isContentEditable;
+
+            if (hasInput || hasContentEditable) {
+              if (checkInput || activeElement === target) {
+                // force false or already focused.
+                return false;
+              }
+
+              if (activeElement && hasContentEditable && activeElement.isContentEditable && activeElement.contains(target)) {
+                return false;
+              }
+            } else if ((preventDefault || e.type === "touchstart") && activeElement) {
+              var activeTagName = activeElement.tagName;
+
+              if (activeElement.isContentEditable || INPUT_TAGNAMES.indexOf(activeTagName) > -1) {
+                activeElement.blur();
+              }
+            }
+          }
 
           if (!_this.flag && isTouch && pinchOutside) {
             setTimeout(function () {
-              addEvent$1(container, "touchstart", _this.onDragStart);
+              addEvent$1(container, "touchstart", _this.onDragStart, {
+                passive: false
+              });
             });
           }
 
@@ -2045,14 +2084,20 @@ version: 0.8.0
           _this.movement = 0;
           var position = getPosition(clients[0], _this.prevClients[0], _this.startClients[0]);
 
-          if (preventRightClick && (e.which === 3 || e.button === 2) || (dragstart && dragstart(__assign$2({
+          if (preventRightClick && (e.which === 3 || e.button === 2)) {
+            _this.initDrag();
+
+            return false;
+          }
+
+          var result = dragstart && dragstart(__assign$2({
             type: "dragstart",
             datas: _this.datas,
             inputEvent: e
-          }, position))) === false) {
-            _this.startClients = [];
-            _this.prevClients = [];
-            _this.flag = false;
+          }, position));
+
+          if (result === false) {
+            _this.initDrag();
           }
 
           _this.isDouble = now() - _this.prevTime < 200;
@@ -2121,6 +2166,7 @@ version: 0.8.0
 
         var elements = [].concat(targets);
         this.options = __assign$2({
+          checkInput: false,
           container: elements.length > 1 ? window : elements[0],
           preventRightClick: true,
           preventDefault: true,
@@ -2278,9 +2324,11 @@ version: 0.8.0
         var startClients = this.prevClients;
         var startAverageClient = getAverageClient(startClients);
         var centerPosition = getPosition(startAverageClient, startAverageClient, startAverageClient);
+        this.startRotate = getRotatiion(startClients);
         pinchstart(__assign$2({
           type: "pinchstart",
           datas: this.datas,
+          angle: this.startRotate,
           touches: getPositions(startClients, startClients, startClients)
         }, centerPosition, {
           inputEvent: e
@@ -2302,11 +2350,14 @@ version: 0.8.0
         var prevClients = this.prevClients;
         var startClients = this.startClients;
         var centerPosition = getPosition(getAverageClient(clients), getAverageClient(prevClients), getAverageClient(startClients));
+        var angle = getRotatiion(clients);
         var distance = getDist(clients);
         pinch(__assign$2({
           type: "pinch",
           datas: this.datas,
           movement: this.movement,
+          angle: angle,
+          rotation: angle - this.startRotate,
           touches: getPositions(clients, prevClients, startClients),
           scale: distance / this.startDistance,
           distance: distance
@@ -2372,6 +2423,12 @@ version: 0.8.0
           removeEvent$1(container, "touchend", this.onDragEnd);
           removeEvent$1(container, "touchcancel", this.onDragEnd);
         }
+      };
+
+      __proto.initDrag = function () {
+        this.startClients = [];
+        this.prevClients = [];
+        this.flag = false;
       };
 
       return Dragger;
@@ -2595,7 +2652,7 @@ version: 0.8.0
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/guides/blob/master/packages/react-guides
-    version: 0.7.0
+    version: 0.8.0
     */
 
     /*! *****************************************************************************
@@ -2635,6 +2692,19 @@ version: 0.8.0
 
       d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     }
+    var __assign$4 = function () {
+      __assign$4 = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+          s = arguments[i];
+
+          for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+
+        return t;
+      };
+
+      return __assign$4.apply(this, arguments);
+    };
 
     function prefix() {
       var classNames = [];
@@ -2670,12 +2740,15 @@ version: 0.8.0
         _this.scrollPos = 0;
         _this.guideElements = [];
 
-        _this.onDragStart = function (_a) {
-          var datas = _a.datas,
-              clientX = _a.clientX,
-              clientY = _a.clientY,
-              inputEvent = _a.inputEvent;
-          var isHorizontal = _this.props.type === "horizontal";
+        _this.onDragStart = function (e) {
+          var datas = e.datas,
+              clientX = e.clientX,
+              clientY = e.clientY,
+              inputEvent = e.inputEvent;
+          var _a = _this.props,
+              type = _a.type,
+              onDragStart = _a.onDragStart;
+          var isHorizontal = type === "horizontal";
 
           var rect = _this.guidesElement.getBoundingClientRect();
 
@@ -2688,66 +2761,56 @@ version: 0.8.0
             clientX: clientX,
             clientY: clientY
           });
+          /**
+           * When the drag starts, the dragStart event is called.
+           * @event dragStart
+           * @param {OnDragStart} - Parameters for the dragStart event
+           */
 
+
+          onDragStart(__assign$4({}, e, {
+            dragElement: datas.target
+          }));
           inputEvent.stopPropagation();
           inputEvent.preventDefault();
         };
 
-        _this.onDrag = function (_a) {
-          var datas = _a.datas,
-              clientX = _a.clientX,
-              clientY = _a.clientY;
-          var _b = _this.props,
-              type = _b.type,
-              zoom = _b.zoom,
-              snaps = _b.snaps,
-              snapThreshold = _b.snapThreshold,
-              displayDragPos = _b.displayDragPos,
-              dragPosFormat = _b.dragPosFormat;
-          var isHorizontal = type === "horizontal";
-          var nextPos = Math.round((isHorizontal ? clientY : clientX) - datas.offset);
-          var guidePos = Math.round(nextPos / zoom);
-          var guideSnaps = snaps.slice().sort(function (a, b) {
-            return Math.abs(guidePos - a) - Math.abs(guidePos - b);
-          });
+        _this.onDrag = function (e) {
+          var nextPos = _this.movePos(e);
+          /**
+           * When dragging, the drag event is called.
+           * @event drag
+           * @param {OnDrag} - Parameters for the drag event
+           */
 
-          if (guideSnaps.length && Math.abs(guideSnaps[0] - guidePos) < snapThreshold) {
-            guidePos = guideSnaps[0];
-            nextPos = guidePos * zoom;
-          }
 
-          if (displayDragPos) {
-            var rect = datas.rect;
-            var displayPos = type === "horizontal" ? [clientX - rect.left, guidePos] : [guidePos, clientY - rect.top];
-            _this.displayElement.style.cssText += "display: block;transform: translate(-50%, -50%) translate(" + displayPos.map(function (v) {
-              return v + "px";
-            }).join(", ") + ")";
-            _this.displayElement.innerHTML = "" + dragPosFormat(guidePos);
-          }
+          _this.props.onDrag(__assign$4({}, e, {
+            dragElement: e.datas.target
+          }));
 
-          datas.target.setAttribute("data-pos", guidePos);
-          datas.target.style.transform = _this.getTranslateName() + "(" + nextPos + "px)";
           return nextPos;
         };
 
-        _this.onDragEnd = function (_a) {
-          var datas = _a.datas,
-              clientX = _a.clientX,
-              clientY = _a.clientY,
-              isDouble = _a.isDouble;
+        _this.onDragEnd = function (e) {
+          var datas = e.datas,
+              clientX = e.clientX,
+              clientY = e.clientY,
+              isDouble = e.isDouble,
+              distX = e.distX,
+              distY = e.distY;
 
-          var pos = _this.onDrag({
+          var pos = _this.movePos({
             datas: datas,
             clientX: clientX,
             clientY: clientY
           });
 
           var guides = _this.state.guides;
-          var _b = _this.props,
-              setGuides = _b.setGuides,
-              onChangeGuides = _b.onChangeGuides,
-              zoom = _b.zoom,
-              displayDragPos = _b.displayDragPos;
+          var _a = _this.props,
+              setGuides = _a.setGuides,
+              onChangeGuides = _a.onChangeGuides,
+              zoom = _a.zoom,
+              displayDragPos = _a.displayDragPos;
           var guidePos = Math.round(pos / zoom);
 
           if (displayDragPos) {
@@ -2756,11 +2819,21 @@ version: 0.8.0
 
           removeClass(datas.target, DRAGGING);
           /**
+           * When the drag finishes, the dragEnd event is called.
+           * @event dragEnd
+           * @param {OnDragEnd} - Parameters for the dragEnd event
+           */
+
+          _this.props.onDragEnd(__assign$4({}, e, {
+            dragElement: datas.target
+          }));
+          /**
           * The `changeGuides` event occurs when the guideline is added / removed / changed.
           * @memberof Guides
           * @event changeGuides
           * @param {OnChangeGuides} - Parameters for the changeGuides event
           */
+
 
           if (datas.fromRuler) {
             if (pos >= _this.scrollPos && guides.indexOf(guidePos) < 0) {
@@ -2768,7 +2841,9 @@ version: 0.8.0
                 guides: guides.concat([guidePos])
               }, function () {
                 onChangeGuides({
-                  guides: _this.state.guides
+                  guides: _this.state.guides,
+                  distX: distX,
+                  distY: distY
                 });
                 setGuides(_this.state.guides);
               });
@@ -2790,6 +2865,8 @@ version: 0.8.0
               var nextGuides = _this.state.guides;
               setGuides(nextGuides);
               onChangeGuides({
+                distX: distX,
+                distY: distY,
                 guides: nextGuides
               });
             });
@@ -2959,6 +3036,43 @@ version: 0.8.0
         this.ruler.scroll(pos);
       };
 
+      __proto.movePos = function (e) {
+        var datas = e.datas,
+            clientX = e.clientX,
+            clientY = e.clientY;
+        var _a = this.props,
+            type = _a.type,
+            zoom = _a.zoom,
+            snaps = _a.snaps,
+            snapThreshold = _a.snapThreshold,
+            displayDragPos = _a.displayDragPos,
+            dragPosFormat = _a.dragPosFormat;
+        var isHorizontal = type === "horizontal";
+        var nextPos = Math.round((isHorizontal ? clientY : clientX) - datas.offset);
+        var guidePos = Math.round(nextPos / zoom);
+        var guideSnaps = snaps.slice().sort(function (a, b) {
+          return Math.abs(guidePos - a) - Math.abs(guidePos - b);
+        });
+
+        if (guideSnaps.length && Math.abs(guideSnaps[0] - guidePos) < snapThreshold) {
+          guidePos = guideSnaps[0];
+          nextPos = guidePos * zoom;
+        }
+
+        if (displayDragPos) {
+          var rect = datas.rect;
+          var displayPos = type === "horizontal" ? [clientX - rect.left, guidePos] : [guidePos, clientY - rect.top];
+          this.displayElement.style.cssText += "display: block;transform: translate(-50%, -50%) translate(" + displayPos.map(function (v) {
+            return v + "px";
+          }).join(", ") + ")";
+          this.displayElement.innerHTML = "" + dragPosFormat(guidePos);
+        }
+
+        datas.target.setAttribute("data-pos", guidePos);
+        datas.target.style.transform = this.getTranslateName() + "(" + nextPos + "px)";
+        return nextPos;
+      };
+
       __proto.getTranslateName = function () {
         return this.props.type === "horizontal" ? "translateY" : "translateX";
       };
@@ -2975,6 +3089,9 @@ version: 0.8.0
         snapThreshold: 5,
         snaps: [],
         onChangeGuides: function () {},
+        onDragStart: function () {},
+        onDrag: function () {},
+        onDragEnd: function () {},
         displayDragPos: false,
         dragPosFormat: function (v) {
           return v;
@@ -3421,8 +3538,8 @@ version: 0.8.0
     See the Apache Version 2.0 License for specific language governing permissions
     and limitations under the License.
     ***************************************************************************** */
-    var __assign$4 = function () {
-      __assign$4 = Object.assign || function __assign(t) {
+    var __assign$5 = function () {
+      __assign$5 = Object.assign || function __assign(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
           s = arguments[i];
 
@@ -3432,7 +3549,7 @@ version: 0.8.0
         return t;
       };
 
-      return __assign$4.apply(this, arguments);
+      return __assign$5.apply(this, arguments);
     };
 
     function getPinchDragPosition$1(clients, prevClients, startClients, startPinchClients) {
@@ -3574,7 +3691,7 @@ version: 0.8.0
               dragstart = _a.dragstart,
               preventRightClick = _a.preventRightClick;
 
-          if (preventRightClick && e.which === 3 || (dragstart && dragstart(__assign$4({
+          if (preventRightClick && e.which === 3 || (dragstart && dragstart(__assign$5({
             datas: _this.datas,
             inputEvent: e
           }, position))) === false) {
@@ -3604,7 +3721,7 @@ version: 0.8.0
           }
 
           var drag = _this.options.drag;
-          drag && drag(__assign$4({}, result, {
+          drag && drag(__assign$5({}, result, {
             isScroll: !!isScroll,
             inputEvent: e
           }));
@@ -3626,14 +3743,14 @@ version: 0.8.0
           var position = _this.pinchFlag ? getPinchDragPosition$1(prevClients, prevClients, startClients, _this.startPinchClients) : getPosition$1(prevClients[0], prevClients[0], startClients[0]);
           _this.startClients = [];
           _this.prevClients = [];
-          dragend && dragend(__assign$4({
+          dragend && dragend(__assign$5({
             datas: _this.datas,
             isDrag: _this.isDrag,
             inputEvent: e
           }, position));
         };
 
-        this.options = __assign$4({
+        this.options = __assign$5({
           container: el,
           preventRightClick: true,
           pinchThreshold: 0,
@@ -3715,7 +3832,7 @@ version: 0.8.0
         this.movement += Math.sqrt(positionDeltaX * positionDeltaX + positionDeltaY * positionDeltaY);
         this.prevClients = clients;
         this.isDrag = true;
-        return __assign$4({
+        return __assign$5({
           datas: this.datas
         }, position, {
           isScroll: false,
@@ -3751,7 +3868,7 @@ version: 0.8.0
         var startClients = this.prevClients;
         var startAverageClient = getAverageClient$1(startClients);
         var centerPosition = getPosition$1(startAverageClient, startAverageClient, startAverageClient);
-        pinchstart(__assign$4({
+        pinchstart(__assign$5({
           datas: this.datas,
           touches: getPositions$1(startClients, startClients, startClients)
         }, centerPosition, {
@@ -3775,7 +3892,7 @@ version: 0.8.0
         var startClients = this.startClients;
         var centerPosition = getPosition$1(getAverageClient$1(clients), getAverageClient$1(prevClients), getAverageClient$1(startClients));
         var distance = getDist$1(clients);
-        pinch(__assign$4({
+        pinch(__assign$5({
           datas: this.datas,
           touches: getPositions$1(clients, prevClients, startClients),
           scale: distance / this.startDistance,
@@ -3802,7 +3919,7 @@ version: 0.8.0
         var prevClients = this.prevClients;
         var startClients = this.startClients;
         var centerPosition = getPosition$1(getAverageClient$1(prevClients), getAverageClient$1(prevClients), getAverageClient$1(startClients));
-        pinchend(__assign$4({
+        pinchend(__assign$5({
           datas: this.datas,
           isPinch: isPinch,
           touches: getPositions$1(prevClients, prevClients, startClients)
