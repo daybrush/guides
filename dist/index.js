@@ -4,7 +4,7 @@ name: @scena/guides
 license: MIT
 author: Daybrush
 repository: git+https://github.com/daybrush/guides.git
-version: 0.9.0
+version: 0.10.0
 */
 (function () {
     'use strict';
@@ -1516,7 +1516,7 @@ version: 0.9.0
       });
     }
 
-    var PROPERTIES = ["setGuides", "type", "width", "height", "rulerStyle", "unit", "zoom", "style", "backgroundColor", "lineColor", "snaps", "snapThreshold", "direction", "container", "className", "textColor", "displayDragPos", "dragPosFormat"];
+    var PROPERTIES = ["setGuides", "type", "width", "height", "rulerStyle", "unit", "zoom", "style", "backgroundColor", "lineColor", "snaps", "snapThreshold", "direction", "container", "className", "textColor", "displayDragPos", "dragPosFormat", "cspNonce"];
     var METHODS = ["getGuides", "loadGuides", "scroll", "scrollGuides", "resize"];
     var EVENTS = ["changeGuides", "dragStart", "drag", "dragEnd"];
 
@@ -1526,7 +1526,7 @@ version: 0.9.0
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/ruler/blob/master/packages/react-ruler
-    version: 0.3.0
+    version: 0.5.0
     */
 
     /*! *****************************************************************************
@@ -1611,12 +1611,13 @@ version: 0.9.0
         var canvas = this.canvasElement;
         var _a = this.props,
             width = _a.width,
-            height = _a.height;
+            height = _a.height,
+            scrollPos = _a.scrollPos;
         this.width = width || canvas.offsetWidth;
         this.height = height || canvas.offsetHeight;
         canvas.width = this.width * 2;
         canvas.height = this.height * 2;
-        this.draw();
+        this.draw(scrollPos);
       };
 
       __proto.draw = function (scrollPos) {
@@ -1631,7 +1632,8 @@ version: 0.9.0
             backgroundColor = _a.backgroundColor,
             lineColor = _a.lineColor,
             textColor = _a.textColor,
-            direction = _a.direction;
+            direction = _a.direction,
+            textFormat = _a.textFormat;
         var width = this.width;
         var height = this.height;
         var state = this.state;
@@ -1669,13 +1671,19 @@ version: 0.9.0
                 startX = _b[0],
                 startY = _b[1];
 
+            var text = "" + (i + minRange) * unit;
+
+            if (textFormat) {
+              text = textFormat((i + minRange) * unit);
+            }
+
             if (isHorizontal) {
-              context.fillText("" + (i + minRange) * unit, startX, startY);
+              context.fillText(text, startX, startY);
             } else {
               context.save();
               context.translate(startX, startY);
               context.rotate(-Math.PI / 2);
-              context.fillText("" + (i + minRange) * unit, 0, 0);
+              context.fillText(text, 0, 0);
               context.restore();
             }
           }
@@ -1844,7 +1852,7 @@ version: 0.9.0
     license: MIT
     author: Daybrush
     repository: git+https://github.com/daybrush/drag.git
-    version: 0.18.6
+    version: 0.19.1
     */
 
     /*! *****************************************************************************
@@ -2009,7 +2017,11 @@ version: 0.9.0
          * @method
          */
 
-        this.onDragStart = function (e) {
+        this.onDragStart = function (e, isTrusted) {
+          if (isTrusted === void 0) {
+            isTrusted = true;
+          }
+
           if (!_this.flag && e.cancelable === false) {
             return;
           }
@@ -2048,8 +2060,10 @@ version: 0.9.0
             }
           }
 
+          var timer = 0;
+
           if (!_this.flag && isTouch && pinchOutside) {
-            setTimeout(function () {
+            timer = setTimeout(function () {
               addEvent$1(container, "touchstart", _this.onDragStart, {
                 passive: false
               });
@@ -2061,6 +2075,8 @@ version: 0.9.0
           }
 
           if (isMultiTouch(e)) {
+            clearTimeout(timer);
+
             if (!_this.flag && e.touches.length !== e.changedTouches.length) {
               return;
             }
@@ -2085,6 +2101,8 @@ version: 0.9.0
           var position = getPosition(clients[0], _this.prevClients[0], _this.startClients[0]);
 
           if (preventRightClick && (e.which === 3 || e.button === 2)) {
+            clearTimeout(timer);
+
             _this.initDrag();
 
             return false;
@@ -2093,10 +2111,13 @@ version: 0.9.0
           var result = dragstart && dragstart(__assign$2({
             type: "dragstart",
             datas: _this.datas,
-            inputEvent: e
+            inputEvent: e,
+            isTrusted: isTrusted
           }, position));
 
           if (result === false) {
+            clearTimeout(timer);
+
             _this.initDrag();
           }
 
@@ -2394,6 +2415,10 @@ version: 0.9.0
         this.isPinch = false;
         this.pinchFlag = false;
       };
+
+      __proto.triggerDragStart = function (e) {
+        this.onDragStart(e, false);
+      };
       /**
        *
        */
@@ -2440,7 +2465,7 @@ version: 0.9.0
     license: MIT
     author: Daybrush
     repository: git+https://github.com/daybrush/css-styled.git
-    version: 0.1.7
+    version: 0.2.1
     */
 
     function hash(str) {
@@ -2473,20 +2498,32 @@ version: 0.9.0
 
       return;
     }
-    function injectStyle(className, css, shadowRoot) {
+    function injectStyle(className, css, options, shadowRoot) {
       var style = document.createElement("style");
       style.setAttribute("type", "text/css");
-      style.innerHTML = css.replace(/([^}{]*){/mg, function (all, selector) {
-        return splitComma(selector).map(function (subSelector) {
-          if (subSelector.indexOf(":global") > -1) {
-            return subSelector.replace(/\:global/g, "");
-          } else if (subSelector.indexOf(":host") > -1) {
-            return "" + subSelector.replace(/\:host/g, "." + className);
-          }
+      style.setAttribute("data-styled-id", className);
 
-          return "." + className + " " + subSelector;
-        }).join(", ") + "{";
-      });
+      if (options.nonce) {
+        style.setAttribute("nonce", options.nonce);
+      }
+
+      var styleCSS = css;
+
+      if (!options.original) {
+        styleCSS = css.replace(/([^}{]*){/mg, function (all, selector) {
+          return splitComma(selector).map(function (subSelector) {
+            if (subSelector.indexOf(":global") > -1) {
+              return subSelector.replace(/\:global/g, "");
+            } else if (subSelector.indexOf(":host") > -1) {
+              return "" + subSelector.replace(/\:host/g, "." + className);
+            }
+
+            return "." + className + " " + subSelector;
+          }).join(", ") + "{";
+        });
+      }
+
+      style.innerHTML = styleCSS;
       (shadowRoot || document.head || document.body).appendChild(style);
       return style;
     }
@@ -2497,13 +2534,17 @@ version: 0.9.0
       var injectElement;
       return {
         className: injectClassName,
-        inject: function (el) {
+        inject: function (el, options) {
+          if (options === void 0) {
+            options = {};
+          }
+
           var shadowRoot = getShadowRoot(el);
           var firstMount = injectCount === 0;
           var styleElement;
 
           if (shadowRoot || firstMount) {
-            styleElement = injectStyle(injectClassName, css, shadowRoot);
+            styleElement = injectStyle(injectClassName, css, options, shadowRoot);
           }
 
           if (firstMount) {
@@ -2541,7 +2582,7 @@ version: 0.9.0
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/css-styled/tree/master/packages/react-css-styled
-    version: 0.1.4
+    version: 0.2.0
     */
 
     /*! *****************************************************************************
@@ -2606,44 +2647,50 @@ version: 0.9.0
     }
 
     function styled$1(Tag, css) {
+      var _a;
+
       var injector = styled(css);
-      return (
-        /*#__PURE__*/
-        function (_super) {
-          __extends$3(Styled, _super);
+      return _a =
+      /*#__PURE__*/
+      function (_super) {
+        __extends$3(Styled, _super);
 
-          function Styled() {
-            return _super !== null && _super.apply(this, arguments) || this;
-          }
+        function Styled() {
+          return _super !== null && _super.apply(this, arguments) || this;
+        }
 
-          Styled.prototype.render = function () {
-            var _a = this.props,
-                _b = _a.className,
-                className = _b === void 0 ? "" : _b,
-                attributes = __rest$2(_a, ["className"]);
+        Styled.prototype.render = function () {
+          var _a = this.props,
+              _b = _a.className,
+              className = _b === void 0 ? "" : _b,
+              cspNonce = _a.cspNonce,
+              attributes = __rest$2(_a, ["className", "cspNonce"]);
 
-            return createElement(Tag, __assign$3({
-              ref: ref(this, "element"),
-              className: className + " " + injector.className
-            }, attributes));
-          };
+          var cssId = injector.className;
+          return createElement(Tag, __assign$3({
+            "ref": ref(this, "element"),
+            "data-styled-id": cssId,
+            "className": className + " " + cssId
+          }, attributes));
+        };
 
-          Styled.prototype.componentDidMount = function () {
-            this.injectResult = injector.inject(this.element);
-          };
+        Styled.prototype.componentDidMount = function () {
+          this.injectResult = injector.inject(this.element, {
+            nonce: this.props.cspNonce
+          });
+        };
 
-          Styled.prototype.componentWillUnmount = function () {
-            this.injectResult.destroy();
-            this.injectResult = null;
-          };
+        Styled.prototype.componentWillUnmount = function () {
+          this.injectResult.destroy();
+          this.injectResult = null;
+        };
 
-          Styled.prototype.getElement = function () {
-            return this.element;
-          };
+        Styled.prototype.getElement = function () {
+          return this.element;
+        };
 
-          return Styled;
-        }(Component)
-      );
+        return Styled;
+      }(Component), _a.injector = injector, _a;
     }
 
     /*
@@ -2652,7 +2699,7 @@ version: 0.9.0
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/guides/blob/master/packages/react-guides
-    version: 0.8.0
+    version: 0.9.0
     */
 
     /*! *****************************************************************************
@@ -2892,9 +2939,11 @@ version: 0.9.0
             lineColor = _a.lineColor,
             textColor = _a.textColor,
             direction = _a.direction,
-            displayDragPos = _a.displayDragPos;
+            displayDragPos = _a.displayDragPos,
+            cspNonce = _a.cspNonce;
         return createElement(GuidesElement, {
           ref: ref(this, "manager"),
+          cspNonce: cspNonce,
           className: prefix("manager", type) + " " + className,
           style: style
         }, createElement(Ruler, {
