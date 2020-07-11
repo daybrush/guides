@@ -32,6 +32,7 @@ export class NgxGuidesComponent extends NgxGuidesInterface implements GuidesOpti
   @Input() public textColor?: string;
   @Input() public setGuides?: (guides: number[]) => any;
   @Input() public rulerStyle?: GuidesOptions['rulerStyle'];
+  @Input() public cspNonce?: GuidesOptions['cspNonce'];
   @Input() public displayDragPos?: GuidesOptions['displayDragPos'];
   @Input() public dragPosFormat?: GuidesOptions['dragPosFormat'];
   @Output() public changeGuides: NgxGuidesEvents['changeGuides'];

@@ -10,6 +10,7 @@ export const PROPERTIES: Array<keyof GuidesOptions> = [
     "textColor",
     "displayDragPos",
     "dragPosFormat",
+    "cspNonce",
 ];
 
 export const METHODS = [

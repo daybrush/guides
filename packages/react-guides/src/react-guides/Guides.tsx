@@ -53,9 +53,11 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             textColor,
             direction,
             displayDragPos,
+            cspNonce,
         } = this.props as Required<GuidesProps>;
         return <GuidesElement
             ref={ref(this, "manager")}
+            cspNonce={cspNonce}
             className={`${prefix("manager", type)} ${className}`}
             style={style}
         >

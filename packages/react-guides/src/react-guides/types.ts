@@ -18,6 +18,7 @@ export interface GuideOptions extends RulerProps {
     snapThreshold?: number;
     snaps?: number[];
     displayDragPos?: boolean;
+    cspNonce?: string;
     dragPosFormat?: (value: number) => string | number;
 }
 
