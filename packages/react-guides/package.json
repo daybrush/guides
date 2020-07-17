@@ -1,6 +1,6 @@
 {
   "name": "@scena/react-guides",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "A React Guides component that can draw ruler and manage guidelines.",
   "main": "./dist/guides.cjs.js",
   "module": "./dist/guides.esm.js",

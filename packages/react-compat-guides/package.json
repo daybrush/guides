@@ -1,6 +1,6 @@
 {
     "name": "react-compat-guides",
-    "version": "0.7.0",
+    "version": "0.7.1",
     "description": "A React Compat Guides component that can draw ruler and manage guidelines.",
     "main": "./dist/guides.cjs.js",
     "module": "./dist/guides.esm.js",
@@ -46,7 +46,7 @@
         "@types/react": "^16.0.0"
     },
     "dependencies": {
-        "@scena/react-guides": "^0.9.0",
+        "@scena/react-guides": "^0.9.1",
         "react-compat-css-styled": "^0.2.0",
         "react-compat-ruler": "^0.4.1",
         "react-simple-compat": "^0.1.8"

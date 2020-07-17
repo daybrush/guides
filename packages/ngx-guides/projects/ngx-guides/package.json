@@ -1,6 +1,6 @@
 {
   "name": "ngx-guides",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "An Angular Guides component that can draw ruler and manage guidelines.",
   "keywords": [
     "scene",
@@ -28,6 +28,6 @@
     "@angular/core": "^8.2.13"
   },
   "dependencies": {
-    "@scena/guides": "^0.10.0"
+    "@scena/guides": "^0.10.1"
   }
 }
