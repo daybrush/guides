@@ -52,6 +52,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             lineColor,
             textColor,
             direction,
+            textFormat,
             displayDragPos,
             cspNonce,
         } = this.props as Required<GuidesProps>;
@@ -73,6 +74,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                 style={rulerStyle}
                 textColor={textColor}
                 direction={direction}
+                textFormat={textFormat}
             />
             <div className={GUIDES} ref={ref(this, "guidesElement")}>
                 {displayDragPos && <div className={DISPLAY_DRAG} ref={ref(this, "displayElement")} />}
