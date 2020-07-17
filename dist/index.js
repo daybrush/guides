@@ -4,7 +4,7 @@ name: @scena/guides
 license: MIT
 author: Daybrush
 repository: git+https://github.com/daybrush/guides.git
-version: 0.10.0
+version: 0.10.1
 */
 (function () {
     'use strict';
@@ -1516,7 +1516,7 @@ version: 0.10.0
       });
     }
 
-    var PROPERTIES = ["setGuides", "type", "width", "height", "rulerStyle", "unit", "zoom", "style", "backgroundColor", "lineColor", "snaps", "snapThreshold", "direction", "container", "className", "textColor", "displayDragPos", "dragPosFormat", "cspNonce"];
+    var PROPERTIES = ["setGuides", "type", "width", "height", "rulerStyle", "unit", "zoom", "style", "backgroundColor", "lineColor", "snaps", "snapThreshold", "direction", "container", "className", "textColor", "displayDragPos", "dragPosFormat", "cspNonce", "textFormat"];
     var METHODS = ["getGuides", "loadGuides", "scroll", "scrollGuides", "resize"];
     var EVENTS = ["changeGuides", "dragStart", "drag", "dragEnd"];
 
@@ -2699,7 +2699,7 @@ version: 0.10.0
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/guides/blob/master/packages/react-guides
-    version: 0.9.0
+    version: 0.9.1
     */
 
     /*! *****************************************************************************
@@ -2939,6 +2939,7 @@ version: 0.10.0
             lineColor = _a.lineColor,
             textColor = _a.textColor,
             direction = _a.direction,
+            textFormat = _a.textFormat,
             displayDragPos = _a.displayDragPos,
             cspNonce = _a.cspNonce;
         return createElement(GuidesElement, {
@@ -2957,7 +2958,8 @@ version: 0.10.0
           lineColor: lineColor,
           style: rulerStyle,
           textColor: textColor,
-          direction: direction
+          direction: direction,
+          textFormat: textFormat
         }), createElement("div", {
           className: GUIDES,
           ref: ref(this, "guidesElement")
