@@ -26,6 +26,7 @@ export default class App extends Component<{}> {
                     zoom={this.state.zoom}
                     unit={this.state.unit}
                     snapThreshold={5}
+                    textFormat={v => `${v}in`}
                     snaps={[100, 200, 400]}
                     rulerStyle={{ left: "30px", width: "calc(100% - 30px)", height: "100%" }}
                     displayDragPos={true}
