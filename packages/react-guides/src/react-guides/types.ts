@@ -21,6 +21,8 @@ export interface GuideOptions extends RulerProps {
     cspNonce?: string;
     dragPosFormat?: (value: number) => string | number;
     guidePreset? :number[];
+    showGuides?: boolean;
+
 }
 
 /**
