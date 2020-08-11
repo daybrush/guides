@@ -26,6 +26,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         displayDragPos: false,
         dragPosFormat: v => v,
         guidePreset: [],
+        showGuides: true,
     };
     public state: GuidesState = {
         guides: [],
@@ -83,11 +84,12 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         </GuidesElement>;
     }
     public renderGuides() {
-        const { type, zoom } = this.props as Required<GuidesProps>;
+        const { type, zoom, showGuides } = this.props as Required<GuidesProps>;
         const translateName = type === "horizontal" ? "translateY" : "translateX";
         const guides = this.state.guides;
 
         this.guideElements = [];
+        if(showGuides){
         return guides.map((pos, i) => {
             return (<div className={prefix("guide", type)}
                 ref={refs(this, "guideElements", i)}
@@ -98,6 +100,9 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                     transform: `${translateName}(${pos * zoom}px)`,
                 }}></div>);
         });
+      }else{
+        return (<div></div>)
+      }
     }
     public componentDidMount() {
         this.dragger = new Dragger(
