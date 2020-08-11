@@ -25,6 +25,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         onDragEnd: () => {},
         displayDragPos: false,
         dragPosFormat: v => v,
+        guidePreset: [],
     };
     public state: GuidesState = {
         guides: [],
@@ -120,6 +121,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             dragend: this.onDragEnd,
         },
         );
+        this.setState({guides: this.props.guidePreset || []}); // pass array of guides on mount data to create gridlines or something like that in ui 
+
     }
     public componentWillUnmount() {
         this.dragger.unset();
