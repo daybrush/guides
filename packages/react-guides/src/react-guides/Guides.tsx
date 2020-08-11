@@ -122,7 +122,6 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         },
         );
         this.setState({guides: this.props.guidePreset || []}); // pass array of guides on mount data to create gridlines or something like that in ui 
-
     }
     public componentWillUnmount() {
         this.dragger.unset();
