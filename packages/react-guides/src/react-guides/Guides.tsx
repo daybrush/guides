@@ -131,6 +131,14 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     public componentWillUnmount() {
         this.dragger.unset();
     }
+    public componentDidUpdate(prevProps: any) {
+      if (prevProps.defaultGuides !== this.props.defaultGuides) {
+        //to dynamically update guides from code rather than dragging guidelines
+        this.setState({guides: this.props.defaultGuides || []},()=>{
+          this.renderGuides();
+        });
+      }
+    }
     /**
      * Load the current guidelines.
      * @memberof Guides
