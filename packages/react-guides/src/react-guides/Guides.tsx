@@ -4,9 +4,10 @@ import { ref, refs } from "framework-utils";
 import Dragger, { OnDragEnd } from "@daybrush/drag";
 import styled, { StyledInterface } from "react-css-styled";
 import { GUIDES, GUIDE, DRAGGING, ADDER, DISPLAY_DRAG, GUIDES_CSS } from "./consts";
-import { prefix } from "./utils";
+import { prefix, getMatrix } from "./utils";
 import { hasClass, addClass, removeClass } from "@daybrush/utils";
 import { GuidesState, GuidesProps, GuidesInterface } from "./types";
+import { mat4 } from "gl-matrix";
 
 const GuidesElement = styled("div", GUIDES_CSS);
 
@@ -19,10 +20,10 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         style: { width: "100%", height: "100%" },
         snapThreshold: 5,
         snaps: [],
-        onChangeGuides: () => {},
-        onDragStart: () => {},
-        onDrag: () => {},
-        onDragEnd: () => {},
+        onChangeGuides: () => { },
+        onDragStart: () => { },
+        onDrag: () => { },
+        onDragEnd: () => { },
         displayDragPos: false,
         dragPosFormat: v => v,
         defaultGuides: [],
@@ -34,7 +35,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     public adderElement!: HTMLElement;
     public scrollPos: number = 0;
     public ruler!: Ruler;
-    private manager!: StyledInterface;
+    private manager!: StyledInterface<HTMLElement>;
     private guidesElement!: HTMLElement;
     private displayElement!: HTMLElement;
     private dragger!: Dragger;
@@ -91,35 +92,55 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         const guides = this.state.guides;
 
         this.guideElements = [];
-        if(showGuides){
-        return guides.map((pos, i) => {
-            return (<div className={prefix("guide", type)}
-                ref={refs(this, "guideElements", i)}
-                key={i}
-                data-index={i}
-                data-pos={pos}
-                style={{
-                    transform: `${translateName}(${pos * zoom}px)`,
-                }}></div>);
-        });
-      }else{
-        return (<div></div>)
-      }
+        if (showGuides) {
+            return guides.map((pos, i) => {
+                return (<div className={prefix("guide", type)}
+                    ref={refs(this, "guideElements", i)}
+                    key={i}
+                    data-index={i}
+                    data-pos={pos}
+                    style={{
+                        transform: `${translateName}(${pos * zoom}px)`,
+                    }}></div>);
+            });
+        }
+        return;
     }
     public componentDidMount() {
         this.dragger = new Dragger(
             this.manager.getElement(), {
             container: document.body,
             dragstart: e => {
-                const target = e.inputEvent.target;
+                const inputEvent = e.inputEvent;
+                const target = inputEvent.target;
                 const datas = e.datas;
+                const canvasElement = this.ruler.canvasElement;
+                const guidesElement = this.guidesElement;
+                const isHorizontal = this.props.type === "horizontal";
 
-                if (target === this.ruler.canvasElement) {
-                    e.datas.fromRuler = true;
+                if (target === canvasElement) {
+                    datas.fromRuler = true;
+                    const offsetY = canvasElement.offsetTop + inputEvent.offsetY - guidesElement.offsetTop;
+                    const offsetX = canvasElement.offsetLeft + inputEvent.offsetX - guidesElement.offsetLeft;
+
+                    datas.offsetPos = [
+                        offsetX,
+                        offsetY,
+                    ];
                     datas.target = this.adderElement;
+                    datas.offsetPos[isHorizontal ? 1 : 0] += this.scrollPos;
                 } else if (!hasClass(target, GUIDE)) {
                     return false;
                 } else {
+                    const offsetY = target.offsetTop + inputEvent.offsetY;
+                    const offsetX = target.offsetLeft + inputEvent.offsetX;
+                    const pos = parseFloat(target.getAttribute("data-pos"));
+
+                    datas.offsetPos = [
+                        offsetX,
+                        offsetY,
+                    ];
+                    datas.offsetPos[isHorizontal ? 1 : 0] += pos;
                     datas.target = target;
                 }
                 this.onDragStart(e);
@@ -128,18 +149,18 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             dragend: this.onDragEnd,
         },
         );
-        this.setState({guides: this.props.defaultGuides || []}); // pass array of guides on mount data to create gridlines or something like that in ui 
+        this.setState({ guides: this.props.defaultGuides || [] }); // pass array of guides on mount data to create gridlines or something like that in ui
     }
     public componentWillUnmount() {
         this.dragger.unset();
     }
     public componentDidUpdate(prevProps: any) {
-      if (prevProps.defaultGuides !== this.props.defaultGuides) {
-        //to dynamically update guides from code rather than dragging guidelines
-        this.setState({guides: this.props.defaultGuides || []},()=>{
-          this.renderGuides();
-        });
-      }
+        if (prevProps.defaultGuides !== this.props.defaultGuides) {
+            // to dynamically update guides from code rather than dragging guidelines
+            this.setState({ guides: this.props.defaultGuides || [] }, () => {
+                this.renderGuides();
+            });
+        }
     }
     /**
      * Load the current guidelines.
@@ -196,15 +217,13 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         this.ruler.scroll(pos);
     }
     private onDragStart = (e: any) => {
-        const { datas, clientX, clientY, inputEvent } = e;
-        const { type, onDragStart } = this.props;
-        const isHorizontal = type === "horizontal";
-        const rect = this.guidesElement.getBoundingClientRect();
-        datas.rect = rect;
-        datas.offset = isHorizontal ? rect.top : rect.left;
+        const { datas, inputEvent } = e;
+        const { onDragStart } = this.props;
+
+        datas.matrix = getMatrix(this.manager.getElement());
 
         addClass(datas.target, DRAGGING);
-        this.onDrag({ datas, clientX, clientY });
+        this.onDrag(e);
 
         /**
          * When the drag starts, the dragStart event is called.
@@ -233,8 +252,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         return nextPos;
     }
     private onDragEnd = (e: OnDragEnd) => {
-        const { datas, clientX, clientY, isDouble, distX, distY } = e;
-        const pos = this.movePos({ datas, clientX, clientY });
+        const { datas, isDouble, distX, distY } = e;
+        const pos = this.movePos(e);
         const guides = this.state.guides;
         const { setGuides, onChangeGuides, zoom, displayDragPos } = this.props;
         const guidePos = Math.round(pos / zoom!);
@@ -252,12 +271,12 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             ...e,
             dragElement: datas.target,
         });
-         /**
-         * The `changeGuides` event occurs when the guideline is added / removed / changed.
-         * @memberof Guides
-         * @event changeGuides
-         * @param {OnChangeGuides} - Parameters for the changeGuides event
-         */
+        /**
+        * The `changeGuides` event occurs when the guideline is added / removed / changed.
+        * @memberof Guides
+        * @event changeGuides
+        * @param {OnChangeGuides} - Parameters for the changeGuides event
+        */
         if (datas.fromRuler) {
             if (pos >= this.scrollPos && guides.indexOf(guidePos) < 0) {
                 this.setState({
@@ -295,13 +314,19 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         }
     }
     private movePos(e: any) {
-        const { datas, clientX, clientY } = e;
+        const { datas, distX, distY } = e;
         const {
             type, zoom, snaps, snapThreshold,
             displayDragPos, dragPosFormat,
         } = this.props;
         const isHorizontal = type === "horizontal";
-        let nextPos = Math.round((isHorizontal ? clientY : clientX) - datas.offset);
+
+        const res = mat4.multiply(mat4.create(), datas.matrix, [distX, distY, 0, 1] as any);
+        const w = res[3];
+        const offsetPos = datas.offsetPos;
+        const offsetX = res[0] / w + offsetPos[0];
+        const offsetY = res[1] / w + offsetPos[1];
+        let nextPos = Math.round(isHorizontal ? offsetY : offsetX);
         let guidePos = Math.round(nextPos / zoom!);
         const guideSnaps = snaps!.slice().sort((a, b) => {
             return Math.abs(guidePos - a) - Math.abs(guidePos - b);
@@ -312,13 +337,12 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             nextPos = guidePos * zoom!;
         }
         if (displayDragPos) {
-            const rect = datas.rect;
             const displayPos = type === "horizontal"
-                ? [clientX - rect.left, guidePos]
-                : [guidePos, clientY - rect.top];
+                ? [offsetX, guidePos]
+                : [guidePos, offsetY];
             this.displayElement.style.cssText += `display: block;transform: translate(-50%, -50%) translate(${
                 displayPos.map(v => `${v}px`).join(", ")
-            })`;
+                })`;
             this.displayElement.innerHTML = `${dragPosFormat!(guidePos)}`;
         }
         datas.target.setAttribute("data-pos", guidePos);
