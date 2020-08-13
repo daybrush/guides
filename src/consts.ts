@@ -12,6 +12,8 @@ export const PROPERTIES: Array<keyof GuidesOptions> = [
     "dragPosFormat",
     "cspNonce",
     "textFormat",
+    "defaultGuides",
+    "showGuides",
 ];
 
 export const METHODS = [
