@@ -4,7 +4,7 @@ name: @scena/guides
 license: MIT
 author: Daybrush
 repository: git+https://github.com/daybrush/guides.git
-version: 0.10.1
+version: 0.11.0
 */
 (function () {
     'use strict';
@@ -1516,7 +1516,7 @@ version: 0.10.1
       });
     }
 
-    var PROPERTIES = ["setGuides", "type", "width", "height", "rulerStyle", "unit", "zoom", "style", "backgroundColor", "lineColor", "snaps", "snapThreshold", "direction", "container", "className", "textColor", "displayDragPos", "dragPosFormat", "cspNonce", "textFormat"];
+    var PROPERTIES = ["setGuides", "type", "width", "height", "rulerStyle", "unit", "zoom", "style", "backgroundColor", "lineColor", "snaps", "snapThreshold", "direction", "container", "className", "textColor", "displayDragPos", "dragPosFormat", "cspNonce", "textFormat", "defaultGuides", "showGuides"];
     var METHODS = ["getGuides", "loadGuides", "scroll", "scrollGuides", "resize"];
     var EVENTS = ["changeGuides", "dragStart", "drag", "dragEnd"];
 
@@ -1526,7 +1526,7 @@ version: 0.10.1
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/ruler/blob/master/packages/react-ruler
-    version: 0.5.0
+    version: 0.6.0
     */
 
     /*! *****************************************************************************
@@ -1641,9 +1641,17 @@ version: 0.10.1
         var context = this.canvasContext;
         var isHorizontal = type === "horizontal";
         var isDirectionStart = direction === "start";
-        context.rect(0, 0, width * 2, height * 2);
-        context.fillStyle = backgroundColor;
-        context.fill();
+
+        if (backgroundColor === "transparent") {
+          // Clear existing paths & text
+          context.clearRect(0, 0, width * 2, height * 2);
+        } else {
+          // Draw the background
+          context.rect(0, 0, width * 2, height * 2);
+          context.fillStyle = backgroundColor;
+          context.fill();
+        }
+
         context.save();
         context.scale(2, 2);
         context.strokeStyle = lineColor;
@@ -1752,62 +1760,6 @@ version: 0.10.1
 
     function now() {
       return Date.now ? Date.now() : new Date().getTime();
-    }
-    /**
-    * Checks if the specified class value exists in the element's class attribute.
-    * @memberof DOM
-    * @param element - target
-    * @param className - the class name to search
-    * @return {boolean} return false if the class is not found.
-    * @example
-    import {hasClass} from "@daybrush/utils";
-
-    console.log(hasClass(element, "start")); // true or false
-    */
-
-    function hasClass(element, className) {
-      if (element.classList) {
-        return element.classList.contains(className);
-      }
-
-      return !!element.className.match(new RegExp("(\\s|^)" + className + "(\\s|$)"));
-    }
-    /**
-    * Add the specified class value. If these classe already exist in the element's class attribute they are ignored.
-    * @memberof DOM
-    * @param element - target
-    * @param className - the class name to add
-    * @example
-    import {addClass} from "@daybrush/utils";
-
-    addClass(element, "start");
-    */
-
-    function addClass(element, className) {
-      if (element.classList) {
-        element.classList.add(className);
-      } else {
-        element.className += " " + className;
-      }
-    }
-    /**
-    * Removes the specified class value.
-    * @memberof DOM
-    * @param element - target
-    * @param className - the class name to remove
-    * @example
-    import {removeClass} from "@daybrush/utils";
-
-    removeClass(element, "start");
-    */
-
-    function removeClass(element, className) {
-      if (element.classList) {
-        element.classList.remove(className);
-      } else {
-        var reg = new RegExp("(\\s|^)" + className + "(\\s|$)");
-        element.className = element.className.replace(reg, " ");
-      }
     }
     /**
     * Sets up a function that will be called whenever the specified event is delivered to the target
@@ -2694,12 +2646,368 @@ version: 0.10.1
     }
 
     /*
+    Copyright (c) 2018 Daybrush
+    @name: @daybrush/utils
+    license: MIT
+    author: Daybrush
+    repository: https://github.com/daybrush/utils
+    @version 0.13.0
+    */
+    var OPEN_CLOSED_CHARACTER = ["\"", "'", "\\\"", "\\'"];
+
+    function findClosed(closedCharacter, texts, index, length) {
+      for (var i = index; i < length; ++i) {
+        var character = texts[i].trim();
+
+        if (character === closedCharacter) {
+          return i;
+        }
+
+        var nextIndex = i;
+
+        if (character === "(") {
+          nextIndex = findClosed(")", texts, i + 1, length);
+        } else if (OPEN_CLOSED_CHARACTER.indexOf(character) > -1) {
+          nextIndex = findClosed(character, texts, i + 1, length);
+        }
+
+        if (nextIndex === -1) {
+          break;
+        }
+
+        i = nextIndex;
+      }
+
+      return -1;
+    }
+
+    function splitText(text, separator) {
+      var regexText = "(\\s*" + (separator || ",") + "\\s*|\\(|\\)|\"|'|\\\\\"|\\\\'|\\s+)";
+      var regex = new RegExp(regexText, "g");
+      var texts = text.split(regex).filter(Boolean);
+      var length = texts.length;
+      var values = [];
+      var tempValues = [];
+
+      for (var i = 0; i < length; ++i) {
+        var character = texts[i].trim();
+        var nextIndex = i;
+
+        if (character === "(") {
+          nextIndex = findClosed(")", texts, i + 1, length);
+        } else if (character === ")") {
+          throw new Error("invalid format");
+        } else if (OPEN_CLOSED_CHARACTER.indexOf(character) > -1) {
+          nextIndex = findClosed(character, texts, i + 1, length);
+        } else if (character === separator) {
+          if (tempValues.length) {
+            values.push(tempValues.join(""));
+            tempValues = [];
+          }
+
+          continue;
+        }
+
+        if (nextIndex === -1) {
+          nextIndex = length - 1;
+        }
+
+        tempValues.push(texts.slice(i, nextIndex + 1).join(""));
+        i = nextIndex;
+      }
+
+      if (tempValues.length) {
+        values.push(tempValues.join(""));
+      }
+
+      return values;
+    }
+    /**
+    * divide text by comma.
+    * @memberof Utils
+    * @param {string} text - text to divide
+    * @return {Array} divided texts
+    * @example
+    import {splitComma} from "@daybrush/utils";
+
+    console.log(splitComma("a,b,c,d,e,f,g"));
+    // ["a", "b", "c", "d", "e", "f", "g"]
+    console.log(splitComma("'a,b',c,'d,e',f,g"));
+    // ["'a,b'", "c", "'d,e'", "f", "g"]
+    */
+
+    function splitComma$1(text) {
+      // divide comma(,)
+      // "[^"]*"|'[^']*'
+      return splitText(text, ",");
+    }
+    /**
+    * divide text by bracket "(", ")".
+    * @memberof Utils
+    * @param {string} text - text to divide
+    * @return {object} divided texts
+    * @example
+    import {splitBracket} from "@daybrush/utils";
+
+    console.log(splitBracket("a(1, 2)"));
+    // {prefix: "a", value: "1, 2", suffix: ""}
+    console.log(splitBracket("a(1, 2)b"));
+    // {prefix: "a", value: "1, 2", suffix: "b"}
+    */
+
+    function splitBracket(text) {
+      var matches = /([^(]*)\(([\s\S]*)\)([\s\S]*)/g.exec(text);
+
+      if (!matches || matches.length < 4) {
+        return {};
+      } else {
+        return {
+          prefix: matches[1],
+          value: matches[2],
+          suffix: matches[3]
+        };
+      }
+    }
+    /**
+    * Checks if the specified class value exists in the element's class attribute.
+    * @memberof DOM
+    * @param element - target
+    * @param className - the class name to search
+    * @return {boolean} return false if the class is not found.
+    * @example
+    import {hasClass} from "@daybrush/utils";
+
+    console.log(hasClass(element, "start")); // true or false
+    */
+
+    function hasClass(element, className) {
+      if (element.classList) {
+        return element.classList.contains(className);
+      }
+
+      return !!element.className.match(new RegExp("(\\s|^)" + className + "(\\s|$)"));
+    }
+    /**
+    * Add the specified class value. If these classe already exist in the element's class attribute they are ignored.
+    * @memberof DOM
+    * @param element - target
+    * @param className - the class name to add
+    * @example
+    import {addClass} from "@daybrush/utils";
+
+    addClass(element, "start");
+    */
+
+    function addClass(element, className) {
+      if (element.classList) {
+        element.classList.add(className);
+      } else {
+        element.className += " " + className;
+      }
+    }
+    /**
+    * Removes the specified class value.
+    * @memberof DOM
+    * @param element - target
+    * @param className - the class name to remove
+    * @example
+    import {removeClass} from "@daybrush/utils";
+
+    removeClass(element, "start");
+    */
+
+    function removeClass(element, className) {
+      if (element.classList) {
+        element.classList.remove(className);
+      } else {
+        var reg = new RegExp("(\\s|^)" + className + "(\\s|$)");
+        element.className = element.className.replace(reg, " ");
+      }
+    }
+
+    /**
+     * Common utilities
+     * @module glMatrix
+     */
+    var ARRAY_TYPE = typeof Float32Array !== 'undefined' ? Float32Array : Array;
+    if (!Math.hypot) Math.hypot = function () {
+      var y = 0,
+          i = arguments.length;
+
+      while (i--) {
+        y += arguments[i] * arguments[i];
+      }
+
+      return Math.sqrt(y);
+    };
+
+    /**
+     * 4x4 Matrix<br>Format: column-major, when typed out it looks like row-major<br>The matrices are being post multiplied.
+     * @module mat4
+     */
+
+    /**
+     * Creates a new identity mat4
+     *
+     * @returns {mat4} a new 4x4 matrix
+     */
+
+    function create() {
+      var out = new ARRAY_TYPE(16);
+
+      if (ARRAY_TYPE != Float32Array) {
+        out[1] = 0;
+        out[2] = 0;
+        out[3] = 0;
+        out[4] = 0;
+        out[6] = 0;
+        out[7] = 0;
+        out[8] = 0;
+        out[9] = 0;
+        out[11] = 0;
+        out[12] = 0;
+        out[13] = 0;
+        out[14] = 0;
+      }
+
+      out[0] = 1;
+      out[5] = 1;
+      out[10] = 1;
+      out[15] = 1;
+      return out;
+    }
+    /**
+     * Inverts a mat4
+     *
+     * @param {mat4} out the receiving matrix
+     * @param {ReadonlyMat4} a the source matrix
+     * @returns {mat4} out
+     */
+
+    function invert(out, a) {
+      var a00 = a[0],
+          a01 = a[1],
+          a02 = a[2],
+          a03 = a[3];
+      var a10 = a[4],
+          a11 = a[5],
+          a12 = a[6],
+          a13 = a[7];
+      var a20 = a[8],
+          a21 = a[9],
+          a22 = a[10],
+          a23 = a[11];
+      var a30 = a[12],
+          a31 = a[13],
+          a32 = a[14],
+          a33 = a[15];
+      var b00 = a00 * a11 - a01 * a10;
+      var b01 = a00 * a12 - a02 * a10;
+      var b02 = a00 * a13 - a03 * a10;
+      var b03 = a01 * a12 - a02 * a11;
+      var b04 = a01 * a13 - a03 * a11;
+      var b05 = a02 * a13 - a03 * a12;
+      var b06 = a20 * a31 - a21 * a30;
+      var b07 = a20 * a32 - a22 * a30;
+      var b08 = a20 * a33 - a23 * a30;
+      var b09 = a21 * a32 - a22 * a31;
+      var b10 = a21 * a33 - a23 * a31;
+      var b11 = a22 * a33 - a23 * a32; // Calculate the determinant
+
+      var det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
+
+      if (!det) {
+        return null;
+      }
+
+      det = 1.0 / det;
+      out[0] = (a11 * b11 - a12 * b10 + a13 * b09) * det;
+      out[1] = (a02 * b10 - a01 * b11 - a03 * b09) * det;
+      out[2] = (a31 * b05 - a32 * b04 + a33 * b03) * det;
+      out[3] = (a22 * b04 - a21 * b05 - a23 * b03) * det;
+      out[4] = (a12 * b08 - a10 * b11 - a13 * b07) * det;
+      out[5] = (a00 * b11 - a02 * b08 + a03 * b07) * det;
+      out[6] = (a32 * b02 - a30 * b05 - a33 * b01) * det;
+      out[7] = (a20 * b05 - a22 * b02 + a23 * b01) * det;
+      out[8] = (a10 * b10 - a11 * b08 + a13 * b06) * det;
+      out[9] = (a01 * b08 - a00 * b10 - a03 * b06) * det;
+      out[10] = (a30 * b04 - a31 * b02 + a33 * b00) * det;
+      out[11] = (a21 * b02 - a20 * b04 - a23 * b00) * det;
+      out[12] = (a11 * b07 - a10 * b09 - a12 * b06) * det;
+      out[13] = (a00 * b09 - a01 * b07 + a02 * b06) * det;
+      out[14] = (a31 * b01 - a30 * b03 - a32 * b00) * det;
+      out[15] = (a20 * b03 - a21 * b01 + a22 * b00) * det;
+      return out;
+    }
+    /**
+     * Multiplies two mat4s
+     *
+     * @param {mat4} out the receiving matrix
+     * @param {ReadonlyMat4} a the first operand
+     * @param {ReadonlyMat4} b the second operand
+     * @returns {mat4} out
+     */
+
+    function multiply(out, a, b) {
+      var a00 = a[0],
+          a01 = a[1],
+          a02 = a[2],
+          a03 = a[3];
+      var a10 = a[4],
+          a11 = a[5],
+          a12 = a[6],
+          a13 = a[7];
+      var a20 = a[8],
+          a21 = a[9],
+          a22 = a[10],
+          a23 = a[11];
+      var a30 = a[12],
+          a31 = a[13],
+          a32 = a[14],
+          a33 = a[15]; // Cache only the current line of the second matrix
+
+      var b0 = b[0],
+          b1 = b[1],
+          b2 = b[2],
+          b3 = b[3];
+      out[0] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+      out[1] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+      out[2] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+      out[3] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
+      b0 = b[4];
+      b1 = b[5];
+      b2 = b[6];
+      b3 = b[7];
+      out[4] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+      out[5] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+      out[6] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+      out[7] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
+      b0 = b[8];
+      b1 = b[9];
+      b2 = b[10];
+      b3 = b[11];
+      out[8] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+      out[9] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+      out[10] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+      out[11] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
+      b0 = b[12];
+      b1 = b[13];
+      b2 = b[14];
+      b3 = b[15];
+      out[12] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+      out[13] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+      out[14] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+      out[15] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
+      return out;
+    }
+
+    /*
     Copyright (c) 2019 Daybrush
     name: @scena/react-guides
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/guides/blob/master/packages/react-guides
-    version: 0.9.1
+    version: 0.10.1
     */
 
     /*! *****************************************************************************
@@ -2762,6 +3070,39 @@ version: 0.10.1
 
       return prefixNames.apply(void 0, ["scena-"].concat(classNames));
     }
+    function getMatrix(el) {
+      var target = el;
+      var matrix = create();
+
+      while (target) {
+        var transform = getComputedStyle(target).transform;
+        target = target.parentElement;
+
+        if (transform.indexOf("matrix") !== 0) {
+          continue;
+        }
+
+        var _a = splitBracket(transform),
+            name = _a.prefix,
+            value = _a.value;
+
+        var nums = splitComma$1(value).map(function (v) {
+          return parseFloat(v);
+        });
+
+        if (name === "matrix") {
+          nums = [nums[0], nums[1], 0, 0, nums[2], nums[3], 0, 0, 0, 0, 1, 0, nums[4], nums[5], 0, 1];
+        }
+
+        multiply(matrix, nums, matrix);
+      }
+
+      invert(matrix, matrix);
+      matrix[12] = 0;
+      matrix[13] = 0;
+      matrix[14] = 0;
+      return matrix;
+    }
 
     var RULER = prefix("ruler");
     var ADDER = prefix("guide", "adder");
@@ -2789,25 +3130,12 @@ version: 0.10.1
 
         _this.onDragStart = function (e) {
           var datas = e.datas,
-              clientX = e.clientX,
-              clientY = e.clientY,
               inputEvent = e.inputEvent;
-          var _a = _this.props,
-              type = _a.type,
-              onDragStart = _a.onDragStart;
-          var isHorizontal = type === "horizontal";
-
-          var rect = _this.guidesElement.getBoundingClientRect();
-
-          datas.rect = rect;
-          datas.offset = isHorizontal ? rect.top : rect.left;
+          var onDragStart = _this.props.onDragStart;
+          datas.matrix = getMatrix(_this.manager.getElement());
           addClass(datas.target, DRAGGING);
 
-          _this.onDrag({
-            datas: datas,
-            clientX: clientX,
-            clientY: clientY
-          });
+          _this.onDrag(e);
           /**
            * When the drag starts, the dragStart event is called.
            * @event dragStart
@@ -2840,17 +3168,11 @@ version: 0.10.1
 
         _this.onDragEnd = function (e) {
           var datas = e.datas,
-              clientX = e.clientX,
-              clientY = e.clientY,
               isDouble = e.isDouble,
               distX = e.distX,
               distY = e.distY;
 
-          var pos = _this.movePos({
-            datas: datas,
-            clientX: clientX,
-            clientY: clientY
-          });
+          var pos = _this.movePos(e);
 
           var guides = _this.state.guides;
           var _a = _this.props,
@@ -2977,22 +3299,28 @@ version: 0.10.1
 
         var _a = this.props,
             type = _a.type,
-            zoom = _a.zoom;
+            zoom = _a.zoom,
+            showGuides = _a.showGuides;
         var translateName = type === "horizontal" ? "translateY" : "translateX";
         var guides = this.state.guides;
         this.guideElements = [];
-        return guides.map(function (pos, i) {
-          return createElement("div", {
-            className: prefix("guide", type),
-            ref: refs(_this, "guideElements", i),
-            key: i,
-            "data-index": i,
-            "data-pos": pos,
-            style: {
-              transform: translateName + "(" + pos * zoom + "px)"
-            }
+
+        if (showGuides) {
+          return guides.map(function (pos, i) {
+            return createElement("div", {
+              className: prefix("guide", type),
+              ref: refs(_this, "guideElements", i),
+              key: i,
+              "data-index": i,
+              "data-pos": pos,
+              style: {
+                transform: translateName + "(" + pos * zoom + "px)"
+              }
+            });
           });
-        });
+        }
+
+        return;
       };
 
       __proto.componentDidMount = function () {
@@ -3001,15 +3329,28 @@ version: 0.10.1
         this.dragger = new Dragger(this.manager.getElement(), {
           container: document.body,
           dragstart: function (e) {
-            var target = e.inputEvent.target;
+            var inputEvent = e.inputEvent;
+            var target = inputEvent.target;
             var datas = e.datas;
+            var canvasElement = _this.ruler.canvasElement;
+            var guidesElement = _this.guidesElement;
+            var isHorizontal = _this.props.type === "horizontal";
 
-            if (target === _this.ruler.canvasElement) {
-              e.datas.fromRuler = true;
+            if (target === canvasElement) {
+              datas.fromRuler = true;
+              var offsetY = canvasElement.offsetTop + inputEvent.offsetY - guidesElement.offsetTop;
+              var offsetX = canvasElement.offsetLeft + inputEvent.offsetX - guidesElement.offsetLeft;
+              datas.offsetPos = [offsetX, offsetY];
               datas.target = _this.adderElement;
+              datas.offsetPos[isHorizontal ? 1 : 0] += _this.scrollPos;
             } else if (!hasClass(target, GUIDE)) {
               return false;
             } else {
+              var offsetY = target.offsetTop + inputEvent.offsetY;
+              var offsetX = target.offsetLeft + inputEvent.offsetX;
+              var pos = parseFloat(target.getAttribute("data-pos"));
+              datas.offsetPos = [offsetX, offsetY];
+              datas.offsetPos[isHorizontal ? 1 : 0] += pos;
               datas.target = target;
             }
 
@@ -3018,10 +3359,26 @@ version: 0.10.1
           drag: this.onDrag,
           dragend: this.onDragEnd
         });
+        this.setState({
+          guides: this.props.defaultGuides || []
+        }); // pass array of guides on mount data to create gridlines or something like that in ui
       };
 
       __proto.componentWillUnmount = function () {
         this.dragger.unset();
+      };
+
+      __proto.componentDidUpdate = function (prevProps) {
+        var _this = this;
+
+        if (prevProps.defaultGuides !== this.props.defaultGuides) {
+          // to dynamically update guides from code rather than dragging guidelines
+          this.setState({
+            guides: this.props.defaultGuides || []
+          }, function () {
+            _this.renderGuides();
+          });
+        }
       };
       /**
        * Load the current guidelines.
@@ -3089,8 +3446,8 @@ version: 0.10.1
 
       __proto.movePos = function (e) {
         var datas = e.datas,
-            clientX = e.clientX,
-            clientY = e.clientY;
+            distX = e.distX,
+            distY = e.distY;
         var _a = this.props,
             type = _a.type,
             zoom = _a.zoom,
@@ -3099,7 +3456,12 @@ version: 0.10.1
             displayDragPos = _a.displayDragPos,
             dragPosFormat = _a.dragPosFormat;
         var isHorizontal = type === "horizontal";
-        var nextPos = Math.round((isHorizontal ? clientY : clientX) - datas.offset);
+        var res = multiply(create(), datas.matrix, [distX, distY, 0, 1]);
+        var w = res[3];
+        var offsetPos = datas.offsetPos;
+        var offsetX = res[0] / w + offsetPos[0];
+        var offsetY = res[1] / w + offsetPos[1];
+        var nextPos = Math.round(isHorizontal ? offsetY : offsetX);
         var guidePos = Math.round(nextPos / zoom);
         var guideSnaps = snaps.slice().sort(function (a, b) {
           return Math.abs(guidePos - a) - Math.abs(guidePos - b);
@@ -3111,8 +3473,7 @@ version: 0.10.1
         }
 
         if (displayDragPos) {
-          var rect = datas.rect;
-          var displayPos = type === "horizontal" ? [clientX - rect.left, guidePos] : [guidePos, clientY - rect.top];
+          var displayPos = type === "horizontal" ? [offsetX, guidePos] : [guidePos, offsetY];
           this.displayElement.style.cssText += "display: block;transform: translate(-50%, -50%) translate(" + displayPos.map(function (v) {
             return v + "px";
           }).join(", ") + ")";
@@ -3146,7 +3507,9 @@ version: 0.10.1
         displayDragPos: false,
         dragPosFormat: function (v) {
           return v;
-        }
+        },
+        defaultGuides: [],
+        showGuides: true
       };
       return Guides;
     }(PureComponent);
