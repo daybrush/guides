@@ -20,7 +20,7 @@ export default class App extends Component<{}> {
     public render() {
         return (<div className="page" style={{ transform: "rotate(20deg)"}}>
             <div className="box" onClick={this.restore}></div>
-            <div className="ruler horizontal" style={{ transform: "translateZ(10px)" }}>
+            <div className="ruler horizontal" style={{ }}>
                 <Guides ref={ref(this, "guides1")}
                     type="horizontal"
                     zoom={this.state.zoom}
@@ -28,7 +28,7 @@ export default class App extends Component<{}> {
                     snapThreshold={5}
                     textFormat={v => `${v}in`}
                     snaps={[100, 200, 400]}
-                    style={{ transform: "scale(0.9)", height: "30px" }}
+                    style={{  height: "30px" }}
                     rulerStyle={{ left: "30px", width: "calc(100% - 30px)", height: "100%" }}
                     displayDragPos={true}
                     onChangeGuides={({ guides }) => {
