@@ -4,11 +4,10 @@ import { ref, refs } from "framework-utils";
 import Dragger, { OnDragEnd } from "@daybrush/drag";
 import styled, { StyledInterface } from "react-css-styled";
 import { GUIDES, GUIDE, DRAGGING, ADDER, DISPLAY_DRAG, GUIDES_CSS } from "./consts";
-import { prefix, getMatrix } from "./utils";
+import { prefix } from "./utils";
 import { hasClass, addClass, removeClass } from "@daybrush/utils";
 import { GuidesState, GuidesProps, GuidesInterface } from "./types";
-import { mat4 } from "gl-matrix";
-
+import { getDistElementMatrix, caculateMatrixDist } from "css-to-mat";
 const GuidesElement = styled("div", GUIDES_CSS);
 
 export default class Guides extends React.PureComponent<GuidesProps, GuidesState> implements GuidesInterface {
@@ -220,7 +219,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         const { datas, inputEvent } = e;
         const { onDragStart } = this.props;
 
-        datas.matrix = getMatrix(this.manager.getElement());
+        datas.matrix = getDistElementMatrix(this.manager.getElement());
 
         addClass(datas.target, DRAGGING);
         this.onDrag(e);
@@ -321,11 +320,10 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         } = this.props;
         const isHorizontal = type === "horizontal";
 
-        const res = mat4.multiply(mat4.create(), datas.matrix, [distX, distY, 0, 1] as any);
-        const w = res[3];
+        const matrixPos = caculateMatrixDist(datas.matrix, [distX, distY]);
         const offsetPos = datas.offsetPos;
-        const offsetX = res[0] / w + offsetPos[0];
-        const offsetY = res[1] / w + offsetPos[1];
+        const offsetX = matrixPos[0] + offsetPos[0];
+        const offsetY = matrixPos[1] + offsetPos[1];
         let nextPos = Math.round(isHorizontal ? offsetY : offsetX);
         let guidePos = Math.round(nextPos / zoom!);
         const guideSnaps = snaps!.slice().sort((a, b) => {
