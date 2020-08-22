@@ -15,6 +15,7 @@ const defaultOptions = {
         "framework-utils": "framework-utils",
         "@egjs/agent": "eg.Agent",
         "@egjs/children-differ": "eg.ChildrenDiffer",
+        "css-to-mat": "CssToMat",
     },
     exports: "named",
     plugins: [

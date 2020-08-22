@@ -12,6 +12,7 @@ const external = {
     "@daybrush/drag": "Dragger",
     "@egjs/agent": "eg.Agent",
     "@egjs/children-differ": "eg.ChildrenDiffer",
+    "css-to-mat": "CssToMat",
 };
 
 
