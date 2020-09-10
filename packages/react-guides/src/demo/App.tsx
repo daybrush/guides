@@ -4,7 +4,7 @@ import Scene from "scenejs";
 import "./App.css";
 import Guides from "../react-guides/Guides";
 import { ref } from "framework-utils";
-import Dragger from "@daybrush/drag";
+import Gesto from "gesto";
 
 export default class App extends Component<{}> {
     public state = {
@@ -104,17 +104,15 @@ export default class App extends Component<{}> {
         );
     }
     public componentDidMount() {
-        new Dragger(document.body, {
-            drag: e => {
-                this.scrollX -= e.deltaX;
-                this.scrollY -= e.deltaY;
+        new Gesto(document.body).on("drag", e => {
+            this.scrollX -= e.deltaX;
+            this.scrollY -= e.deltaY;
 
-                this.guides1.scrollGuides(this.scrollY);
-                this.guides1.scroll(this.scrollX);
+            this.guides1.scrollGuides(this.scrollY);
+            this.guides1.scroll(this.scrollX);
 
-                this.guides2.scrollGuides(this.scrollX);
-                this.guides2.scroll(this.scrollY);
-            },
+            this.guides2.scrollGuides(this.scrollX);
+            this.guides2.scroll(this.scrollY);
         });
         window.addEventListener("resize", () => {
             this.guides1.resize();

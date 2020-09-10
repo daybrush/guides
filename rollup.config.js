@@ -19,7 +19,7 @@ const external = {
     "react-compat-guides": "react-compat-guides",
     "@egjs/component": "@egjs/component",
     "@daybrush/utils": "@daybrush/utils",
-    "@daybrush/drag": "@daybrush/drag",
+    "gesto": "gesto",
     "framework-utils": "framework-utils",
     "@egjs/agent": "eg.Agent",
     "@egjs/children-differ": "eg.ChildrenDiffer",

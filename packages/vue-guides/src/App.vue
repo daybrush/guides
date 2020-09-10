@@ -101,7 +101,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import Dragger from "@daybrush/drag";
+import Gesto from "gesto";
 import Guides from "./components/Guides";
 
 @Component({
@@ -117,7 +117,7 @@ export default class App extends Vue {
     const guides2 = this.$refs.guides2 as Guides;
     this.onResize();
 
-    new Dragger(document.body, {
+    new Gesto(document.body, {
       drag: e => {
         this.scrollX -= e.deltaX;
         this.scrollY -= e.deltaY;

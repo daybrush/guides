@@ -1,10 +1,10 @@
 import { RulerProps } from "@scena/react-ruler/declaration/types";
 import { IObject } from "@daybrush/utils";
 import {
-    OnDragStart as OnDraggerDragStart,
-    OnDrag as OnDraggerDrag,
-    OnDragEnd as OnDraggerDragEnd,
-} from "@daybrush/drag";
+    OnDragStart as OnGestoDragStart,
+    OnDrag as OnGestoDrag,
+    OnDragEnd as OnGestoDragEnd,
+} from "gesto";
 export interface GuidesState {
     guides: number[];
 }
@@ -46,19 +46,19 @@ export interface OnChangeGuides {
 /**
  * @typedef
  */
-export interface OnDragStart extends OnDraggerDragStart {
+export interface OnDragStart extends OnGestoDragStart {
     dragElement: HTMLElement;
 }
 /**
  * @typedef
  */
-export interface OnDrag extends OnDraggerDrag {
+export interface OnDrag extends OnGestoDrag {
     dragElement: HTMLElement;
 }
 /**
  * @typedef
  */
-export interface OnDragEnd extends OnDraggerDragEnd {
+export interface OnDragEnd extends OnGestoDragEnd {
     dragElement: HTMLElement;
 }
 export interface GuidesInterface {

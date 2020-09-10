@@ -1,6 +1,6 @@
 import { Component, AfterViewInit, ViewChild } from '@angular/core';
 import { NgxGuidesComponent } from 'projects/ngx-guides/src/public-api';
-import Dragger from '@daybrush/drag';
+import Gesto from 'gesto';
 
 @Component({
   selector: 'app-root',
@@ -11,13 +11,13 @@ export class AppComponent implements AfterViewInit {
   title = 'ngx-guides-app';
   @ViewChild('guides1', { static: false }) guides1: NgxGuidesComponent;
   @ViewChild('guides2', { static: false }) guides2: NgxGuidesComponent;
-  private dragger: Dragger;
+  private gesto: Gesto;
   private scrollX = 0;
   private scrollY = 0;
   ngAfterViewInit() {
     window.addEventListener('resize', this.onResize);
 
-    this.dragger = new Dragger(document.body, {
+    this.gesto = new Gesto(document.body, {
       drag: e => {
         this.scrollX -= e.deltaX;
         this.scrollY -= e.deltaY;

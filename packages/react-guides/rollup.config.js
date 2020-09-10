@@ -4,7 +4,7 @@ const defaultOptions = {
     tsconfig: "tsconfig.build.json",
     external: {
         "@daybrush/utils": "utils",
-        "@daybrush/drag": "utils",
+        "gesto": "Gesto",
         "@egjs/axes": "eg.Axes",
         "react": "React",
         "keycon": "KeyController",

@@ -1,7 +1,7 @@
 <script lang="ts">
   import Guides from "./index";
   import { onMount } from "svelte";
-  import Dragger from "@daybrush/drag";
+  import Gesto from "gesto";
 
   let ruler1;
   let guides1: Guides;
@@ -13,21 +13,18 @@
       guides1.resize();
       guides2.resize();
     });
-    new Dragger(document.body, {
-      dragstart: e => {
-        if (e.inputEvent.target === box) {
-          return false;
-        }
-      },
-      drag: e => {
-        scrollX -= e.deltaX;
-        scrollY -= e.deltaY;
-
-        guides1.scroll(scrollX);
-        guides1.scrollGuides(scrollY);
-        guides2.scroll(scrollY);
-        guides2.scrollGuides(scrollX);
+    new Gesto(document.body).on("dragStart", e => {
+      if (e.inputEvent.target === box) {
+        return false;
       }
+    }).on("drag", e => {
+      scrollX -= e.deltaX;
+      scrollY -= e.deltaY;
+
+      guides1.scroll(scrollX);
+      guides1.scrollGuides(scrollY);
+      guides2.scroll(scrollY);
+      guides2.scrollGuides(scrollX);
     });
   });
   function onRestore() {

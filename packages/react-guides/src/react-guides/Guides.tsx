@@ -1,7 +1,7 @@
 import * as React from "react";
 import Ruler from "@scena/react-ruler";
 import { ref, refs } from "framework-utils";
-import Dragger, { OnDragEnd } from "@daybrush/drag";
+import Gesto, { OnDragEnd } from "gesto";
 import styled, { StyledInterface } from "react-css-styled";
 import { GUIDES, GUIDE, DRAGGING, ADDER, DISPLAY_DRAG, GUIDES_CSS } from "./consts";
 import { prefix } from "./utils";
@@ -37,7 +37,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     private manager!: StyledInterface<HTMLElement>;
     private guidesElement!: HTMLElement;
     private displayElement!: HTMLElement;
-    private dragger!: Dragger;
+    private gesto!: Gesto;
     private guideElements: HTMLElement[] = [];
 
     public render() {
@@ -106,52 +106,48 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         return;
     }
     public componentDidMount() {
-        this.dragger = new Dragger(
-            this.manager.getElement(), {
+        this.gesto = new Gesto(this.manager.getElement(), {
             container: document.body,
-            dragstart: e => {
-                const inputEvent = e.inputEvent;
-                const target = inputEvent.target;
-                const datas = e.datas;
-                const canvasElement = this.ruler.canvasElement;
-                const guidesElement = this.guidesElement;
-                const isHorizontal = this.props.type === "horizontal";
-
-                if (target === canvasElement) {
-                    datas.fromRuler = true;
-                    const offsetY = canvasElement.offsetTop + inputEvent.offsetY - guidesElement.offsetTop;
-                    const offsetX = canvasElement.offsetLeft + inputEvent.offsetX - guidesElement.offsetLeft;
-
-                    datas.offsetPos = [
-                        offsetX,
-                        offsetY,
-                    ];
-                    datas.target = this.adderElement;
-                    datas.offsetPos[isHorizontal ? 1 : 0] += this.scrollPos;
-                } else if (!hasClass(target, GUIDE)) {
-                    return false;
-                } else {
-                    const offsetY = target.offsetTop + inputEvent.offsetY;
-                    const offsetX = target.offsetLeft + inputEvent.offsetX;
-                    const pos = parseFloat(target.getAttribute("data-pos"));
-
-                    datas.offsetPos = [
-                        offsetX,
-                        offsetY,
-                    ];
-                    datas.offsetPos[isHorizontal ? 1 : 0] += pos;
-                    datas.target = target;
-                }
-                this.onDragStart(e);
-            },
-            drag: this.onDrag,
-            dragend: this.onDragEnd,
         },
-        );
+        ).on("dragStart", e => {
+            const inputEvent = e.inputEvent;
+            const target = inputEvent.target;
+            const datas = e.datas;
+            const canvasElement = this.ruler.canvasElement;
+            const guidesElement = this.guidesElement;
+            const isHorizontal = this.props.type === "horizontal";
+
+            if (target === canvasElement) {
+                datas.fromRuler = true;
+                const offsetY = canvasElement.offsetTop + inputEvent.offsetY - guidesElement.offsetTop;
+                const offsetX = canvasElement.offsetLeft + inputEvent.offsetX - guidesElement.offsetLeft;
+
+                datas.offsetPos = [
+                    offsetX,
+                    offsetY,
+                ];
+                datas.target = this.adderElement;
+                datas.offsetPos[isHorizontal ? 1 : 0] += this.scrollPos;
+            } else if (!hasClass(target, GUIDE)) {
+                return false;
+            } else {
+                const offsetY = target.offsetTop + inputEvent.offsetY;
+                const offsetX = target.offsetLeft + inputEvent.offsetX;
+                const pos = parseFloat(target.getAttribute("data-pos"));
+
+                datas.offsetPos = [
+                    offsetX,
+                    offsetY,
+                ];
+                datas.offsetPos[isHorizontal ? 1 : 0] += pos;
+                datas.target = target;
+            }
+            this.onDragStart(e);
+        }).on("drag", this.onDrag).on("dragEnd", this.onDragEnd);
         this.setState({ guides: this.props.defaultGuides || [] }); // pass array of guides on mount data to create gridlines or something like that in ui
     }
     public componentWillUnmount() {
-        this.dragger.unset();
+        this.gesto.unset();
     }
     public componentDidUpdate(prevProps: any) {
         if (prevProps.defaultGuides !== this.props.defaultGuides) {

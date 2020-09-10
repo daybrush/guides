@@ -3,7 +3,7 @@ import Scene from "scenejs";
 import "./App.css";
 import Guides from "../preact-guides/Guides";
 import { ref } from "framework-utils";
-import Dragger from "@daybrush/drag";
+import Gesto from "gesto";
 
 export default class App extends Component<{}> {
     private scene: Scene = new Scene();
@@ -69,7 +69,7 @@ export default class App extends Component<{}> {
         );
     }
     public componentDidMount() {
-        new Dragger(document.body, {
+        new Gesto(document.body, {
             drag: e => {
                 this.scrollX -= e.deltaX;
                 this.scrollY -= e.deltaY;
