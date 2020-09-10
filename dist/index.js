@@ -4,7 +4,7 @@ name: @scena/guides
 license: MIT
 author: Daybrush
 repository: git+https://github.com/daybrush/guides.git
-version: 0.11.1
+version: 0.11.2
 */
 (function () {
     'use strict';
@@ -1665,6 +1665,296 @@ version: 0.11.1
     }(PureComponent);
 
     /*
+    Copyright (c) 2017 NAVER Corp.
+    @egjs/component project is licensed under the MIT license
+
+    @egjs/component JavaScript library
+    https://naver.github.io/egjs-component
+
+    @version 2.1.2
+    */
+    /**
+     * Copyright (c) 2015 NAVER Corp.
+     * egjs projects are licensed under the MIT license
+     */
+    function isUndefined$1(value) {
+      return typeof value === "undefined";
+    }
+    /**
+     * A class used to manage events in a component
+     * @ko 컴포넌트의 이벤트을 관리할 수 있게 하는 클래스
+     * @alias eg.Component
+     */
+
+
+    var Component$1 =
+    /*#__PURE__*/
+    function () {
+      var Component =
+      /*#__PURE__*/
+      function () {
+        /**
+        * Version info string
+        * @ko 버전정보 문자열
+        * @name VERSION
+        * @static
+        * @type {String}
+        * @example
+        * eg.Component.VERSION;  // ex) 2.0.0
+        * @memberof eg.Component
+        */
+
+        /**
+         * @support {"ie": "7+", "ch" : "latest", "ff" : "latest",  "sf" : "latest", "edge" : "latest", "ios" : "7+", "an" : "2.1+ (except 3.x)"}
+         */
+        function Component() {
+          this._eventHandler = {};
+          this.options = {};
+        }
+        /**
+         * Triggers a custom event.
+         * @ko 커스텀 이벤트를 발생시킨다
+         * @param {String} eventName The name of the custom event to be triggered <ko>발생할 커스텀 이벤트의 이름</ko>
+         * @param {Object} customEvent Event data to be sent when triggering a custom event <ko>커스텀 이벤트가 발생할 때 전달할 데이터</ko>
+         * @return {Boolean} Indicates whether the event has occurred. If the stop() method is called by a custom event handler, it will return false and prevent the event from occurring. <a href="https://github.com/naver/egjs-component/wiki/How-to-make-Component-event-design%3F">Ref</a> <ko>이벤트 발생 여부. 커스텀 이벤트 핸들러에서 stop() 메서드를 호출하면 'false'를 반환하고 이벤트 발생을 중단한다. <a href="https://github.com/naver/egjs-component/wiki/How-to-make-Component-event-design%3F">참고</a></ko>
+         * @example
+        class Some extends eg.Component {
+         some(){
+         	if(this.trigger("beforeHi")){ // When event call to stop return false.
+        	this.trigger("hi");// fire hi event.
+         	}
+         }
+        }
+        const some = new Some();
+        some.on("beforeHi", (e) => {
+        if(condition){
+        	e.stop(); // When event call to stop, `hi` event not call.
+        }
+        });
+        some.on("hi", (e) => {
+        // `currentTarget` is component instance.
+        console.log(some === e.currentTarget); // true
+        });
+        // If you want to more know event design. You can see article.
+        // https://github.com/naver/egjs-component/wiki/How-to-make-Component-event-design%3F
+         */
+
+
+        var _proto = Component.prototype;
+
+        _proto.trigger = function trigger(eventName, customEvent) {
+          if (customEvent === void 0) {
+            customEvent = {};
+          }
+
+          var handlerList = this._eventHandler[eventName] || [];
+          var hasHandlerList = handlerList.length > 0;
+
+          if (!hasHandlerList) {
+            return true;
+          } // If detach method call in handler in first time then handler list calls.
+
+
+          handlerList = handlerList.concat();
+          customEvent.eventType = eventName;
+          var isCanceled = false;
+          var arg = [customEvent];
+          var i = 0;
+
+          customEvent.stop = function () {
+            isCanceled = true;
+          };
+
+          customEvent.currentTarget = this;
+
+          for (var _len = arguments.length, restParam = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+            restParam[_key - 2] = arguments[_key];
+          }
+
+          if (restParam.length >= 1) {
+            arg = arg.concat(restParam);
+          }
+
+          for (i = 0; handlerList[i]; i++) {
+            handlerList[i].apply(this, arg);
+          }
+
+          return !isCanceled;
+        };
+        /**
+         * Executed event just one time.
+         * @ko 이벤트가 한번만 실행된다.
+         * @param {eventName} eventName The name of the event to be attached <ko>등록할 이벤트의 이름</ko>
+         * @param {Function} handlerToAttach The handler function of the event to be attached <ko>등록할 이벤트의 핸들러 함수</ko>
+         * @return {eg.Component} An instance of a component itself<ko>컴포넌트 자신의 인스턴스</ko>
+         * @example
+        class Some extends eg.Component {
+         hi() {
+           alert("hi");
+         }
+         thing() {
+           this.once("hi", this.hi);
+         }
+        }
+        var some = new Some();
+        some.thing();
+        some.trigger("hi");
+        // fire alert("hi");
+        some.trigger("hi");
+        // Nothing happens
+         */
+
+
+        _proto.once = function once(eventName, handlerToAttach) {
+          if (typeof eventName === "object" && isUndefined$1(handlerToAttach)) {
+            var eventHash = eventName;
+            var i;
+
+            for (i in eventHash) {
+              this.once(i, eventHash[i]);
+            }
+
+            return this;
+          } else if (typeof eventName === "string" && typeof handlerToAttach === "function") {
+            var self = this;
+            this.on(eventName, function listener() {
+              for (var _len2 = arguments.length, arg = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+                arg[_key2] = arguments[_key2];
+              }
+
+              handlerToAttach.apply(self, arg);
+              self.off(eventName, listener);
+            });
+          }
+
+          return this;
+        };
+        /**
+         * Checks whether an event has been attached to a component.
+         * @ko 컴포넌트에 이벤트가 등록됐는지 확인한다.
+         * @param {String} eventName The name of the event to be attached <ko>등록 여부를 확인할 이벤트의 이름</ko>
+         * @return {Boolean} Indicates whether the event is attached. <ko>이벤트 등록 여부</ko>
+         * @example
+        class Some extends eg.Component {
+         some() {
+           this.hasOn("hi");// check hi event.
+         }
+        }
+         */
+
+
+        _proto.hasOn = function hasOn(eventName) {
+          return !!this._eventHandler[eventName];
+        };
+        /**
+         * Attaches an event to a component.
+         * @ko 컴포넌트에 이벤트를 등록한다.
+         * @param {eventName} eventName The name of the event to be attached <ko>등록할 이벤트의 이름</ko>
+         * @param {Function} handlerToAttach The handler function of the event to be attached <ko>등록할 이벤트의 핸들러 함수</ko>
+         * @return {eg.Component} An instance of a component itself<ko>컴포넌트 자신의 인스턴스</ko>
+         * @example
+        class Some extends eg.Component {
+         hi() {
+           console.log("hi");
+         }
+         some() {
+           this.on("hi",this.hi); //attach event
+         }
+        }
+        */
+
+
+        _proto.on = function on(eventName, handlerToAttach) {
+          if (typeof eventName === "object" && isUndefined$1(handlerToAttach)) {
+            var eventHash = eventName;
+            var name;
+
+            for (name in eventHash) {
+              this.on(name, eventHash[name]);
+            }
+
+            return this;
+          } else if (typeof eventName === "string" && typeof handlerToAttach === "function") {
+            var handlerList = this._eventHandler[eventName];
+
+            if (isUndefined$1(handlerList)) {
+              this._eventHandler[eventName] = [];
+              handlerList = this._eventHandler[eventName];
+            }
+
+            handlerList.push(handlerToAttach);
+          }
+
+          return this;
+        };
+        /**
+         * Detaches an event from the component.
+         * @ko 컴포넌트에 등록된 이벤트를 해제한다
+         * @param {eventName} eventName The name of the event to be detached <ko>해제할 이벤트의 이름</ko>
+         * @param {Function} handlerToDetach The handler function of the event to be detached <ko>해제할 이벤트의 핸들러 함수</ko>
+         * @return {eg.Component} An instance of a component itself <ko>컴포넌트 자신의 인스턴스</ko>
+         * @example
+        class Some extends eg.Component {
+         hi() {
+           console.log("hi");
+         }
+         some() {
+           this.off("hi",this.hi); //detach event
+         }
+        }
+         */
+
+
+        _proto.off = function off(eventName, handlerToDetach) {
+          // All event detach.
+          if (isUndefined$1(eventName)) {
+            this._eventHandler = {};
+            return this;
+          } // All handler of specific event detach.
+
+
+          if (isUndefined$1(handlerToDetach)) {
+            if (typeof eventName === "string") {
+              this._eventHandler[eventName] = undefined;
+              return this;
+            } else {
+              var eventHash = eventName;
+              var name;
+
+              for (name in eventHash) {
+                this.off(name, eventHash[name]);
+              }
+
+              return this;
+            }
+          } // The handler of specific event detach.
+
+
+          var handlerList = this._eventHandler[eventName];
+
+          if (handlerList) {
+            var k;
+            var handlerFunction;
+
+            for (k = 0; (handlerFunction = handlerList[k]) !== undefined; k++) {
+              if (handlerFunction === handlerToDetach) {
+                handlerList = handlerList.splice(k, 1);
+                break;
+              }
+            }
+          }
+
+          return this;
+        };
+
+        return Component;
+      }();
+
+      Component.VERSION = "2.1.2";
+      return Component;
+    }();
+
+    /*
     Copyright (c) 2018 Daybrush
     @name: @daybrush/utils
     license: MIT
@@ -1780,11 +2070,11 @@ version: 0.11.1
 
     /*
     Copyright (c) 2019 Daybrush
-    name: @daybrush/drag
+    name: gesto
     license: MIT
     author: Daybrush
-    repository: git+https://github.com/daybrush/drag.git
-    version: 0.19.3
+    repository: git+https://github.com/daybrush/gesture.git
+    version: 1.0.0
     */
 
     /*! *****************************************************************************
@@ -1801,6 +2091,29 @@ version: 0.11.1
     See the Apache Version 2.0 License for specific language governing permissions
     and limitations under the License.
     ***************************************************************************** */
+
+    /* global Reflect, Promise */
+    var extendStatics$3 = function (d, b) {
+      extendStatics$3 = Object.setPrototypeOf || {
+        __proto__: []
+      } instanceof Array && function (d, b) {
+        d.__proto__ = b;
+      } || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+      };
+
+      return extendStatics$3(d, b);
+    };
+
+    function __extends$3(d, b) {
+      extendStatics$3(d, b);
+
+      function __() {
+        this.constructor = d;
+      }
+
+      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    }
     var __assign$2 = function () {
       __assign$2 = Object.assign || function __assign(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -1824,38 +2137,40 @@ version: 0.11.1
     function getRotatiion(touches) {
       return getRad([touches[0].clientX, touches[0].clientY], [touches[1].clientX, touches[1].clientY]) / Math.PI * 180;
     }
-    function getPinchDragPosition(clients, prevClients, startClients, startPinchClients) {
-      var nowCenter = getAverageClient(clients);
-      var prevCenter = getAverageClient(prevClients);
-      var startCenter = getAverageClient(startPinchClients);
-      var pinchClient = plueClient(startPinchClients[0], minusClient(nowCenter, startCenter));
-      var pinchPrevClient = plueClient(startPinchClients[0], minusClient(prevCenter, startCenter));
-      return getPosition(pinchClient, pinchPrevClient, startClients[0]);
-    }
     function isMultiTouch(e) {
       return e.touches && e.touches.length >= 2;
     }
-    function getPositionEvent(e) {
+    function getEventClients(e) {
       if (e.touches) {
         return getClients(e.touches);
       } else {
         return [getClient(e)];
       }
     }
-    function getPosition(client, prevClient, startClient) {
-      var clientX = client.clientX,
-          clientY = client.clientY;
-      var prevX = prevClient.clientX,
-          prevY = prevClient.clientY;
-      var startX = startClient.clientX,
-          startY = startClient.clientY;
+    function getPosition(clients, prevClients, startClients) {
+      var length = startClients.length;
+
+      var _a = getAverageClient(clients, length),
+          clientX = _a.clientX,
+          clientY = _a.clientY,
+          originalClientX = _a.originalClientX,
+          originalClientY = _a.originalClientY;
+
+      var _b = getAverageClient(prevClients, length),
+          prevX = _b.clientX,
+          prevY = _b.clientY;
+
+      var _c = getAverageClient(startClients, length),
+          startX = _c.clientX,
+          startY = _c.clientY;
+
       var deltaX = clientX - prevX;
       var deltaY = clientY - prevY;
       var distX = clientX - startX;
       var distY = clientY - startY;
       return {
-        clientX: clientX,
-        clientY: clientY,
+        clientX: originalClientX,
+        clientY: originalClientY,
         deltaX: deltaX,
         deltaY: deltaY,
         distX: distX,
@@ -1864,11 +2179,6 @@ version: 0.11.1
     }
     function getDist(clients) {
       return Math.sqrt(Math.pow(clients[0].clientX - clients[1].clientX, 2) + Math.pow(clients[0].clientY - clients[1].clientY, 2));
-    }
-    function getPositions(clients, prevClients, startClients) {
-      return clients.map(function (client, i) {
-        return getPosition(client, prevClients[i], startClients[i]);
-      });
     }
     function getClients(touches) {
       var length = Math.min(touches.length, 2);
@@ -1886,70 +2196,176 @@ version: 0.11.1
         clientY: e.clientY
       };
     }
-    function getAverageClient(clients) {
-      if (clients.length === 1) {
-        return clients[0];
+    function getAverageClient(clients, length) {
+      if (length === void 0) {
+        length = clients.length;
+      }
+
+      var sumClient = {
+        clientX: 0,
+        clientY: 0,
+        originalClientX: 0,
+        originalClientY: 0
+      };
+
+      for (var i = 0; i < length; ++i) {
+        var client = clients[i];
+        sumClient.originalClientX += "originalClientX" in client ? client.originalClientX : client.clientX;
+        sumClient.originalClientY += "originalClientY" in client ? client.originalClientY : client.clientY;
+        sumClient.clientX += client.clientX;
+        sumClient.clientY += client.clientY;
+      }
+
+      if (!length) {
+        return sumClient;
       }
 
       return {
-        clientX: (clients[0].clientX + clients[1].clientX) / 2,
-        clientY: (clients[0].clientY + clients[1].clientY) / 2
+        clientX: sumClient.clientX / length,
+        clientY: sumClient.clientY / length,
+        originalClientX: sumClient.originalClientX / length,
+        originalClientY: sumClient.originalClientY / length
       };
     }
-    function plueClient(client1, client2) {
-      return {
-        clientX: client1.clientX + client2.clientX,
-        clientY: client1.clientY + client2.clientY
+
+    var ClientStore =
+    /*#__PURE__*/
+    function () {
+      function ClientStore(clients) {
+        this.prevClients = [];
+        this.startClients = [];
+        this.movement = 0;
+        this.length = 0;
+        this.startClients = clients;
+        this.prevClients = clients;
+        this.length = clients.length;
+      }
+
+      var __proto = ClientStore.prototype;
+
+      __proto.addClients = function (clients) {
+        if (clients === void 0) {
+          clients = this.prevClients;
+        }
+
+        var position = this.getPosition(clients);
+        var deltaX = position.deltaX,
+            deltaY = position.deltaY;
+        this.movement += Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        this.prevClients = clients;
+        return position;
       };
-    }
-    function minusClient(client1, client2) {
-      return {
-        clientX: client1.clientX - client2.clientX,
-        clientY: client1.clientY - client2.clientY
+
+      __proto.getAngle = function (clients) {
+        if (clients === void 0) {
+          clients = this.prevClients;
+        }
+
+        return getRotatiion(clients);
       };
-    }
+
+      __proto.getRotation = function (clients) {
+        if (clients === void 0) {
+          clients = this.prevClients;
+        }
+
+        return getRotatiion(clients) - getRotatiion(this.startClients);
+      };
+
+      __proto.getPosition = function (clients) {
+        return getPosition(clients || this.prevClients, this.prevClients, this.startClients);
+      };
+
+      __proto.getPositions = function (clients) {
+        if (clients === void 0) {
+          clients = this.prevClients;
+        }
+
+        var prevClients = this.prevClients;
+        return this.startClients.map(function (startClient, i) {
+          return getPosition([clients[i]], [prevClients[i]], [startClient]);
+        });
+      };
+
+      __proto.getMovement = function (clients) {
+        var movement = this.movement;
+
+        if (!clients) {
+          return movement;
+        }
+
+        var currentClient = getAverageClient(clients, this.length);
+        var prevClient = getAverageClient(this.prevClients, this.length);
+        var deltaX = currentClient.clientX - prevClient.clientX;
+        var deltaY = currentClient.clientY - prevClient.clientY;
+        return Math.sqrt(deltaX * deltaX + deltaY * deltaY) + movement;
+      };
+
+      __proto.getDistance = function (clients) {
+        if (clients === void 0) {
+          clients = this.prevClients;
+        }
+
+        return getDist(clients);
+      };
+
+      __proto.getScale = function (clients) {
+        if (clients === void 0) {
+          clients = this.prevClients;
+        }
+
+        return getDist(clients) / getDist(this.startClients);
+      };
+
+      __proto.move = function (deltaX, deltaY) {
+        this.startClients.forEach(function (client) {
+          client.clientX -= deltaX;
+          client.clientY -= deltaY;
+        });
+        this.prevClients.forEach(function (client) {
+          client.clientX -= deltaX;
+          client.clientY -= deltaY;
+        });
+      };
+
+      return ClientStore;
+    }();
 
     var INPUT_TAGNAMES = ["textarea", "input"];
     /**
-     * You can set up drag events in any browser.
+     * You can set up drag, pinch events in any browser.
      */
 
-    var Dragger =
+    var Gesto =
     /*#__PURE__*/
-    function () {
+    function (_super) {
+      __extends$3(Gesto, _super);
       /**
        *
        */
-      function Dragger(targets, options) {
-        var _this = this;
 
+
+      function Gesto(targets, options) {
         if (options === void 0) {
           options = {};
         }
 
-        this.options = {};
-        this.flag = false;
-        this.pinchFlag = false;
-        this.datas = {};
-        this.isDrag = false;
-        this.isPinch = false;
-        this.isMouse = false;
-        this.isTouch = false;
-        this.prevClients = [];
-        this.startClients = [];
-        this.movement = 0;
-        this.startPinchClients = [];
-        this.startDistance = 0;
-        this.customDist = [0, 0];
-        this.targets = [];
-        this.prevTime = 0;
-        this.isDouble = false;
-        this.startRotate = 0;
-        /**
-         * @method
-         */
+        var _this = _super.call(this) || this;
 
-        this.onDragStart = function (e, isTrusted) {
+        _this.options = {};
+        _this.flag = false;
+        _this.pinchFlag = false;
+        _this.datas = {};
+        _this.isDrag = false;
+        _this.isPinch = false;
+        _this.isMouse = false;
+        _this.isTouch = false;
+        _this.clientStores = [];
+        _this.targets = [];
+        _this.prevTime = 0;
+        _this.isDouble = false;
+
+        _this.onDragStart = function (e, isTrusted) {
           if (isTrusted === void 0) {
             isTrusted = true;
           }
@@ -1961,13 +2377,13 @@ version: 0.11.1
           var _a = _this.options,
               container = _a.container,
               pinchOutside = _a.pinchOutside,
-              dragstart = _a.dragstart,
               preventRightClick = _a.preventRightClick,
               preventDefault = _a.preventDefault,
               checkInput = _a.checkInput;
           var isTouch = _this.isTouch;
+          var isDragStart = !_this.flag;
 
-          if (!_this.flag) {
+          if (isDragStart) {
             var activeElement = document.activeElement;
             var target = e.target;
             var tagName = target.tagName.toLowerCase();
@@ -1990,11 +2406,39 @@ version: 0.11.1
                 activeElement.blur();
               }
             }
+
+            _this.clientStores = [new ClientStore(getEventClients(e))];
+            _this.flag = true;
+            _this.isDrag = false;
+            _this.datas = {};
+
+            if (preventRightClick && (e.which === 3 || e.button === 2)) {
+              _this.initDrag();
+
+              return false;
+            }
+
+            var result = _this.trigger("dragStart", __assign$2({
+              datas: _this.datas,
+              inputEvent: e,
+              isTrusted: isTrusted
+            }, _this.getCurrentStore().getPosition()));
+
+            if (result === false) {
+              _this.initDrag();
+            }
+
+            _this.isDouble = now() - _this.prevTime < 200;
+            _this.flag && preventDefault && e.preventDefault();
+          }
+
+          if (!_this.flag) {
+            return false;
           }
 
           var timer = 0;
 
-          if (!_this.flag && isTouch && pinchOutside) {
+          if (isDragStart && isTouch && pinchOutside) {
             timer = setTimeout(function () {
               addEvent(container, "touchstart", _this.onDragStart, {
                 passive: false
@@ -2002,14 +2446,14 @@ version: 0.11.1
             });
           }
 
-          if (_this.flag && isTouch && pinchOutside) {
+          if (!isDragStart && isTouch && pinchOutside) {
             removeEvent(container, "touchstart", _this.onDragStart);
           }
 
-          if (isMultiTouch(e)) {
+          if (_this.flag && isMultiTouch(e)) {
             clearTimeout(timer);
 
-            if (!_this.flag && e.touches.length !== e.changedTouches.length) {
+            if (isDragStart && e.touches.length !== e.changedTouches.length) {
               return;
             }
 
@@ -2017,77 +2461,37 @@ version: 0.11.1
               _this.onPinchStart(e);
             }
           }
-
-          if (_this.flag) {
-            return;
-          }
-
-          var clients = _this.startClients[0] ? _this.startClients : getPositionEvent(e);
-          _this.customDist = [0, 0];
-          _this.flag = true;
-          _this.isDrag = false;
-          _this.startClients = clients;
-          _this.prevClients = clients;
-          _this.datas = {};
-          _this.movement = 0;
-          var position = getPosition(clients[0], _this.prevClients[0], _this.startClients[0]);
-
-          if (preventRightClick && (e.which === 3 || e.button === 2)) {
-            clearTimeout(timer);
-
-            _this.initDrag();
-
-            return false;
-          }
-
-          var result = dragstart && dragstart(__assign$2({
-            type: "dragstart",
-            datas: _this.datas,
-            inputEvent: e,
-            isTrusted: isTrusted
-          }, position));
-
-          if (result === false) {
-            clearTimeout(timer);
-
-            _this.initDrag();
-          }
-
-          _this.isDouble = now() - _this.prevTime < 200;
-          _this.flag && preventDefault && e.preventDefault();
         };
 
-        this.onDrag = function (e, isScroll) {
+        _this.onDrag = function (e, isScroll) {
           if (!_this.flag) {
             return;
           }
 
-          var clients = getPositionEvent(e);
+          var clients = getEventClients(e);
+
+          var result = _this.moveClients(clients, e, false);
+
+          if (_this.pinchFlag || result.deltaX || result.deltaY) {
+            _this.trigger("drag", __assign$2({}, result, {
+              isScroll: !!isScroll,
+              inputEvent: e
+            }));
+          }
 
           if (_this.pinchFlag) {
             _this.onPinch(e, clients);
           }
 
-          var result = _this.move([0, 0], e, clients);
-
-          if (!result || !result.deltaX && !result.deltaY) {
-            return;
-          }
-
-          var drag = _this.options.drag;
-          drag && drag(__assign$2({}, result, {
-            isScroll: !!isScroll,
-            inputEvent: e
-          }));
+          _this.getCurrentStore().addClients(clients);
         };
 
-        this.onDragEnd = function (e) {
+        _this.onDragEnd = function (e) {
           if (!_this.flag) {
             return;
           }
 
           var _a = _this.options,
-              dragend = _a.dragend,
               pinchOutside = _a.pinchOutside,
               container = _a.container;
 
@@ -2095,30 +2499,30 @@ version: 0.11.1
             removeEvent(container, "touchstart", _this.onDragStart);
           }
 
-          if (_this.pinchFlag) {
-            _this.onPinchEnd(e);
-          }
-
           _this.flag = false;
-          var prevClients = _this.prevClients;
-          var startClients = _this.startClients;
-          var position = _this.pinchFlag ? getPinchDragPosition(prevClients, prevClients, startClients, _this.startPinchClients) : getPosition(prevClients[0], prevClients[0], startClients[0]);
+
+          var position = _this.getCurrentStore().getPosition();
+
           var currentTime = now();
           var isDouble = !_this.isDrag && _this.isDouble;
           _this.prevTime = _this.isDrag || isDouble ? 0 : currentTime;
-          _this.startClients = [];
-          _this.prevClients = [];
-          dragend && dragend(__assign$2({
-            type: "dragend",
+
+          _this.trigger("dragEnd", __assign$2({
             datas: _this.datas,
             isDouble: isDouble,
             isDrag: _this.isDrag,
             inputEvent: e
           }, position));
+
+          if (_this.pinchFlag) {
+            _this.onPinchEnd(e);
+          }
+
+          _this.clientStores = [];
         };
 
         var elements = [].concat(targets);
-        this.options = __assign$2({
+        _this.options = __assign$2({
           checkInput: false,
           container: elements.length > 1 ? window : elements[0],
           preventRightClick: true,
@@ -2126,47 +2530,58 @@ version: 0.11.1
           pinchThreshold: 0,
           events: ["touch", "mouse"]
         }, options);
-        var _a = this.options,
+        var _a = _this.options,
             container = _a.container,
             events = _a.events;
-        this.isTouch = events.indexOf("touch") > -1;
-        this.isMouse = events.indexOf("mouse") > -1;
-        this.customDist = [0, 0];
-        this.targets = elements;
+        _this.isTouch = events.indexOf("touch") > -1;
+        _this.isMouse = events.indexOf("mouse") > -1;
+        _this.targets = elements;
 
-        if (this.isMouse) {
+        if (_this.isMouse) {
           elements.forEach(function (el) {
             addEvent(el, "mousedown", _this.onDragStart);
           });
-          addEvent(container, "mousemove", this.onDrag);
-          addEvent(container, "mouseup", this.onDragEnd);
-          addEvent(container, "contextmenu", this.onDragEnd);
+          addEvent(container, "mousemove", _this.onDrag);
+          addEvent(container, "mouseup", _this.onDragEnd);
+          addEvent(container, "contextmenu", _this.onDragEnd);
         }
 
-        if (this.isTouch) {
+        if (_this.isTouch) {
           var passive_1 = {
             passive: false
           };
           elements.forEach(function (el) {
             addEvent(el, "touchstart", _this.onDragStart, passive_1);
           });
-          addEvent(container, "touchmove", this.onDrag, passive_1);
-          addEvent(container, "touchend", this.onDragEnd, passive_1);
-          addEvent(container, "touchcancel", this.onDragEnd, passive_1);
+          addEvent(container, "touchmove", _this.onDrag, passive_1);
+          addEvent(container, "touchend", _this.onDragEnd, passive_1);
+          addEvent(container, "touchcancel", _this.onDragEnd, passive_1);
         }
+
+        return _this;
       }
       /**
-       *
+       * The total moved distance
        */
 
 
-      var __proto = Dragger.prototype;
+      var __proto = Gesto.prototype;
+
+      __proto.getMovement = function (clients) {
+        return this.getCurrentStore().getMovement(clients) + this.clientStores.slice(1).reduce(function (prev, cur) {
+          return prev + cur.movement;
+        }, 0);
+      };
+      /**
+       * Whether to drag
+       */
+
 
       __proto.isDragging = function () {
         return this.isDrag;
       };
       /**
-       *
+       * Whether to start drag
        */
 
 
@@ -2174,7 +2589,7 @@ version: 0.11.1
         return this.flag;
       };
       /**
-       *
+       * Whether to start pinch
        */
 
 
@@ -2182,7 +2597,7 @@ version: 0.11.1
         return this.pinchFlag;
       };
       /**
-       *
+       * Whether to pinch
        */
 
 
@@ -2190,7 +2605,7 @@ version: 0.11.1
         return this.isPinch;
       };
       /**
-       *
+       * If a scroll event occurs, it is corrected by the scroll distance.
        */
 
 
@@ -2203,156 +2618,40 @@ version: 0.11.1
           return;
         }
 
-        this.startClients.forEach(function (client) {
-          client.clientX -= deltaX;
-          client.clientY -= deltaY;
-        });
-        this.prevClients.forEach(function (client) {
-          client.clientX -= deltaX;
-          client.clientY -= deltaY;
-        });
+        this.clientStores[0].move(deltaX, deltaY);
         isCallDrag && this.onDrag(e, true);
       };
+      /**
+       * Create a virtual drag event.
+       */
 
-      __proto.move = function (_a, inputEvent, clients) {
+
+      __proto.move = function (_a, inputEvent) {
         var deltaX = _a[0],
             deltaY = _a[1];
-
-        if (clients === void 0) {
-          clients = this.prevClients;
-        }
-
-        var customDist = this.customDist;
-        var prevClients = this.prevClients;
-        var startClients = this.startClients;
-        var position = this.pinchFlag ? getPinchDragPosition(clients, prevClients, startClients, this.startPinchClients) : getPosition(clients[0], prevClients[0], startClients[0]);
-        customDist[0] += deltaX;
-        customDist[1] += deltaY;
-        position.deltaX += deltaX;
-        position.deltaY += deltaY;
-        var positionDeltaX = position.deltaX,
-            positionDeltaY = position.deltaY;
-        position.distX += customDist[0];
-        position.distY += customDist[1];
-        this.movement += Math.sqrt(positionDeltaX * positionDeltaX + positionDeltaY * positionDeltaY);
-        this.prevClients = clients;
-        this.isDrag = true;
-        return __assign$2({
-          type: "drag",
-          datas: this.datas
-        }, position, {
-          movement: this.movement,
-          isDrag: this.isDrag,
-          isPinch: this.isPinch,
-          isScroll: false,
-          inputEvent: inputEvent
-        });
+        var store = this.getCurrentStore();
+        var nextClients = store.prevClients;
+        return this.moveClients(nextClients.map(function (_a) {
+          var clientX = _a.clientX,
+              clientY = _a.clientY;
+          return {
+            clientX: clientX + deltaX,
+            clientY: clientY + deltaY,
+            originalClientX: clientX,
+            originalClientY: clientY
+          };
+        }), inputEvent, true);
       };
+      /**
+       * The dragStart event is triggered by an external event.
+       */
 
-      __proto.onPinchStart = function (e) {
-        var _a, _b;
-
-        var _c = this.options,
-            pinchstart = _c.pinchstart,
-            pinchThreshold = _c.pinchThreshold;
-
-        if (this.isDrag && this.movement > pinchThreshold) {
-          return;
-        }
-
-        var pinchClients = getClients(e.changedTouches);
-        this.pinchFlag = true;
-
-        (_a = this.startClients).push.apply(_a, pinchClients);
-
-        (_b = this.prevClients).push.apply(_b, pinchClients);
-
-        this.startDistance = getDist(this.prevClients);
-        this.startPinchClients = this.prevClients.slice();
-
-        if (!pinchstart) {
-          return;
-        }
-
-        var startClients = this.prevClients;
-        var startAverageClient = getAverageClient(startClients);
-        var centerPosition = getPosition(startAverageClient, startAverageClient, startAverageClient);
-        this.startRotate = getRotatiion(startClients);
-        pinchstart(__assign$2({
-          type: "pinchstart",
-          datas: this.datas,
-          angle: this.startRotate,
-          touches: getPositions(startClients, startClients, startClients)
-        }, centerPosition, {
-          inputEvent: e
-        }));
-      };
-
-      __proto.onPinch = function (e, clients) {
-        if (!this.flag || !this.pinchFlag || clients.length < 2) {
-          return;
-        }
-
-        this.isPinch = true;
-        var pinch = this.options.pinch;
-
-        if (!pinch) {
-          return;
-        }
-
-        var prevClients = this.prevClients;
-        var startClients = this.startClients;
-        var centerPosition = getPosition(getAverageClient(clients), getAverageClient(prevClients), getAverageClient(startClients));
-        var angle = getRotatiion(clients);
-        var distance = getDist(clients);
-        pinch(__assign$2({
-          type: "pinch",
-          datas: this.datas,
-          movement: this.movement,
-          angle: angle,
-          rotation: angle - this.startRotate,
-          touches: getPositions(clients, prevClients, startClients),
-          scale: distance / this.startDistance,
-          distance: distance
-        }, centerPosition, {
-          inputEvent: e
-        }));
-      };
-
-      __proto.onPinchEnd = function (e) {
-        if (!this.flag || !this.pinchFlag) {
-          return;
-        }
-
-        var isPinch = this.isPinch;
-        this.isPinch = false;
-        this.pinchFlag = false;
-        var pinchend = this.options.pinchend;
-
-        if (!pinchend) {
-          return;
-        }
-
-        var prevClients = this.prevClients;
-        var startClients = this.startClients;
-        var centerPosition = getPosition(getAverageClient(prevClients), getAverageClient(prevClients), getAverageClient(startClients));
-        pinchend(__assign$2({
-          type: "pinchend",
-          datas: this.datas,
-          isPinch: isPinch,
-          touches: getPositions(prevClients, prevClients, startClients)
-        }, centerPosition, {
-          inputEvent: e
-        }));
-        this.isPinch = false;
-        this.pinchFlag = false;
-      };
 
       __proto.triggerDragStart = function (e) {
         this.onDragStart(e, false);
       };
       /**
-       *
+       * Unset Gesto
        */
 
 
@@ -2361,6 +2660,7 @@ version: 0.11.1
 
         var targets = this.targets;
         var container = this.options.container;
+        this.off();
 
         if (this.isMouse) {
           targets.forEach(function (target) {
@@ -2382,14 +2682,92 @@ version: 0.11.1
         }
       };
 
+      __proto.onPinchStart = function (e) {
+        var pinchThreshold = this.options.pinchThreshold;
+
+        if (this.isDrag && this.getMovement() > pinchThreshold) {
+          return;
+        }
+
+        var store = new ClientStore(getEventClients(e));
+        this.pinchFlag = true;
+        this.clientStores.splice(0, 0, store);
+        this.trigger("pinchStart", __assign$2({
+          datas: this.datas,
+          angle: store.getAngle(),
+          touches: this.getCurrentStore().getPositions()
+        }, store.getPosition(), {
+          inputEvent: e
+        }));
+      };
+
+      __proto.onPinch = function (e, clients) {
+        if (!this.flag || !this.pinchFlag || clients.length < 2) {
+          return;
+        }
+
+        var store = this.getCurrentStore();
+        this.isPinch = true;
+        this.trigger("pinch", __assign$2({
+          datas: this.datas,
+          movement: this.getMovement(clients),
+          angle: store.getAngle(clients),
+          rotation: store.getRotation(clients),
+          touches: store.getPositions(clients),
+          scale: store.getScale(clients),
+          distance: store.getDistance(clients)
+        }, store.getPosition(clients), {
+          inputEvent: e
+        }));
+      };
+
+      __proto.onPinchEnd = function (e) {
+        if (!this.pinchFlag) {
+          return;
+        }
+
+        var isPinch = this.isPinch;
+        this.isPinch = false;
+        this.pinchFlag = false;
+        var store = this.getCurrentStore();
+        this.trigger("pinchEnd", __assign$2({
+          datas: this.datas,
+          isPinch: isPinch,
+          touches: store.getPositions()
+        }, store.getPosition(), {
+          inputEvent: e
+        }));
+        this.isPinch = false;
+        this.pinchFlag = false;
+      };
+
       __proto.initDrag = function () {
-        this.startClients = [];
-        this.prevClients = [];
+        this.clientStores = [];
+        this.pinchFlag = false;
         this.flag = false;
       };
 
-      return Dragger;
-    }();
+      __proto.getCurrentStore = function () {
+        return this.clientStores[0];
+      };
+
+      __proto.moveClients = function (clients, inputEvent, isAdd) {
+        var store = this.getCurrentStore();
+        var position = store[isAdd ? "addClients" : "getPosition"](clients);
+        this.isDrag = true;
+        return __assign$2({
+          datas: this.datas
+        }, position, {
+          movement: this.getMovement(clients),
+          isDrag: this.isDrag,
+          isPinch: this.isPinch,
+          isScroll: false,
+          inputEvent: inputEvent
+        });
+      };
+
+      return Gesto;
+    }(Component$1);
 
     /*
     Copyright (c) 2018 Daybrush
@@ -2494,7 +2872,7 @@ version: 0.11.1
     license: MIT
     author: Daybrush
     repository: git+https://github.com/daybrush/css-styled.git
-    version: 0.2.3
+    version: 0.2.6
     */
 
     function hash(str) {
@@ -2527,6 +2905,30 @@ version: 0.11.1
 
       return;
     }
+    function replaceStyle(className, css, options) {
+      if (options.original) {
+        return css;
+      }
+
+      return css.replace(/([^};{\s}][^};{]*|^\s*){/mg, function (_, selector) {
+        var trimmedSelector = selector.trim();
+        return (trimmedSelector ? splitComma(trimmedSelector) : [""]).map(function (subSelector) {
+          var trimmedSubSelector = subSelector.trim();
+
+          if (trimmedSubSelector.indexOf("@") === 0) {
+            return trimmedSubSelector;
+          } else if (trimmedSubSelector.indexOf(":global") > -1) {
+            return trimmedSubSelector.replace(/\:global/g, "");
+          } else if (trimmedSubSelector.indexOf(":host") > -1) {
+            return "" + trimmedSubSelector.replace(/\:host/g, "." + className);
+          } else if (trimmedSubSelector) {
+            return "." + className + " " + trimmedSubSelector;
+          } else {
+            return "." + className;
+          }
+        }).join(", ") + " {";
+      });
+    }
     function injectStyle(className, css, options, shadowRoot) {
       var style = document.createElement("style");
       style.setAttribute("type", "text/css");
@@ -2536,23 +2938,7 @@ version: 0.11.1
         style.setAttribute("nonce", options.nonce);
       }
 
-      var styleCSS = css;
-
-      if (!options.original) {
-        styleCSS = css.replace(/([^}{]*){/mg, function (all, selector) {
-          return splitComma(selector).map(function (subSelector) {
-            if (subSelector.indexOf(":global") > -1) {
-              return subSelector.replace(/\:global/g, "");
-            } else if (subSelector.indexOf(":host") > -1) {
-              return "" + subSelector.replace(/\:host/g, "." + className);
-            }
-
-            return "." + className + " " + subSelector;
-          }).join(", ") + "{";
-        });
-      }
-
-      style.innerHTML = styleCSS;
+      style.innerHTML = replaceStyle(className, css, options);
       (shadowRoot || document.head || document.body).appendChild(style);
       return style;
     }
@@ -2611,7 +2997,7 @@ version: 0.11.1
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/css-styled/tree/master/packages/react-css-styled
-    version: 0.2.1
+    version: 0.2.4
     */
 
     /*! *****************************************************************************
@@ -2630,8 +3016,8 @@ version: 0.11.1
     ***************************************************************************** */
 
     /* global Reflect, Promise */
-    var extendStatics$3 = function (d, b) {
-      extendStatics$3 = Object.setPrototypeOf || {
+    var extendStatics$4 = function (d, b) {
+      extendStatics$4 = Object.setPrototypeOf || {
         __proto__: []
       } instanceof Array && function (d, b) {
         d.__proto__ = b;
@@ -2639,11 +3025,11 @@ version: 0.11.1
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
       };
 
-      return extendStatics$3(d, b);
+      return extendStatics$4(d, b);
     };
 
-    function __extends$3(d, b) {
-      extendStatics$3(d, b);
+    function __extends$4(d, b) {
+      extendStatics$4(d, b);
 
       function __() {
         this.constructor = d;
@@ -2682,7 +3068,7 @@ version: 0.11.1
       return _a =
       /*#__PURE__*/
       function (_super) {
-        __extends$3(Styled, _super);
+        __extends$4(Styled, _super);
 
         function Styled() {
           return _super !== null && _super.apply(this, arguments) || this;
@@ -4949,7 +5335,7 @@ version: 0.11.1
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/guides/blob/master/packages/react-guides
-    version: 0.10.2
+    version: 0.10.3
     */
 
     /*! *****************************************************************************
@@ -4968,8 +5354,8 @@ version: 0.11.1
     ***************************************************************************** */
 
     /* global Reflect, Promise */
-    var extendStatics$4 = function (d, b) {
-      extendStatics$4 = Object.setPrototypeOf || {
+    var extendStatics$5 = function (d, b) {
+      extendStatics$5 = Object.setPrototypeOf || {
         __proto__: []
       } instanceof Array && function (d, b) {
         d.__proto__ = b;
@@ -4977,11 +5363,11 @@ version: 0.11.1
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
       };
 
-      return extendStatics$4(d, b);
+      return extendStatics$5(d, b);
     };
 
-    function __extends$4(d, b) {
-      extendStatics$4(d, b);
+    function __extends$5(d, b) {
+      extendStatics$5(d, b);
 
       function __() {
         this.constructor = d;
@@ -5026,7 +5412,7 @@ version: 0.11.1
     var Guides =
     /*#__PURE__*/
     function (_super) {
-      __extends$4(Guides, _super);
+      __extends$5(Guides, _super);
 
       function Guides() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -5235,46 +5621,43 @@ version: 0.11.1
       __proto.componentDidMount = function () {
         var _this = this;
 
-        this.dragger = new Dragger(this.manager.getElement(), {
-          container: document.body,
-          dragstart: function (e) {
-            var inputEvent = e.inputEvent;
-            var target = inputEvent.target;
-            var datas = e.datas;
-            var canvasElement = _this.ruler.canvasElement;
-            var guidesElement = _this.guidesElement;
-            var isHorizontal = _this.props.type === "horizontal";
+        this.gesto = new Gesto(this.manager.getElement(), {
+          container: document.body
+        }).on("dragStart", function (e) {
+          var inputEvent = e.inputEvent;
+          var target = inputEvent.target;
+          var datas = e.datas;
+          var canvasElement = _this.ruler.canvasElement;
+          var guidesElement = _this.guidesElement;
+          var isHorizontal = _this.props.type === "horizontal";
 
-            if (target === canvasElement) {
-              datas.fromRuler = true;
-              var offsetY = canvasElement.offsetTop + inputEvent.offsetY - guidesElement.offsetTop;
-              var offsetX = canvasElement.offsetLeft + inputEvent.offsetX - guidesElement.offsetLeft;
-              datas.offsetPos = [offsetX, offsetY];
-              datas.target = _this.adderElement;
-              datas.offsetPos[isHorizontal ? 1 : 0] += _this.scrollPos;
-            } else if (!hasClass(target, GUIDE)) {
-              return false;
-            } else {
-              var offsetY = target.offsetTop + inputEvent.offsetY;
-              var offsetX = target.offsetLeft + inputEvent.offsetX;
-              var pos = parseFloat(target.getAttribute("data-pos"));
-              datas.offsetPos = [offsetX, offsetY];
-              datas.offsetPos[isHorizontal ? 1 : 0] += pos;
-              datas.target = target;
-            }
+          if (target === canvasElement) {
+            datas.fromRuler = true;
+            var offsetY = canvasElement.offsetTop + inputEvent.offsetY - guidesElement.offsetTop;
+            var offsetX = canvasElement.offsetLeft + inputEvent.offsetX - guidesElement.offsetLeft;
+            datas.offsetPos = [offsetX, offsetY];
+            datas.target = _this.adderElement;
+            datas.offsetPos[isHorizontal ? 1 : 0] += _this.scrollPos;
+          } else if (!hasClass(target, GUIDE)) {
+            return false;
+          } else {
+            var offsetY = target.offsetTop + inputEvent.offsetY;
+            var offsetX = target.offsetLeft + inputEvent.offsetX;
+            var pos = parseFloat(target.getAttribute("data-pos"));
+            datas.offsetPos = [offsetX, offsetY];
+            datas.offsetPos[isHorizontal ? 1 : 0] += pos;
+            datas.target = target;
+          }
 
-            _this.onDragStart(e);
-          },
-          drag: this.onDrag,
-          dragend: this.onDragEnd
-        });
+          _this.onDragStart(e);
+        }).on("drag", this.onDrag).on("dragEnd", this.onDragEnd);
         this.setState({
           guides: this.props.defaultGuides || []
         }); // pass array of guides on mount data to create gridlines or something like that in ui
       };
 
       __proto.componentWillUnmount = function () {
-        this.dragger.unset();
+        this.gesto.unset();
       };
 
       __proto.componentDidUpdate = function (prevProps) {
@@ -5451,296 +5834,6 @@ version: 0.11.1
     }(Component);
 
     /*
-    Copyright (c) 2017 NAVER Corp.
-    @egjs/component project is licensed under the MIT license
-
-    @egjs/component JavaScript library
-    https://naver.github.io/egjs-component
-
-    @version 2.1.2
-    */
-    /**
-     * Copyright (c) 2015 NAVER Corp.
-     * egjs projects are licensed under the MIT license
-     */
-    function isUndefined$1(value) {
-      return typeof value === "undefined";
-    }
-    /**
-     * A class used to manage events in a component
-     * @ko 컴포넌트의 이벤트을 관리할 수 있게 하는 클래스
-     * @alias eg.Component
-     */
-
-
-    var Component$1 =
-    /*#__PURE__*/
-    function () {
-      var Component =
-      /*#__PURE__*/
-      function () {
-        /**
-        * Version info string
-        * @ko 버전정보 문자열
-        * @name VERSION
-        * @static
-        * @type {String}
-        * @example
-        * eg.Component.VERSION;  // ex) 2.0.0
-        * @memberof eg.Component
-        */
-
-        /**
-         * @support {"ie": "7+", "ch" : "latest", "ff" : "latest",  "sf" : "latest", "edge" : "latest", "ios" : "7+", "an" : "2.1+ (except 3.x)"}
-         */
-        function Component() {
-          this._eventHandler = {};
-          this.options = {};
-        }
-        /**
-         * Triggers a custom event.
-         * @ko 커스텀 이벤트를 발생시킨다
-         * @param {String} eventName The name of the custom event to be triggered <ko>발생할 커스텀 이벤트의 이름</ko>
-         * @param {Object} customEvent Event data to be sent when triggering a custom event <ko>커스텀 이벤트가 발생할 때 전달할 데이터</ko>
-         * @return {Boolean} Indicates whether the event has occurred. If the stop() method is called by a custom event handler, it will return false and prevent the event from occurring. <a href="https://github.com/naver/egjs-component/wiki/How-to-make-Component-event-design%3F">Ref</a> <ko>이벤트 발생 여부. 커스텀 이벤트 핸들러에서 stop() 메서드를 호출하면 'false'를 반환하고 이벤트 발생을 중단한다. <a href="https://github.com/naver/egjs-component/wiki/How-to-make-Component-event-design%3F">참고</a></ko>
-         * @example
-        class Some extends eg.Component {
-         some(){
-         	if(this.trigger("beforeHi")){ // When event call to stop return false.
-        	this.trigger("hi");// fire hi event.
-         	}
-         }
-        }
-        const some = new Some();
-        some.on("beforeHi", (e) => {
-        if(condition){
-        	e.stop(); // When event call to stop, `hi` event not call.
-        }
-        });
-        some.on("hi", (e) => {
-        // `currentTarget` is component instance.
-        console.log(some === e.currentTarget); // true
-        });
-        // If you want to more know event design. You can see article.
-        // https://github.com/naver/egjs-component/wiki/How-to-make-Component-event-design%3F
-         */
-
-
-        var _proto = Component.prototype;
-
-        _proto.trigger = function trigger(eventName, customEvent) {
-          if (customEvent === void 0) {
-            customEvent = {};
-          }
-
-          var handlerList = this._eventHandler[eventName] || [];
-          var hasHandlerList = handlerList.length > 0;
-
-          if (!hasHandlerList) {
-            return true;
-          } // If detach method call in handler in first time then handler list calls.
-
-
-          handlerList = handlerList.concat();
-          customEvent.eventType = eventName;
-          var isCanceled = false;
-          var arg = [customEvent];
-          var i = 0;
-
-          customEvent.stop = function () {
-            isCanceled = true;
-          };
-
-          customEvent.currentTarget = this;
-
-          for (var _len = arguments.length, restParam = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
-            restParam[_key - 2] = arguments[_key];
-          }
-
-          if (restParam.length >= 1) {
-            arg = arg.concat(restParam);
-          }
-
-          for (i = 0; handlerList[i]; i++) {
-            handlerList[i].apply(this, arg);
-          }
-
-          return !isCanceled;
-        };
-        /**
-         * Executed event just one time.
-         * @ko 이벤트가 한번만 실행된다.
-         * @param {eventName} eventName The name of the event to be attached <ko>등록할 이벤트의 이름</ko>
-         * @param {Function} handlerToAttach The handler function of the event to be attached <ko>등록할 이벤트의 핸들러 함수</ko>
-         * @return {eg.Component} An instance of a component itself<ko>컴포넌트 자신의 인스턴스</ko>
-         * @example
-        class Some extends eg.Component {
-         hi() {
-           alert("hi");
-         }
-         thing() {
-           this.once("hi", this.hi);
-         }
-        }
-        var some = new Some();
-        some.thing();
-        some.trigger("hi");
-        // fire alert("hi");
-        some.trigger("hi");
-        // Nothing happens
-         */
-
-
-        _proto.once = function once(eventName, handlerToAttach) {
-          if (typeof eventName === "object" && isUndefined$1(handlerToAttach)) {
-            var eventHash = eventName;
-            var i;
-
-            for (i in eventHash) {
-              this.once(i, eventHash[i]);
-            }
-
-            return this;
-          } else if (typeof eventName === "string" && typeof handlerToAttach === "function") {
-            var self = this;
-            this.on(eventName, function listener() {
-              for (var _len2 = arguments.length, arg = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-                arg[_key2] = arguments[_key2];
-              }
-
-              handlerToAttach.apply(self, arg);
-              self.off(eventName, listener);
-            });
-          }
-
-          return this;
-        };
-        /**
-         * Checks whether an event has been attached to a component.
-         * @ko 컴포넌트에 이벤트가 등록됐는지 확인한다.
-         * @param {String} eventName The name of the event to be attached <ko>등록 여부를 확인할 이벤트의 이름</ko>
-         * @return {Boolean} Indicates whether the event is attached. <ko>이벤트 등록 여부</ko>
-         * @example
-        class Some extends eg.Component {
-         some() {
-           this.hasOn("hi");// check hi event.
-         }
-        }
-         */
-
-
-        _proto.hasOn = function hasOn(eventName) {
-          return !!this._eventHandler[eventName];
-        };
-        /**
-         * Attaches an event to a component.
-         * @ko 컴포넌트에 이벤트를 등록한다.
-         * @param {eventName} eventName The name of the event to be attached <ko>등록할 이벤트의 이름</ko>
-         * @param {Function} handlerToAttach The handler function of the event to be attached <ko>등록할 이벤트의 핸들러 함수</ko>
-         * @return {eg.Component} An instance of a component itself<ko>컴포넌트 자신의 인스턴스</ko>
-         * @example
-        class Some extends eg.Component {
-         hi() {
-           console.log("hi");
-         }
-         some() {
-           this.on("hi",this.hi); //attach event
-         }
-        }
-        */
-
-
-        _proto.on = function on(eventName, handlerToAttach) {
-          if (typeof eventName === "object" && isUndefined$1(handlerToAttach)) {
-            var eventHash = eventName;
-            var name;
-
-            for (name in eventHash) {
-              this.on(name, eventHash[name]);
-            }
-
-            return this;
-          } else if (typeof eventName === "string" && typeof handlerToAttach === "function") {
-            var handlerList = this._eventHandler[eventName];
-
-            if (isUndefined$1(handlerList)) {
-              this._eventHandler[eventName] = [];
-              handlerList = this._eventHandler[eventName];
-            }
-
-            handlerList.push(handlerToAttach);
-          }
-
-          return this;
-        };
-        /**
-         * Detaches an event from the component.
-         * @ko 컴포넌트에 등록된 이벤트를 해제한다
-         * @param {eventName} eventName The name of the event to be detached <ko>해제할 이벤트의 이름</ko>
-         * @param {Function} handlerToDetach The handler function of the event to be detached <ko>해제할 이벤트의 핸들러 함수</ko>
-         * @return {eg.Component} An instance of a component itself <ko>컴포넌트 자신의 인스턴스</ko>
-         * @example
-        class Some extends eg.Component {
-         hi() {
-           console.log("hi");
-         }
-         some() {
-           this.off("hi",this.hi); //detach event
-         }
-        }
-         */
-
-
-        _proto.off = function off(eventName, handlerToDetach) {
-          // All event detach.
-          if (isUndefined$1(eventName)) {
-            this._eventHandler = {};
-            return this;
-          } // All handler of specific event detach.
-
-
-          if (isUndefined$1(handlerToDetach)) {
-            if (typeof eventName === "string") {
-              this._eventHandler[eventName] = undefined;
-              return this;
-            } else {
-              var eventHash = eventName;
-              var name;
-
-              for (name in eventHash) {
-                this.off(name, eventHash[name]);
-              }
-
-              return this;
-            }
-          } // The handler of specific event detach.
-
-
-          var handlerList = this._eventHandler[eventName];
-
-          if (handlerList) {
-            var k;
-            var handlerFunction;
-
-            for (k = 0; (handlerFunction = handlerList[k]) !== undefined; k++) {
-              if (handlerFunction === handlerToDetach) {
-                handlerList = handlerList.splice(k, 1);
-                break;
-              }
-            }
-          }
-
-          return this;
-        };
-
-        return Component;
-      }();
-
-      Component.VERSION = "2.1.2";
-      return Component;
-    }();
-
-    /*
     Copyright (c) 2018 Daybrush
     @name: @daybrush/utils
     license: MIT
@@ -5765,42 +5858,6 @@ version: 0.11.1
       return str.replace(/[\s-_]([a-z])/g, function (all, letter) {
         return letter.toUpperCase();
       });
-    }
-    /**
-    * Sets up a function that will be called whenever the specified event is delivered to the target
-    * @memberof DOM
-    * @param - event target
-    * @param - A case-sensitive string representing the event type to listen for.
-    * @param - The object which receives a notification (an object that implements the Event interface) when an event of the specified type occurs
-    * @param - An options object that specifies characteristics about the event listener. The available options are:
-    * @example
-    import {addEvent} from "@daybrush/utils";
-
-    addEvent(el, "click", e => {
-      console.log(e);
-    });
-    */
-
-    function addEvent$1(el, type, listener, options) {
-      el.addEventListener(type, listener, options);
-    }
-    /**
-    * removes from the EventTarget an event listener previously registered with EventTarget.addEventListener()
-    * @memberof DOM
-    * @param - event target
-    * @param - A case-sensitive string representing the event type to listen for.
-    * @param - The EventListener function of the event handler to remove from the event target.
-    * @example
-    import {addEvent, removeEvent} from "@daybrush/utils";
-    const listener = e => {
-      console.log(e);
-    };
-    addEvent(el, "click", listener);
-    removeEvent(el, "click", listener);
-    */
-
-    function removeEvent$1(el, type, listener) {
-      el.removeEventListener(type, listener);
     }
 
     var Guides$1 =
@@ -5901,12 +5958,70 @@ version: 0.11.1
     }(Component$1);
 
     /*
-    Copyright (c) 2019 Daybrush
-    name: @daybrush/drag
+    Copyright (c) 2018 Daybrush
+    @name: @daybrush/utils
     license: MIT
     author: Daybrush
-    repository: git+https://github.com/daybrush/drag.git
-    version: 0.11.1
+    repository: https://github.com/daybrush/utils
+    @version 1.0.0
+    */
+    /**
+    * Date.now() method
+    * @memberof CrossBrowser
+    * @return {number} milliseconds
+    * @example
+    import {now} from "@daybrush/utils";
+
+    console.log(now()); // 12121324241(milliseconds)
+    */
+
+    function now$1() {
+      return Date.now ? Date.now() : new Date().getTime();
+    }
+    /**
+    * Sets up a function that will be called whenever the specified event is delivered to the target
+    * @memberof DOM
+    * @param - event target
+    * @param - A case-sensitive string representing the event type to listen for.
+    * @param - The object which receives a notification (an object that implements the Event interface) when an event of the specified type occurs
+    * @param - An options object that specifies characteristics about the event listener. The available options are:
+    * @example
+    import {addEvent} from "@daybrush/utils";
+
+    addEvent(el, "click", e => {
+      console.log(e);
+    });
+    */
+
+    function addEvent$1(el, type, listener, options) {
+      el.addEventListener(type, listener, options);
+    }
+    /**
+    * removes from the EventTarget an event listener previously registered with EventTarget.addEventListener()
+    * @memberof DOM
+    * @param - event target
+    * @param - A case-sensitive string representing the event type to listen for.
+    * @param - The EventListener function of the event handler to remove from the event target.
+    * @example
+    import {addEvent, removeEvent} from "@daybrush/utils";
+    const listener = e => {
+      console.log(e);
+    };
+    addEvent(el, "click", listener);
+    removeEvent(el, "click", listener);
+    */
+
+    function removeEvent$1(el, type, listener) {
+      el.removeEventListener(type, listener);
+    }
+
+    /*
+    Copyright (c) 2019 Daybrush
+    name: gesto
+    license: MIT
+    author: Daybrush
+    repository: git+https://github.com/daybrush/gesture.git
+    version: 1.0.0
     */
 
     /*! *****************************************************************************
@@ -5923,6 +6038,29 @@ version: 0.11.1
     See the Apache Version 2.0 License for specific language governing permissions
     and limitations under the License.
     ***************************************************************************** */
+
+    /* global Reflect, Promise */
+    var extendStatics$6 = function (d, b) {
+      extendStatics$6 = Object.setPrototypeOf || {
+        __proto__: []
+      } instanceof Array && function (d, b) {
+        d.__proto__ = b;
+      } || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+      };
+
+      return extendStatics$6(d, b);
+    };
+
+    function __extends$6(d, b) {
+      extendStatics$6(d, b);
+
+      function __() {
+        this.constructor = d;
+      }
+
+      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    }
     var __assign$5 = function () {
       __assign$5 = Object.assign || function __assign(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -5937,38 +6075,49 @@ version: 0.11.1
       return __assign$5.apply(this, arguments);
     };
 
-    function getPinchDragPosition$1(clients, prevClients, startClients, startPinchClients) {
-      var nowCenter = getAverageClient$1(clients);
-      var prevCenter = getAverageClient$1(prevClients);
-      var startCenter = getAverageClient$1(startPinchClients);
-      var pinchClient = getAddClient(startPinchClients[0], getMinusClient(nowCenter, startCenter));
-      var pinchPrevClient = getAddClient(startPinchClients[0], getMinusClient(prevCenter, startCenter));
-      return getPosition$1(pinchClient, pinchPrevClient, startClients[0]);
+    function getRad$1(pos1, pos2) {
+      var distX = pos2[0] - pos1[0];
+      var distY = pos2[1] - pos1[1];
+      var rad = Math.atan2(distY, distX);
+      return rad >= 0 ? rad : rad + Math.PI * 2;
+    }
+    function getRotatiion$1(touches) {
+      return getRad$1([touches[0].clientX, touches[0].clientY], [touches[1].clientX, touches[1].clientY]) / Math.PI * 180;
     }
     function isMultiTouch$1(e) {
       return e.touches && e.touches.length >= 2;
     }
-    function getPositionEvent$1(e) {
+    function getEventClients$1(e) {
       if (e.touches) {
         return getClients$1(e.touches);
       } else {
         return [getClient$1(e)];
       }
     }
-    function getPosition$1(client, prevClient, startClient) {
-      var clientX = client.clientX,
-          clientY = client.clientY;
-      var prevX = prevClient.clientX,
-          prevY = prevClient.clientY;
-      var startX = startClient.clientX,
-          startY = startClient.clientY;
+    function getPosition$1(clients, prevClients, startClients) {
+      var length = startClients.length;
+
+      var _a = getAverageClient$1(clients, length),
+          clientX = _a.clientX,
+          clientY = _a.clientY,
+          originalClientX = _a.originalClientX,
+          originalClientY = _a.originalClientY;
+
+      var _b = getAverageClient$1(prevClients, length),
+          prevX = _b.clientX,
+          prevY = _b.clientY;
+
+      var _c = getAverageClient$1(startClients, length),
+          startX = _c.clientX,
+          startY = _c.clientY;
+
       var deltaX = clientX - prevX;
       var deltaY = clientY - prevY;
       var distX = clientX - startX;
       var distY = clientY - startY;
       return {
-        clientX: clientX,
-        clientY: clientY,
+        clientX: originalClientX,
+        clientY: originalClientY,
         deltaX: deltaX,
         deltaY: deltaY,
         distX: distX,
@@ -5977,11 +6126,6 @@ version: 0.11.1
     }
     function getDist$1(clients) {
       return Math.sqrt(Math.pow(clients[0].clientX - clients[1].clientX, 2) + Math.pow(clients[0].clientY - clients[1].clientY, 2));
-    }
-    function getPositions$1(clients, prevClients, startClients) {
-      return clients.map(function (client, i) {
-        return getPosition$1(client, prevClients[i], startClients[i]);
-      });
     }
     function getClients$1(touches) {
       var length = Math.min(touches.length, 2);
@@ -5999,58 +6143,264 @@ version: 0.11.1
         clientY: e.clientY
       };
     }
-    function getAverageClient$1(clients) {
-      return {
-        clientX: (clients[0].clientX + clients[1].clientX) / 2,
-        clientY: (clients[0].clientY + clients[1].clientY) / 2
+    function getAverageClient$1(clients, length) {
+      if (length === void 0) {
+        length = clients.length;
+      }
+
+      var sumClient = {
+        clientX: 0,
+        clientY: 0,
+        originalClientX: 0,
+        originalClientY: 0
       };
-    }
-    function getAddClient(client1, client2) {
+
+      for (var i = 0; i < length; ++i) {
+        var client = clients[i];
+        sumClient.originalClientX += "originalClientX" in client ? client.originalClientX : client.clientX;
+        sumClient.originalClientY += "originalClientY" in client ? client.originalClientY : client.clientY;
+        sumClient.clientX += client.clientX;
+        sumClient.clientY += client.clientY;
+      }
+
+      if (!length) {
+        return sumClient;
+      }
+
       return {
-        clientX: client1.clientX + client2.clientX,
-        clientY: client1.clientY + client2.clientY
-      };
-    }
-    function getMinusClient(client1, client2) {
-      return {
-        clientX: client1.clientX - client2.clientX,
-        clientY: client1.clientY - client2.clientY
+        clientX: sumClient.clientX / length,
+        clientY: sumClient.clientY / length,
+        originalClientX: sumClient.originalClientX / length,
+        originalClientY: sumClient.originalClientY / length
       };
     }
 
-    var Dragger$1 =
+    var ClientStore$1 =
     /*#__PURE__*/
     function () {
-      function Dragger(el, options) {
-        var _this = this;
+      function ClientStore(clients) {
+        this.prevClients = [];
+        this.startClients = [];
+        this.movement = 0;
+        this.length = 0;
+        this.startClients = clients;
+        this.prevClients = clients;
+        this.length = clients.length;
+      }
 
+      var __proto = ClientStore.prototype;
+
+      __proto.addClients = function (clients) {
+        if (clients === void 0) {
+          clients = this.prevClients;
+        }
+
+        var position = this.getPosition(clients);
+        var deltaX = position.deltaX,
+            deltaY = position.deltaY;
+        this.movement += Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        this.prevClients = clients;
+        return position;
+      };
+
+      __proto.getAngle = function (clients) {
+        if (clients === void 0) {
+          clients = this.prevClients;
+        }
+
+        return getRotatiion$1(clients);
+      };
+
+      __proto.getRotation = function (clients) {
+        if (clients === void 0) {
+          clients = this.prevClients;
+        }
+
+        return getRotatiion$1(clients) - getRotatiion$1(this.startClients);
+      };
+
+      __proto.getPosition = function (clients) {
+        return getPosition$1(clients || this.prevClients, this.prevClients, this.startClients);
+      };
+
+      __proto.getPositions = function (clients) {
+        if (clients === void 0) {
+          clients = this.prevClients;
+        }
+
+        var prevClients = this.prevClients;
+        return this.startClients.map(function (startClient, i) {
+          return getPosition$1([clients[i]], [prevClients[i]], [startClient]);
+        });
+      };
+
+      __proto.getMovement = function (clients) {
+        var movement = this.movement;
+
+        if (!clients) {
+          return movement;
+        }
+
+        var currentClient = getAverageClient$1(clients, this.length);
+        var prevClient = getAverageClient$1(this.prevClients, this.length);
+        var deltaX = currentClient.clientX - prevClient.clientX;
+        var deltaY = currentClient.clientY - prevClient.clientY;
+        return Math.sqrt(deltaX * deltaX + deltaY * deltaY) + movement;
+      };
+
+      __proto.getDistance = function (clients) {
+        if (clients === void 0) {
+          clients = this.prevClients;
+        }
+
+        return getDist$1(clients);
+      };
+
+      __proto.getScale = function (clients) {
+        if (clients === void 0) {
+          clients = this.prevClients;
+        }
+
+        return getDist$1(clients) / getDist$1(this.startClients);
+      };
+
+      __proto.move = function (deltaX, deltaY) {
+        this.startClients.forEach(function (client) {
+          client.clientX -= deltaX;
+          client.clientY -= deltaY;
+        });
+        this.prevClients.forEach(function (client) {
+          client.clientX -= deltaX;
+          client.clientY -= deltaY;
+        });
+      };
+
+      return ClientStore;
+    }();
+
+    var INPUT_TAGNAMES$1 = ["textarea", "input"];
+    /**
+     * You can set up drag, pinch events in any browser.
+     */
+
+    var Gesto$1 =
+    /*#__PURE__*/
+    function (_super) {
+      __extends$6(Gesto, _super);
+      /**
+       *
+       */
+
+
+      function Gesto(targets, options) {
         if (options === void 0) {
           options = {};
         }
 
-        this.el = el;
-        this.options = {};
-        this.flag = false;
-        this.pinchFlag = false;
-        this.datas = {};
-        this.isDrag = false;
-        this.isPinch = false;
-        this.isMouse = false;
-        this.isTouch = false;
-        this.prevClients = [];
-        this.startClients = [];
-        this.movement = 0;
-        this.startPinchClients = [];
-        this.startDistance = 0;
-        this.customDist = [0, 0];
+        var _this = _super.call(this) || this;
 
-        this.onDragStart = function (e) {
+        _this.options = {};
+        _this.flag = false;
+        _this.pinchFlag = false;
+        _this.datas = {};
+        _this.isDrag = false;
+        _this.isPinch = false;
+        _this.isMouse = false;
+        _this.isTouch = false;
+        _this.clientStores = [];
+        _this.targets = [];
+        _this.prevTime = 0;
+        _this.isDouble = false;
+
+        _this.onDragStart = function (e, isTrusted) {
+          if (isTrusted === void 0) {
+            isTrusted = true;
+          }
+
           if (!_this.flag && e.cancelable === false) {
             return;
           }
 
-          if (isMultiTouch$1(e)) {
-            if (!_this.flag && e.touches.length !== e.changedTouches.length) {
+          var _a = _this.options,
+              container = _a.container,
+              pinchOutside = _a.pinchOutside,
+              preventRightClick = _a.preventRightClick,
+              preventDefault = _a.preventDefault,
+              checkInput = _a.checkInput;
+          var isTouch = _this.isTouch;
+          var isDragStart = !_this.flag;
+
+          if (isDragStart) {
+            var activeElement = document.activeElement;
+            var target = e.target;
+            var tagName = target.tagName.toLowerCase();
+            var hasInput = INPUT_TAGNAMES$1.indexOf(tagName) > -1;
+            var hasContentEditable = target.isContentEditable;
+
+            if (hasInput || hasContentEditable) {
+              if (checkInput || activeElement === target) {
+                // force false or already focused.
+                return false;
+              }
+
+              if (activeElement && hasContentEditable && activeElement.isContentEditable && activeElement.contains(target)) {
+                return false;
+              }
+            } else if ((preventDefault || e.type === "touchstart") && activeElement) {
+              var activeTagName = activeElement.tagName;
+
+              if (activeElement.isContentEditable || INPUT_TAGNAMES$1.indexOf(activeTagName) > -1) {
+                activeElement.blur();
+              }
+            }
+
+            _this.clientStores = [new ClientStore$1(getEventClients$1(e))];
+            _this.flag = true;
+            _this.isDrag = false;
+            _this.datas = {};
+
+            if (preventRightClick && (e.which === 3 || e.button === 2)) {
+              _this.initDrag();
+
+              return false;
+            }
+
+            var result = _this.trigger("dragStart", __assign$5({
+              datas: _this.datas,
+              inputEvent: e,
+              isTrusted: isTrusted
+            }, _this.getCurrentStore().getPosition()));
+
+            if (result === false) {
+              _this.initDrag();
+            }
+
+            _this.isDouble = now$1() - _this.prevTime < 200;
+            _this.flag && preventDefault && e.preventDefault();
+          }
+
+          if (!_this.flag) {
+            return false;
+          }
+
+          var timer = 0;
+
+          if (isDragStart && isTouch && pinchOutside) {
+            timer = setTimeout(function () {
+              addEvent$1(container, "touchstart", _this.onDragStart, {
+                passive: false
+              });
+            });
+          }
+
+          if (!isDragStart && isTouch && pinchOutside) {
+            removeEvent$1(container, "touchstart", _this.onDragStart);
+          }
+
+          if (_this.flag && isMultiTouch$1(e)) {
+            clearTimeout(timer);
+
+            if (isDragStart && e.touches.length !== e.changedTouches.length) {
               return;
             }
 
@@ -6058,121 +6408,153 @@ version: 0.11.1
               _this.onPinchStart(e);
             }
           }
-
-          if (_this.flag) {
-            return;
-          }
-
-          var clients = _this.startClients[0] ? _this.startClients : getPositionEvent$1(e);
-          _this.customDist = [0, 0];
-          _this.flag = true;
-          _this.isDrag = false;
-          _this.startClients = clients;
-          _this.prevClients = clients;
-          _this.datas = {};
-          _this.movement = 0;
-          var position = getPosition$1(clients[0], _this.prevClients[0], _this.startClients[0]);
-          var _a = _this.options,
-              dragstart = _a.dragstart,
-              preventRightClick = _a.preventRightClick;
-
-          if (preventRightClick && e.which === 3 || (dragstart && dragstart(__assign$5({
-            datas: _this.datas,
-            inputEvent: e
-          }, position))) === false) {
-            _this.startClients = [];
-            _this.prevClients = [];
-            _this.flag = false;
-          }
-
-          _this.flag && e.preventDefault();
         };
 
-        this.onDrag = function (e, isScroll) {
+        _this.onDrag = function (e, isScroll) {
           if (!_this.flag) {
             return;
           }
 
-          var clients = getPositionEvent$1(e);
+          var clients = getEventClients$1(e);
+
+          var result = _this.moveClients(clients, e, false);
+
+          if (_this.pinchFlag || result.deltaX || result.deltaY) {
+            _this.trigger("drag", __assign$5({}, result, {
+              isScroll: !!isScroll,
+              inputEvent: e
+            }));
+          }
 
           if (_this.pinchFlag) {
             _this.onPinch(e, clients);
           }
 
-          var result = _this.move([0, 0], e, clients);
-
-          if (!result || !result.deltaX && !result.deltaY) {
-            return;
-          }
-
-          var drag = _this.options.drag;
-          drag && drag(__assign$5({}, result, {
-            isScroll: !!isScroll,
-            inputEvent: e
-          }));
+          _this.getCurrentStore().addClients(clients);
         };
 
-        this.onDragEnd = function (e) {
+        _this.onDragEnd = function (e) {
           if (!_this.flag) {
             return;
           }
+
+          var _a = _this.options,
+              pinchOutside = _a.pinchOutside,
+              container = _a.container;
+
+          if (_this.isTouch && pinchOutside) {
+            removeEvent$1(container, "touchstart", _this.onDragStart);
+          }
+
+          _this.flag = false;
+
+          var position = _this.getCurrentStore().getPosition();
+
+          var currentTime = now$1();
+          var isDouble = !_this.isDrag && _this.isDouble;
+          _this.prevTime = _this.isDrag || isDouble ? 0 : currentTime;
+
+          _this.trigger("dragEnd", __assign$5({
+            datas: _this.datas,
+            isDouble: isDouble,
+            isDrag: _this.isDrag,
+            inputEvent: e
+          }, position));
 
           if (_this.pinchFlag) {
             _this.onPinchEnd(e);
           }
 
-          _this.flag = false;
-          var dragend = _this.options.dragend;
-          var prevClients = _this.prevClients;
-          var startClients = _this.startClients;
-          var position = _this.pinchFlag ? getPinchDragPosition$1(prevClients, prevClients, startClients, _this.startPinchClients) : getPosition$1(prevClients[0], prevClients[0], startClients[0]);
-          _this.startClients = [];
-          _this.prevClients = [];
-          dragend && dragend(__assign$5({
-            datas: _this.datas,
-            isDrag: _this.isDrag,
-            inputEvent: e
-          }, position));
+          _this.clientStores = [];
         };
 
-        this.options = __assign$5({
-          container: el,
+        var elements = [].concat(targets);
+        _this.options = __assign$5({
+          checkInput: false,
+          container: elements.length > 1 ? window : elements[0],
           preventRightClick: true,
+          preventDefault: true,
           pinchThreshold: 0,
           events: ["touch", "mouse"]
         }, options);
-        var _a = this.options,
+        var _a = _this.options,
             container = _a.container,
             events = _a.events;
-        this.isTouch = events.indexOf("touch") > -1;
-        this.isMouse = events.indexOf("mouse") > -1;
-        this.customDist = [0, 0];
+        _this.isTouch = events.indexOf("touch") > -1;
+        _this.isMouse = events.indexOf("mouse") > -1;
+        _this.targets = elements;
 
-        if (this.isMouse) {
-          addEvent$1(el, "mousedown", this.onDragStart);
-          addEvent$1(container, "mousemove", this.onDrag);
-          addEvent$1(container, "mouseup", this.onDragEnd);
+        if (_this.isMouse) {
+          elements.forEach(function (el) {
+            addEvent$1(el, "mousedown", _this.onDragStart);
+          });
+          addEvent$1(container, "mousemove", _this.onDrag);
+          addEvent$1(container, "mouseup", _this.onDragEnd);
+          addEvent$1(container, "contextmenu", _this.onDragEnd);
         }
 
-        if (this.isTouch) {
-          var passive = {
+        if (_this.isTouch) {
+          var passive_1 = {
             passive: false
           };
-          addEvent$1(el, "touchstart", this.onDragStart, passive);
-          addEvent$1(container, "touchmove", this.onDrag, passive);
-          addEvent$1(container, "touchend", this.onDragEnd, passive);
+          elements.forEach(function (el) {
+            addEvent$1(el, "touchstart", _this.onDragStart, passive_1);
+          });
+          addEvent$1(container, "touchmove", _this.onDrag, passive_1);
+          addEvent$1(container, "touchend", _this.onDragEnd, passive_1);
+          addEvent$1(container, "touchcancel", _this.onDragEnd, passive_1);
         }
-      }
 
-      var __proto = Dragger.prototype;
+        return _this;
+      }
+      /**
+       * The total moved distance
+       */
+
+
+      var __proto = Gesto.prototype;
+
+      __proto.getMovement = function (clients) {
+        return this.getCurrentStore().getMovement(clients) + this.clientStores.slice(1).reduce(function (prev, cur) {
+          return prev + cur.movement;
+        }, 0);
+      };
+      /**
+       * Whether to drag
+       */
+
 
       __proto.isDragging = function () {
         return this.isDrag;
       };
+      /**
+       * Whether to start drag
+       */
+
+
+      __proto.isFlag = function () {
+        return this.flag;
+      };
+      /**
+       * Whether to start pinch
+       */
+
+
+      __proto.isPinchFlag = function () {
+        return this.pinchFlag;
+      };
+      /**
+       * Whether to pinch
+       */
+
 
       __proto.isPinching = function () {
         return this.isPinch;
       };
+      /**
+       * If a scroll event occurs, it is corrected by the scroll distance.
+       */
+
 
       __proto.scrollBy = function (deltaX, deltaY, e, isCallDrag) {
         if (isCallDrag === void 0) {
@@ -6183,157 +6565,156 @@ version: 0.11.1
           return;
         }
 
-        this.startClients.forEach(function (client) {
-          client.clientX -= deltaX;
-          client.clientY -= deltaY;
-        });
-        this.prevClients.forEach(function (client) {
-          client.clientX -= deltaX;
-          client.clientY -= deltaY;
-        });
+        this.clientStores[0].move(deltaX, deltaY);
         isCallDrag && this.onDrag(e, true);
       };
+      /**
+       * Create a virtual drag event.
+       */
 
-      __proto.move = function (_a, inputEvent, clients) {
+
+      __proto.move = function (_a, inputEvent) {
         var deltaX = _a[0],
             deltaY = _a[1];
+        var store = this.getCurrentStore();
+        var nextClients = store.prevClients;
+        return this.moveClients(nextClients.map(function (_a) {
+          var clientX = _a.clientX,
+              clientY = _a.clientY;
+          return {
+            clientX: clientX + deltaX,
+            clientY: clientY + deltaY,
+            originalClientX: clientX,
+            originalClientY: clientY
+          };
+        }), inputEvent, true);
+      };
+      /**
+       * The dragStart event is triggered by an external event.
+       */
 
-        if (clients === void 0) {
-          clients = this.prevClients;
+
+      __proto.triggerDragStart = function (e) {
+        this.onDragStart(e, false);
+      };
+      /**
+       * Unset Gesto
+       */
+
+
+      __proto.unset = function () {
+        var _this = this;
+
+        var targets = this.targets;
+        var container = this.options.container;
+        this.off();
+
+        if (this.isMouse) {
+          targets.forEach(function (target) {
+            removeEvent$1(target, "mousedown", _this.onDragStart);
+          });
+          removeEvent$1(container, "mousemove", this.onDrag);
+          removeEvent$1(container, "mouseup", this.onDragEnd);
+          removeEvent$1(container, "contextmenu", this.onDragEnd);
         }
 
-        var customDist = this.customDist;
-        var prevClients = this.prevClients;
-        var startClients = this.startClients;
-        var position = this.pinchFlag ? getPinchDragPosition$1(clients, prevClients, startClients, this.startPinchClients) : getPosition$1(clients[0], prevClients[0], startClients[0]);
-        customDist[0] += deltaX;
-        customDist[1] += deltaY;
-        position.deltaX += deltaX;
-        position.deltaY += deltaY;
-        var positionDeltaX = position.deltaX,
-            positionDeltaY = position.deltaY;
-        position.distX += customDist[0];
-        position.distY += customDist[1];
-        this.movement += Math.sqrt(positionDeltaX * positionDeltaX + positionDeltaY * positionDeltaY);
-        this.prevClients = clients;
-        this.isDrag = true;
-        return __assign$5({
-          datas: this.datas
-        }, position, {
-          isScroll: false,
-          inputEvent: inputEvent
-        });
+        if (this.isTouch) {
+          targets.forEach(function (target) {
+            removeEvent$1(target, "touchstart", _this.onDragStart);
+          });
+          removeEvent$1(container, "touchstart", this.onDragStart);
+          removeEvent$1(container, "touchmove", this.onDrag);
+          removeEvent$1(container, "touchend", this.onDragEnd);
+          removeEvent$1(container, "touchcancel", this.onDragEnd);
+        }
       };
 
       __proto.onPinchStart = function (e) {
-        var _a, _b;
+        var pinchThreshold = this.options.pinchThreshold;
 
-        var _c = this.options,
-            pinchstart = _c.pinchstart,
-            pinchThreshold = _c.pinchThreshold;
-
-        if (this.isDrag && this.movement > pinchThreshold) {
+        if (this.isDrag && this.getMovement() > pinchThreshold) {
           return;
         }
 
-        var pinchClients = getClients$1(e.changedTouches);
+        var store = new ClientStore$1(getEventClients$1(e));
         this.pinchFlag = true;
-
-        (_a = this.startClients).push.apply(_a, pinchClients);
-
-        (_b = this.prevClients).push.apply(_b, pinchClients);
-
-        this.startDistance = getDist$1(this.prevClients);
-        this.startPinchClients = this.prevClients.slice();
-
-        if (!pinchstart) {
-          return;
-        }
-
-        var startClients = this.prevClients;
-        var startAverageClient = getAverageClient$1(startClients);
-        var centerPosition = getPosition$1(startAverageClient, startAverageClient, startAverageClient);
-        pinchstart(__assign$5({
+        this.clientStores.splice(0, 0, store);
+        this.trigger("pinchStart", __assign$5({
           datas: this.datas,
-          touches: getPositions$1(startClients, startClients, startClients)
-        }, centerPosition, {
+          angle: store.getAngle(),
+          touches: this.getCurrentStore().getPositions()
+        }, store.getPosition(), {
           inputEvent: e
         }));
       };
 
       __proto.onPinch = function (e, clients) {
-        if (!this.flag || !this.pinchFlag) {
+        if (!this.flag || !this.pinchFlag || clients.length < 2) {
           return;
         }
 
+        var store = this.getCurrentStore();
         this.isPinch = true;
-        var pinch = this.options.pinch;
-
-        if (!pinch) {
-          return;
-        }
-
-        var prevClients = this.prevClients;
-        var startClients = this.startClients;
-        var centerPosition = getPosition$1(getAverageClient$1(clients), getAverageClient$1(prevClients), getAverageClient$1(startClients));
-        var distance = getDist$1(clients);
-        pinch(__assign$5({
+        this.trigger("pinch", __assign$5({
           datas: this.datas,
-          touches: getPositions$1(clients, prevClients, startClients),
-          scale: distance / this.startDistance,
-          distance: distance
-        }, centerPosition, {
+          movement: this.getMovement(clients),
+          angle: store.getAngle(clients),
+          rotation: store.getRotation(clients),
+          touches: store.getPositions(clients),
+          scale: store.getScale(clients),
+          distance: store.getDistance(clients)
+        }, store.getPosition(clients), {
           inputEvent: e
         }));
       };
 
       __proto.onPinchEnd = function (e) {
-        if (!this.flag || !this.pinchFlag) {
+        if (!this.pinchFlag) {
           return;
         }
 
         var isPinch = this.isPinch;
         this.isPinch = false;
         this.pinchFlag = false;
-        var pinchend = this.options.pinchend;
-
-        if (!pinchend) {
-          return;
-        }
-
-        var prevClients = this.prevClients;
-        var startClients = this.startClients;
-        var centerPosition = getPosition$1(getAverageClient$1(prevClients), getAverageClient$1(prevClients), getAverageClient$1(startClients));
-        pinchend(__assign$5({
+        var store = this.getCurrentStore();
+        this.trigger("pinchEnd", __assign$5({
           datas: this.datas,
           isPinch: isPinch,
-          touches: getPositions$1(prevClients, prevClients, startClients)
-        }, centerPosition, {
+          touches: store.getPositions()
+        }, store.getPosition(), {
           inputEvent: e
         }));
         this.isPinch = false;
         this.pinchFlag = false;
       };
 
-      __proto.unset = function () {
-        var el = this.el;
-        var container = this.options.container;
-
-        if (this.isMouse) {
-          removeEvent$1(el, "mousedown", this.onDragStart);
-          removeEvent$1(container, "mousemove", this.onDrag);
-          removeEvent$1(container, "mouseup", this.onDragEnd);
-        }
-
-        if (this.isTouch) {
-          removeEvent$1(el, "touchstart", this.onDragStart);
-          removeEvent$1(container, "touchmove", this.onDrag);
-          removeEvent$1(container, "touchend", this.onDragEnd);
-        }
+      __proto.initDrag = function () {
+        this.clientStores = [];
+        this.pinchFlag = false;
+        this.flag = false;
       };
 
-      return Dragger;
-    }();
+      __proto.getCurrentStore = function () {
+        return this.clientStores[0];
+      };
+
+      __proto.moveClients = function (clients, inputEvent, isAdd) {
+        var store = this.getCurrentStore();
+        var position = store[isAdd ? "addClients" : "getPosition"](clients);
+        this.isDrag = true;
+        return __assign$5({
+          datas: this.datas
+        }, position, {
+          movement: this.getMovement(clients),
+          isDrag: this.isDrag,
+          isPinch: this.isPinch,
+          isScroll: false,
+          inputEvent: inputEvent
+        });
+      };
+
+      return Gesto;
+    }(Component$1);
 
     var guides1 = new Guides$1(document.querySelector(".ruler.horizontal"), {
       type: "horizontal",
@@ -6360,20 +6741,17 @@ version: 0.11.1
     var scrollX = 0;
     var scrollY = 0;
     var box = document.querySelector(".box");
-    new Dragger$1(document.body, {
-      dragstart: function (e) {
-        if (e.inputEvent.target === box || e.inputEvent.target.nodeName === "A") {
-          return false;
-        }
-      },
-      drag: function (e) {
-        scrollX -= e.deltaX;
-        scrollY -= e.deltaY;
-        guides1.scroll(scrollX);
-        guides1.scrollGuides(scrollY);
-        guides2.scroll(scrollY);
-        guides2.scrollGuides(scrollX);
+    new Gesto$1(document.body).on("dragStart", function (e) {
+      if (e.inputEvent.target === box || e.inputEvent.target.nodeName === "A") {
+        return false;
       }
+    }).on("drag", function (e) {
+      scrollX -= e.deltaX;
+      scrollY -= e.deltaY;
+      guides1.scroll(scrollX);
+      guides1.scrollGuides(scrollY);
+      guides2.scroll(scrollY);
+      guides2.scrollGuides(scrollX);
     });
     box.addEventListener("click", function () {
       scrollX = 0;
