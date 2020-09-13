@@ -4,7 +4,7 @@ name: @scena/guides
 license: MIT
 author: Daybrush
 repository: git+https://github.com/daybrush/guides.git
-version: 0.11.2
+version: 0.11.3
 */
 (function () {
     'use strict';
@@ -2074,7 +2074,7 @@ version: 0.11.2
     license: MIT
     author: Daybrush
     repository: git+https://github.com/daybrush/gesture.git
-    version: 1.0.0
+    version: 1.0.1
     */
 
     /*! *****************************************************************************
@@ -2692,13 +2692,17 @@ version: 0.11.2
         var store = new ClientStore(getEventClients(e));
         this.pinchFlag = true;
         this.clientStores.splice(0, 0, store);
-        this.trigger("pinchStart", __assign$2({
+        var result = this.trigger("pinchStart", __assign$2({
           datas: this.datas,
           angle: store.getAngle(),
           touches: this.getCurrentStore().getPositions()
         }, store.getPosition(), {
           inputEvent: e
         }));
+
+        if (result === false) {
+          this.pinchFlag = false;
+        }
       };
 
       __proto.onPinch = function (e, clients) {
@@ -5335,7 +5339,7 @@ version: 0.11.2
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/guides/blob/master/packages/react-guides
-    version: 0.10.3
+    version: 0.10.4
     */
 
     /*! *****************************************************************************
@@ -5405,7 +5409,7 @@ version: 0.11.2
     var GUIDE = prefix("guide");
     var DRAGGING = prefix("dragging");
     var DISPLAY_DRAG = prefix("display-drag");
-    var GUIDES_CSS = prefixCSS("scena-", "\n{\n    position: relative;\n}\ncanvas {\n    position: relative;\n}\n.guides {\n    position: absolute;\n    top: 0;\n    left: 0;\n    will-change: transform;\n    z-index: 2000;\n}\n.display-drag {\n    position: absolute;\n    will-change: transform;\n    z-index: 2000;\n    font-weight: bold;\n    font-size: 12px;\n    display: none;\n    left: 20px;\n    top: -20px;\n    color: #f33;\n}\n:host.horizontal .guides {\n    width: 100%;\n    height: 0;\n    top: 30px;\n}\n:host.vertical .guides {\n    height: 100%;\n    width: 0;\n    left: 30px;\n}\n.guide {\n    position: absolute;\n    background: #f33;\n    z-index: 2;\n}\n.guide.dragging:before {\n    position: absolute;\n    content: \"\";\n    width: 100%;\n    height: 100%;\n    top: 50%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n}\n:host.horizontal .guide {\n    width: 100%;\n    height: 1px;\n    cursor: row-resize;\n}\n:host.vertical .guide {\n    width: 1px;\n    height: 100%;\n    cursor: col-resize;\n}\n.mobile :host.horizontal .guide {\n    transform: scale(1, 2);\n}\n.mobile :host.vertical .guide {\n    transform: scale(2, 1);\n}\n:host.horizontal .guide:before {\n    height: 20px;\n}\n:host.vertical .guide:before {\n    width: 20px;\n}\n.adder {\n    display: none;\n}\n.adder.dragging {\n    display: block;\n}\n");
+    var GUIDES_CSS = prefixCSS("scena-", "\n{\n    position: relative;\n}\ncanvas {\n    position: relative;\n}\n.guide-origin {\n    position: absolute;\n    width: 1px;\n    height: 1px;\n    top: 0;\n    left: 0;\n    opacity: 0;\n}\n.guides {\n    position: absolute;\n    top: 0;\n    left: 0;\n    will-change: transform;\n    z-index: 2000;\n}\n.display-drag {\n    position: absolute;\n    will-change: transform;\n    z-index: 2000;\n    font-weight: bold;\n    font-size: 12px;\n    display: none;\n    left: 20px;\n    top: -20px;\n    color: #f33;\n}\n:host.horizontal .guides {\n    width: 100%;\n    height: 0;\n    top: 30px;\n}\n:host.vertical .guides {\n    height: 100%;\n    width: 0;\n    left: 30px;\n}\n.guide {\n    position: absolute;\n    background: #f33;\n    z-index: 2;\n}\n.guide.dragging:before {\n    position: absolute;\n    content: \"\";\n    width: 100%;\n    height: 100%;\n    top: 50%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n}\n:host.horizontal .guide {\n    width: 100%;\n    height: 1px;\n    cursor: row-resize;\n}\n:host.vertical .guide {\n    width: 1px;\n    height: 100%;\n    cursor: col-resize;\n}\n.mobile :host.horizontal .guide {\n    transform: scale(1, 2);\n}\n.mobile :host.vertical .guide {\n    transform: scale(2, 1);\n}\n:host.horizontal .guide:before {\n    height: 20px;\n}\n:host.vertical .guide:before {\n    width: 20px;\n}\n.adder {\n    display: none;\n}\n.adder.dragging {\n    display: block;\n}\n");
 
     var GuidesElement = styled$1("div", GUIDES_CSS);
 
@@ -5427,7 +5431,6 @@ version: 0.11.2
           var datas = e.datas,
               inputEvent = e.inputEvent;
           var onDragStart = _this.props.onDragStart;
-          datas.matrix = getDistElementMatrix(_this.manager.getElement());
           addClass(datas.target, DRAGGING);
 
           _this.onDrag(e);
@@ -5564,7 +5567,10 @@ version: 0.11.2
           cspNonce: cspNonce,
           className: prefix("manager", type) + " " + className,
           style: style
-        }, createElement(Ruler, {
+        }, createElement("div", {
+          className: prefix("guide-origin"),
+          ref: ref(this, "originElement")
+        }), createElement(Ruler, {
           ref: ref(this, "ruler"),
           type: type,
           width: width,
@@ -5631,22 +5637,24 @@ version: 0.11.2
           var guidesElement = _this.guidesElement;
           var isHorizontal = _this.props.type === "horizontal";
 
+          var originRect = _this.originElement.getBoundingClientRect();
+
+          var matrix = getDistElementMatrix(_this.manager.getElement());
+          var offsetPos = caculateMatrixDist(matrix, [e.clientX - originRect.left, e.clientY - originRect.top]);
+          offsetPos[0] -= guidesElement.offsetLeft;
+          offsetPos[1] -= guidesElement.offsetTop;
+          offsetPos[isHorizontal ? 1 : 0] += _this.scrollPos;
+          datas.offsetPos = offsetPos;
+          datas.matrix = matrix;
+
           if (target === canvasElement) {
             datas.fromRuler = true;
-            var offsetY = canvasElement.offsetTop + inputEvent.offsetY - guidesElement.offsetTop;
-            var offsetX = canvasElement.offsetLeft + inputEvent.offsetX - guidesElement.offsetLeft;
-            datas.offsetPos = [offsetX, offsetY];
             datas.target = _this.adderElement;
-            datas.offsetPos[isHorizontal ? 1 : 0] += _this.scrollPos;
-          } else if (!hasClass(target, GUIDE)) {
-            return false;
-          } else {
-            var offsetY = target.offsetTop + inputEvent.offsetY;
-            var offsetX = target.offsetLeft + inputEvent.offsetX;
-            var pos = parseFloat(target.getAttribute("data-pos"));
-            datas.offsetPos = [offsetX, offsetY];
-            datas.offsetPos[isHorizontal ? 1 : 0] += pos;
+          } else if (hasClass(target, GUIDE)) {
             datas.target = target;
+          } else {
+            e.stop();
+            return false;
           }
 
           _this.onDragStart(e);

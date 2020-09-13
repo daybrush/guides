@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>src/Guides.tsx - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <link type="text/css" rel="stylesheet" href="styles/daybrush.css">
+    <link type="text/css" rel="stylesheet" href="styles/custom.css">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="description" content="src/Guides.tsx - Documentation"/>
+
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h2 class="custom"><a href="https://github.com/daybrush/selecto" target="_blank" class="menu-item" id="repository" >Github repo</a></h2><div class="search"><div class="input-area"><input type="text"/></div><button></button></div><ul class="classes"><li file="guides" class="parent"><a href="Guides.html">Guides</a><h4><a href="Guides.html#methods">Methods</a></h4><ul class='methods'><li data-type='method'><a href="Guides.html#destroy">destroy</a></li><li data-type='method'><a href="Guides.html#getGuides">getGuides</a></li><li data-type='method'><a href="Guides.html#loadGuides">loadGuides</a></li><li data-type='method'><a href="Guides.html#resize">resize</a></li><li data-type='method'><a href="Guides.html#scroll">scroll</a></li><li data-type='method'><a href="Guides.html#scrollGuides">scrollGuides</a></li><li data-type='method'><a href="Guides.html#setState">setState</a></li></ul><h4><a href="Guides.html#events">Events</a></h4><ul class='events'><li data-type='event'><a href="Guides.html#.event:changeGuides">changeGuides</a></li></ul><h4><a href="Guides.html#type definitions">Type Definitions</a></h4><ul class='type definitions'><li data-type='typddef'><a href="Guides.html#.GuidesOptions">GuidesOptions</a></li></ul></li><li file="component" class="parent"><a href="eg.Component.html">eg.Component</a><h4><a href="eg.Component.html#static members">Static Members</a></h4><ul class='static members'><li data-type='member'><a href="eg.Component.html#.VERSION">VERSION</a></li></ul><h4><a href="eg.Component.html#methods">Methods</a></h4><ul class='methods'><li data-type='method'><a href="eg.Component.html#hasOn">hasOn</a></li><li data-type='method'><a href="eg.Component.html#off">off</a></li><li data-type='method'><a href="eg.Component.html#on">on</a></li><li data-type='method'><a href="eg.Component.html#once">once</a></li><li data-type='method'><a href="eg.Component.html#trigger">trigger</a></li></ul></li></ul><ul class="global"><li file="global"  class="parent"><a href="global.html">Global</a><h4><a href="global.html#methods">Methods</a></h4><ul class='methods'><li data-type='method'><a href="global.html#isUndefined">isUndefined</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">src/Guides.tsx</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { ref, Properties } from "framework-utils";
+import * as React from "react";
+import { render } from "react-dom";
+import { PROPERTIES, METHODS, EVENTS } from "./consts";
+import { GuidesInterface, GuideOptions } from "@scena/react-guides/declaration/types";
+import InnerGuides from "./InnerGuides";
+import { GuidesOptions, GuidesEvents } from "./types";
+import Component from "@egjs/component";
+import { camelize } from "@daybrush/utils";
+
+@Properties(METHODS as any, (prototype, property) => {
+    if (prototype[property]) {
+        return;
+    }
+    prototype[property] = function(...args) {
+        const self = this.getPreactGuides();
+
+        if (!self || !self[property]) {
+            return;
+        }
+        return self[property](...args);
+    };
+})
+@Properties(PROPERTIES, (prototype, property) => {
+    Object.defineProperty(prototype, property, {
+        get() {
+            return this.getPreactGuides().props[property];
+        },
+        set(value) {
+            this.innerGuides.setState({
+                [property]: value,
+            });
+        },
+        enumerable: true,
+        configurable: true,
+    });
+})
+/**
+ * @sort 1
+ * @extends eg.Component
+ */
+class Guides extends Component {
+    private tempElement = document.createElement("div");
+    private innerGuides!: InnerGuides;
+    /**
+     * @sort 1
+     */
+    constructor(container: HTMLElement, options: Partial&lt;GuidesOptions> = {}) {
+        super();
+        const events: any = {};
+
+        EVENTS.forEach(name => {
+            events[camelize(`on ${name}`)] = (e: any) => this.trigger(name, e);
+        });
+
+        render(
+            &lt;InnerGuides  {...options} {...events} container={container} ref={ref(this, "innerGuides")} />,
+            this.tempElement,
+        );
+    }
+    /**
+     * @param state
+     * @param callback
+     */
+    public setState(state: Partial&lt;GuideOptions>, callback?: () => void) {
+        this.innerGuides.setState(state, callback);
+    }
+    /**
+     *
+     */
+    public destroy() {
+        render(null, this.tempElement);
+        this.tempElement = null;
+        this.innerGuides = null;
+    }
+    private getPreactGuides() {
+        return this.innerGuides.guides;
+    }
+}
+interface Guides extends GuidesInterface {
+    on&lt;T extends keyof GuidesEvents>(eventName: T, handlerToAttach: (event: GuidesEvents[T]) => any): this;
+    on(eventName: string, handlerToAttach: (event: { [key: string]: any }) => any): this;
+    on(events: { [key: string]: (event: { [key: string]: any }) => any }): this;
+}
+
+export default Guides;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+
+<style>
+
+
+nav li[file="src/guides"]:after {
+    display: none;
+}
+nav li[file="src/guides"] h4, nav li[file="src/guides"] ul {
+    display: block;
+}
+</style>
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/daybrush/jsdoc">JSDoc 0.3.7</a> on Fri May 15 2020 02:19:58 GMT+0900 (GMT+09:00) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+<script src="scripts/utils.min.js"></script>
+<script src="scripts/search.js"></script>
+<script src="scripts/custom.js"></script>
+</body>
+</html>
