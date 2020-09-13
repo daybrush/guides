@@ -37,6 +37,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     private manager!: StyledInterface<HTMLElement>;
     private guidesElement!: HTMLElement;
     private displayElement!: HTMLElement;
+    private originElement!: HTMLElement;
     private gesto!: Gesto;
     private guideElements: HTMLElement[] = [];
 
@@ -64,6 +65,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             className={`${prefix("manager", type)} ${className}`}
             style={style}
         >
+            <div className={prefix("guide-origin")} ref={ref(this, "originElement")}></div>
             <Ruler
                 ref={ref(this, "ruler")}
                 type={type}
@@ -116,31 +118,27 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             const canvasElement = this.ruler.canvasElement;
             const guidesElement = this.guidesElement;
             const isHorizontal = this.props.type === "horizontal";
+            const originRect = this.originElement.getBoundingClientRect();
+            const matrix = getDistElementMatrix(this.manager.getElement());
+            const offsetPos = caculateMatrixDist(matrix, [
+                e.clientX - originRect.left,
+                e.clientY - originRect.top,
+            ]);
+            offsetPos[0] -= guidesElement.offsetLeft;
+            offsetPos[1] -= guidesElement.offsetTop;
+            offsetPos[isHorizontal ? 1 : 0] += this.scrollPos;
+
+            datas.offsetPos = offsetPos;
+            datas.matrix = matrix;
 
             if (target === canvasElement) {
                 datas.fromRuler = true;
-                const offsetY = canvasElement.offsetTop + inputEvent.offsetY - guidesElement.offsetTop;
-                const offsetX = canvasElement.offsetLeft + inputEvent.offsetX - guidesElement.offsetLeft;
-
-                datas.offsetPos = [
-                    offsetX,
-                    offsetY,
-                ];
                 datas.target = this.adderElement;
-                datas.offsetPos[isHorizontal ? 1 : 0] += this.scrollPos;
-            } else if (!hasClass(target, GUIDE)) {
-                return false;
-            } else {
-                const offsetY = target.offsetTop + inputEvent.offsetY;
-                const offsetX = target.offsetLeft + inputEvent.offsetX;
-                const pos = parseFloat(target.getAttribute("data-pos"));
-
-                datas.offsetPos = [
-                    offsetX,
-                    offsetY,
-                ];
-                datas.offsetPos[isHorizontal ? 1 : 0] += pos;
+            } else if (hasClass(target, GUIDE)) {
                 datas.target = target;
+            } else {
+                e.stop();
+                return false;
             }
             this.onDragStart(e);
         }).on("drag", this.onDrag).on("dragEnd", this.onDragEnd);
@@ -214,8 +212,6 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     private onDragStart = (e: any) => {
         const { datas, inputEvent } = e;
         const { onDragStart } = this.props;
-
-        datas.matrix = getDistElementMatrix(this.manager.getElement());
 
         addClass(datas.target, DRAGGING);
         this.onDrag(e);
@@ -315,7 +311,6 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             displayDragPos, dragPosFormat,
         } = this.props;
         const isHorizontal = type === "horizontal";
-
         const matrixPos = caculateMatrixDist(datas.matrix, [distX, distY]);
         const offsetPos = datas.offsetPos;
         const offsetX = matrixPos[0] + offsetPos[0];

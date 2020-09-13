@@ -14,6 +14,14 @@ export const GUIDES_CSS = prefixCSS("scena-", `
 canvas {
     position: relative;
 }
+.guide-origin {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    top: 0;
+    left: 0;
+    opacity: 0;
+}
 .guides {
     position: absolute;
     top: 0;

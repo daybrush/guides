@@ -35,13 +35,13 @@ export default class App extends Component<{}> {
                         console.log("horizontal", guides);
                     }}
                     onDragStart={e => {
-                        console.log(e);
+                        console.log("dragStart", e);
                     }}
                     onDrag={e => {
-                        console.log(e);
+                        console.log("drag", e);
                     }}
                     onDragEnd={e => {
-                        console.log(e);
+                        console.log("dragEnd", e);
                     }}
                 />
             </div>
