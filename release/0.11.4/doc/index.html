@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Home - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <link type="text/css" rel="stylesheet" href="styles/daybrush.css">
+    <link type="text/css" rel="stylesheet" href="styles/custom.css">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="description" content="Home - Documentation"/>
+
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h2 class="custom"><a href="https://github.com/daybrush/selecto" target="_blank" class="menu-item" id="repository" >Github repo</a></h2><div class="search"><div class="input-area"><input type="text"/></div><button></button></div><ul class="classes"><li file="guides" class="parent"><a href="Guides.html">Guides</a><h4><a href="Guides.html#methods">Methods</a></h4><ul class='methods'><li data-type='method'><a href="Guides.html#destroy">destroy</a></li><li data-type='method'><a href="Guides.html#getGuides">getGuides</a></li><li data-type='method'><a href="Guides.html#loadGuides">loadGuides</a></li><li data-type='method'><a href="Guides.html#resize">resize</a></li><li data-type='method'><a href="Guides.html#scroll">scroll</a></li><li data-type='method'><a href="Guides.html#scrollGuides">scrollGuides</a></li><li data-type='method'><a href="Guides.html#setState">setState</a></li></ul><h4><a href="Guides.html#events">Events</a></h4><ul class='events'><li data-type='event'><a href="Guides.html#.event:changeGuides">changeGuides</a></li></ul><h4><a href="Guides.html#type definitions">Type Definitions</a></h4><ul class='type definitions'><li data-type='typddef'><a href="Guides.html#.GuidesOptions">GuidesOptions</a></li></ul></li><li file="component" class="parent"><a href="eg.Component.html">eg.Component</a><h4><a href="eg.Component.html#static members">Static Members</a></h4><ul class='static members'><li data-type='member'><a href="eg.Component.html#.VERSION">VERSION</a></li></ul><h4><a href="eg.Component.html#methods">Methods</a></h4><ul class='methods'><li data-type='method'><a href="eg.Component.html#hasOn">hasOn</a></li><li data-type='method'><a href="eg.Component.html#off">off</a></li><li data-type='method'><a href="eg.Component.html#on">on</a></li><li data-type='method'><a href="eg.Component.html#once">once</a></li><li data-type='method'><a href="eg.Component.html#trigger">trigger</a></li></ul></li></ul><ul class="global"><li file="global"  class="parent"><a href="global.html">Global</a><h4><a href="global.html#methods">Methods</a></h4><ul class='methods'><li data-type='method'><a href="global.html#isUndefined">isUndefined</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+
+    
+
+
+
+    
+
+
+
+
+
+
+
+
+
+    
+
+
+    <section class="readme">
+        <article><p align="middle" ><img src="https://raw.githubusercontent.com/daybrush/guides/master/demo/images/guides.png"/></p>
+<h2 align="middle">Guides</h2>
+<p align="middle">
+<a href="https://www.npmjs.com/package/@scena/guides" target="_blank"><img src="https://img.shields.io/npm/v/@scena/guides.svg?style=flat-square&color=007acc&label=version" alt="npm version" /></a>
+<img src="https://img.shields.io/badge/language-typescript-blue.svg?style=flat-square"/>
+<a href="https://github.com/daybrush/guides/blob/master/LICENSE" target="_blank"><img src="https://img.shields.io/github/license/daybrush/guides.svg?style=flat-square&label=license&color=08CE5D"/></a>
+<a href="https://github.com/daybrush/guides/tree/master/packages/react-guides" target="_blank"><img alt="React" src="https://img.shields.io/static/v1.svg?label=&message=React&style=flat-square&color=61daeb"></a>
+<a href="https://github.com/daybrush/guides/tree/master/packages/preact-guides" target="_blank"><img alt="Preact" src="https://img.shields.io/static/v1.svg?label=&message=Preact&style=flat-square&color=673ab8"></a>
+<a href="https://github.com/daybrush/guides/tree/master/packages/ngx-guides" target="_blank"><img alt="Angular" src="https://img.shields.io/static/v1.svg?label=&message=Angular&style=flat-square&color=C82B38"></a>
+<a href="https://github.com/daybrush/guides/tree/master/packages/vue-guides" target="_blank"><img
+    alt="Vue"
+    src="https://img.shields.io/static/v1.svg?label=&message=Vue&style=flat-square&color=3fb984"></a>
+<a href="https://github.com/daybrush/guides/tree/master/packages/svelte-guides" target="_blank"><img
+    alt="Vue"
+    src="https://img.shields.io/static/v1.svg?label=&message=Svelte&style=flat-square&color=C82B38"></a>
+</p>
+<p align="middle">A Guides component that can draw ruler and manage guidelines.</p>
+<p align="middle">
+    <a href="https://daybrush.com/guides" target="_blank"><strong>Demo</strong></a> /
+    <a href="https://daybrush.com/guides/release/latest/doc/" target="_blank"><strong>API</strong></a> /
+    <a href="https://github.com/daybrush/scenejs-editor" target="_blank"><strong>Main Project</strong></a>
+</p>
+<h2>⚙️ Installation</h2>
+<h3>npm</h3>
+<pre class="prettyprint source lang-sh"><code>$ npm i @scena/guides
+</code></pre>
+<h3>scripts</h3>
+<pre class="prettyprint source lang-html"><code>&lt;script src=&quot;//daybrush.com/guides/release/latest/dist/guides.min.js&quot;>&lt;/script>
+</code></pre>
+<h2>🚀 How to use</h2>
+<pre class="prettyprint source lang-tsx"><code>
+import Guides from &quot;@scena/guides&quot;;
+
+const guides = new Guides(document.body, {
+    type: &quot;horizontal&quot;,
+}).on(&quot;changeGuides&quot;, e => {
+    console.log(e.guides);
+});
+
+
+let scrollX = 0;
+let scrollY = 0;
+window.addEventListener(&quot;resize&quot;, () => {
+    guides.resize();
+});
+
+window.addEventListener(&quot;wheel&quot;, e => {
+    scrollX += e.deltaX;
+    scrollY += e.deltaY;
+
+    guides.scrollGuides(scrollY);
+    guides.scroll(scrollX);
+});
+
+
+export interface RulerProps {
+    type?: &quot;horizontal&quot; | &quot;vertical&quot;;
+    width?: number;
+    height?: number;
+    unit?: number;
+    zoom?: number;
+    direction?: &quot;start&quot; | &quot;end&quot;;
+    style?: IObject&lt;any>;
+    backgroundColor?: string;
+    lineColor?: string;
+    textColor?: string;
+}
+
+export interface GuidesOptions extends RulerProps {
+    className?: string;
+    setGuides?: (guides: number[]) => any;
+    rulerStyle?: IObject&lt;any>;
+    snapThreshold?: number;
+    snaps?: number[];
+    displayDragPos?: boolean;
+    dragPosFormat?: (value: number) => string | number;
+}
+
+export interface GuidesInterface {
+    getGuides(): number[];
+    scroll(pos: number): void;
+    scrollGuides(pos: number): void;
+    loadGuides(guides: number[]): void;
+    resize(): void;
+}
+
+
+</code></pre>
+<h2>⚙️ Developments</h2>
+<h3><code>npm run demo:start</code></h3>
+<p>Runs the app in the development mode.<br>
+Open <code>demo/index.html</code> file.</p>
+<h2>⭐️ Show Your Support</h2>
+<p>Please give a ⭐️ if this project helped you!</p>
+<h2>👏 Contributing</h2>
+<p>If you have any questions or requests or want to contribute to <code>guides</code> or other packages, please write the <a href="https://github.com/daybrush/guides/issues">issue</a> or give me a Pull Request freely.</p>
+<h2>🐞 Bug Report</h2>
+<p>If you find a bug, please report to us opening a new <a href="https://github.com/daybrush/guides/issues">Issue</a> on GitHub.</p>
+<h2>📝 License</h2>
+<p>This project is <a href="https://github.com/daybrush/guides/blob/master/LICENSE">MIT</a> licensed.</p>
+<pre class="prettyprint source"><code>MIT License
+
+Copyright (c) 2019 Daybrush
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the &quot;Software&quot;), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+</code></pre></article>
+    </section>
+
+
+
+
+
+
+
+<style>
+
+nav>.search+ul li:first-child:after {
+    display: none;
+}
+nav>.search+ul li:first-child h4, nav>.search+ul li:first-child ul {
+    display: block;
+}
+
+
+nav li[file="home"]:after {
+    display: none;
+}
+nav li[file="home"] h4, nav li[file="home"] ul {
+    display: block;
+}
+</style>
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/daybrush/jsdoc">JSDoc 0.3.7</a> on Fri May 15 2020 02:19:58 GMT+0900 (GMT+09:00) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+<script src="scripts/utils.min.js"></script>
+<script src="scripts/search.js"></script>
+<script src="scripts/custom.js"></script>
+</body>
+</html>

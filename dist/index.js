@@ -4,7 +4,7 @@ name: @scena/guides
 license: MIT
 author: Daybrush
 repository: git+https://github.com/daybrush/guides.git
-version: 0.11.3
+version: 0.11.4
 */
 (function () {
     'use strict';
@@ -5339,7 +5339,7 @@ version: 0.11.3
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/guides/blob/master/packages/react-guides
-    version: 0.10.4
+    version: 0.10.5
     */
 
     /*! *****************************************************************************
@@ -5518,7 +5518,7 @@ version: 0.11.3
           } else {
             var index = datas.target.getAttribute("data-index");
 
-            if (isDouble || pos < _this.scrollPos) {
+            if (isDouble || guidePos < _this.scrollPos) {
               guides.splice(index, 1);
             } else if (guides.indexOf(guidePos) > -1) {
               return;
@@ -5562,6 +5562,7 @@ version: 0.11.3
             textFormat = _a.textFormat,
             displayDragPos = _a.displayDragPos,
             cspNonce = _a.cspNonce;
+        var translateName = this.getTranslateName();
         return createElement(GuidesElement, {
           ref: ref(this, "manager"),
           cspNonce: cspNonce,
@@ -5585,7 +5586,10 @@ version: 0.11.3
           textFormat: textFormat
         }), createElement("div", {
           className: GUIDES,
-          ref: ref(this, "guidesElement")
+          ref: ref(this, "guidesElement"),
+          style: {
+            transform: translateName + "(" + -this.scrollPos * zoom + "px)"
+          }
         }, displayDragPos && createElement("div", {
           className: DISPLAY_DRAG,
           ref: ref(this, "displayElement")
@@ -5602,7 +5606,7 @@ version: 0.11.3
             type = _a.type,
             zoom = _a.zoom,
             showGuides = _a.showGuides;
-        var translateName = type === "horizontal" ? "translateY" : "translateX";
+        var translateName = this.getTranslateName();
         var guides = this.state.guides;
         this.guideElements = [];
 
@@ -5643,7 +5647,7 @@ version: 0.11.3
           var offsetPos = caculateMatrixDist(matrix, [e.clientX - originRect.left, e.clientY - originRect.top]);
           offsetPos[0] -= guidesElement.offsetLeft;
           offsetPos[1] -= guidesElement.offsetTop;
-          offsetPos[isHorizontal ? 1 : 0] += _this.scrollPos;
+          offsetPos[isHorizontal ? 1 : 0] += _this.scrollPos * _this.props.zoom;
           datas.offsetPos = offsetPos;
           datas.matrix = matrix;
 
@@ -5669,14 +5673,10 @@ version: 0.11.3
       };
 
       __proto.componentDidUpdate = function (prevProps) {
-        var _this = this;
-
         if (prevProps.defaultGuides !== this.props.defaultGuides) {
           // to dynamically update guides from code rather than dragging guidelines
           this.setState({
             guides: this.props.defaultGuides || []
-          }, function () {
-            _this.renderGuides();
           });
         }
       };
@@ -5772,7 +5772,7 @@ version: 0.11.3
         }
 
         if (displayDragPos) {
-          var displayPos = type === "horizontal" ? [offsetX, guidePos] : [guidePos, offsetY];
+          var displayPos = type === "horizontal" ? [offsetX, nextPos] : [nextPos, offsetY];
           this.displayElement.style.cssText += "display: block;transform: translate(-50%, -50%) translate(" + displayPos.map(function (v) {
             return v + "px";
           }).join(", ") + ")";
