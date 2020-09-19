@@ -18,7 +18,7 @@ export default class App extends Component<{}> {
     private scrollX: number = 0;
     private scrollY: number = 0;
     public render() {
-        return (<div className="page" style={{ transform: "rotate(20deg)"}}>
+        return (<div className="page">
             <div className="box" onClick={this.restore}></div>
             <div className="ruler horizontal" style={{ }}>
                 <Guides ref={ref(this, "guides1")}

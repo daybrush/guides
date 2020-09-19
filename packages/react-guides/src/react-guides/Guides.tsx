@@ -59,6 +59,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             displayDragPos,
             cspNonce,
         } = this.props as Required<GuidesProps>;
+        const translateName = this.getTranslateName();
+
         return <GuidesElement
             ref={ref(this, "manager")}
             cspNonce={cspNonce}
@@ -80,7 +82,9 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                 direction={direction}
                 textFormat={textFormat}
             />
-            <div className={GUIDES} ref={ref(this, "guidesElement")}>
+            <div className={GUIDES} ref={ref(this, "guidesElement")} style={{
+                transform: `${translateName}(${-this.scrollPos * zoom}px)`,
+            }}>
                 {displayDragPos && <div className={DISPLAY_DRAG} ref={ref(this, "displayElement")} />}
                 <div className={ADDER} ref={ref(this, "adderElement")} />
                 {this.renderGuides()}
@@ -89,7 +93,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     }
     public renderGuides() {
         const { type, zoom, showGuides } = this.props as Required<GuidesProps>;
-        const translateName = type === "horizontal" ? "translateY" : "translateX";
+        const translateName = this.getTranslateName();
         const guides = this.state.guides;
 
         this.guideElements = [];
@@ -110,8 +114,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     public componentDidMount() {
         this.gesto = new Gesto(this.manager.getElement(), {
             container: document.body,
-        },
-        ).on("dragStart", e => {
+        }).on("dragStart", e => {
             const inputEvent = e.inputEvent;
             const target = inputEvent.target;
             const datas = e.datas;
@@ -126,7 +129,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             ]);
             offsetPos[0] -= guidesElement.offsetLeft;
             offsetPos[1] -= guidesElement.offsetTop;
-            offsetPos[isHorizontal ? 1 : 0] += this.scrollPos;
+            offsetPos[isHorizontal ? 1 : 0] += this.scrollPos * this.props.zoom!;
 
             datas.offsetPos = offsetPos;
             datas.matrix = matrix;
@@ -150,9 +153,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     public componentDidUpdate(prevProps: any) {
         if (prevProps.defaultGuides !== this.props.defaultGuides) {
             // to dynamically update guides from code rather than dragging guidelines
-            this.setState({ guides: this.props.defaultGuides || [] }, () => {
-                this.renderGuides();
-            });
+            this.setState({ guides: this.props.defaultGuides || [] });
         }
     }
     /**
@@ -284,7 +285,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         } else {
             const index = datas.target.getAttribute("data-index");
 
-            if (isDouble || pos < this.scrollPos) {
+            if (isDouble || guidePos < this.scrollPos) {
                 guides.splice(index, 1);
             } else if (guides.indexOf(guidePos) > -1) {
                 return;
@@ -327,8 +328,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         }
         if (displayDragPos) {
             const displayPos = type === "horizontal"
-                ? [offsetX, guidePos]
-                : [guidePos, offsetY];
+                ? [offsetX, nextPos]
+                : [nextPos, offsetY];
             this.displayElement.style.cssText += `display: block;transform: translate(-50%, -50%) translate(${
                 displayPos.map(v => `${v}px`).join(", ")
                 })`;
