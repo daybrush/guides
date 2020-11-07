@@ -2,12 +2,13 @@ import * as React from "react";
 import Ruler from "@scena/react-ruler";
 import { ref, refs } from "framework-utils";
 import Gesto, { OnDragEnd } from "gesto";
-import styled, { StyledInterface } from "react-css-styled";
+import styled, { StyledElement } from "react-css-styled";
 import { GUIDES, GUIDE, DRAGGING, ADDER, DISPLAY_DRAG, GUIDES_CSS } from "./consts";
 import { prefix } from "./utils";
 import { hasClass, addClass, removeClass } from "@daybrush/utils";
 import { GuidesState, GuidesProps, GuidesInterface } from "./types";
 import { getDistElementMatrix, caculateMatrixDist } from "css-to-mat";
+
 const GuidesElement = styled("div", GUIDES_CSS);
 
 export default class Guides extends React.PureComponent<GuidesProps, GuidesState> implements GuidesInterface {
@@ -34,7 +35,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     public adderElement!: HTMLElement;
     public scrollPos: number = 0;
     public ruler!: Ruler;
-    private manager!: StyledInterface<HTMLElement>;
+    private manager!: StyledElement<HTMLElement>;
     private guidesElement!: HTMLElement;
     private displayElement!: HTMLElement;
     private originElement!: HTMLElement;
