@@ -7,7 +7,7 @@ import { GUIDES, GUIDE, DRAGGING, ADDER, DISPLAY_DRAG, GUIDES_CSS } from "./cons
 import { prefix } from "./utils";
 import { hasClass, addClass, removeClass } from "@daybrush/utils";
 import { GuidesState, GuidesProps, GuidesInterface } from "./types";
-import { getDistElementMatrix, caculateMatrixDist } from "css-to-mat";
+import { getDistElementMatrix, calculateMatrixDist } from "css-to-mat";
 
 const GuidesElement = styled("div", GUIDES_CSS);
 
@@ -124,7 +124,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             const isHorizontal = this.props.type === "horizontal";
             const originRect = this.originElement.getBoundingClientRect();
             const matrix = getDistElementMatrix(this.manager.getElement());
-            const offsetPos = caculateMatrixDist(matrix, [
+            const offsetPos = calculateMatrixDist(matrix, [
                 e.clientX - originRect.left,
                 e.clientY - originRect.top,
             ]);
@@ -313,7 +313,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             displayDragPos, dragPosFormat,
         } = this.props;
         const isHorizontal = type === "horizontal";
-        const matrixPos = caculateMatrixDist(datas.matrix, [distX, distY]);
+        const matrixPos = calculateMatrixDist(datas.matrix, [distX, distY]);
         const offsetPos = datas.offsetPos;
         const offsetX = matrixPos[0] + offsetPos[0];
         const offsetY = matrixPos[1] + offsetPos[1];
