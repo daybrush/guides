@@ -4,7 +4,7 @@ name: @scena/guides
 license: MIT
 author: Daybrush
 repository: git+https://github.com/daybrush/guides.git
-version: 0.12.0
+version: 0.12.1
 */
 (function () {
     'use strict';
@@ -2129,7 +2129,7 @@ version: 0.12.0
     license: MIT
     author: Daybrush
     repository: git+https://github.com/daybrush/gesture.git
-    version: 1.2.1
+    version: 1.2.2
     */
 
     /*! *****************************************************************************
@@ -3609,7 +3609,7 @@ version: 0.12.0
     license: MIT
     author: Daybrush
     repository: git+https://github.com/daybrush/css-to-mat.git
-    version: 1.0.2
+    version: 1.0.3
     */
 
     function createMatrix() {
@@ -3618,7 +3618,7 @@ version: 0.12.0
     function parseMat(transform) {
       return toMat(parse(transform));
     }
-    function caculateMatrixDist(matrix, pos) {
+    function calculateMatrixDist(matrix, pos) {
       var res = calculate(matrix, [pos[0], pos[1] || 0, pos[2] || 0, 1], 4);
       var w = res[3] || 1;
       return [res[0] / w, res[1] / w, res[2] / w];
@@ -3765,7 +3765,7 @@ version: 0.12.0
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/guides/blob/master/packages/react-guides
-    version: 0.11.0
+    version: 0.11.1
     */
 
     /*! *****************************************************************************
@@ -4070,7 +4070,7 @@ version: 0.12.0
           var originRect = _this.originElement.getBoundingClientRect();
 
           var matrix = getDistElementMatrix(_this.manager.getElement());
-          var offsetPos = caculateMatrixDist(matrix, [e.clientX - originRect.left, e.clientY - originRect.top]);
+          var offsetPos = calculateMatrixDist(matrix, [e.clientX - originRect.left, e.clientY - originRect.top]);
           offsetPos[0] -= guidesElement.offsetLeft;
           offsetPos[1] -= guidesElement.offsetTop;
           offsetPos[isHorizontal ? 1 : 0] += _this.scrollPos * _this.props.zoom;
@@ -4182,7 +4182,7 @@ version: 0.12.0
             displayDragPos = _a.displayDragPos,
             dragPosFormat = _a.dragPosFormat;
         var isHorizontal = type === "horizontal";
-        var matrixPos = caculateMatrixDist(datas.matrix, [distX, distY]);
+        var matrixPos = calculateMatrixDist(datas.matrix, [distX, distY]);
         var offsetPos = datas.offsetPos;
         var offsetX = matrixPos[0] + offsetPos[0];
         var offsetY = matrixPos[1] + offsetPos[1];
