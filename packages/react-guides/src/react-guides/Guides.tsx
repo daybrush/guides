@@ -1,5 +1,5 @@
 import * as React from "react";
-import Ruler from "@scena/react-ruler";
+import Ruler, { PROPERTIES as RULER_PROPERTIES, RulerProps } from "@scena/react-ruler";
 import { ref, refs } from "framework-utils";
 import Gesto, { OnDragEnd } from "gesto";
 import styled, { StyledElement } from "react-css-styled";
@@ -15,11 +15,11 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     public static defaultProps: GuidesProps = {
         className: "",
         type: "horizontal",
-        setGuides: () => { },
         zoom: 1,
         style: { width: "100%", height: "100%" },
         snapThreshold: 5,
         snaps: [],
+        digit: 0,
         onChangeGuides: () => { },
         onDragStart: () => { },
         onDrag: () => { },
@@ -46,22 +46,24 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         const {
             className,
             type,
-            width,
-            height,
-            unit,
             zoom,
             style,
             rulerStyle,
-            backgroundColor,
-            lineColor,
-            textColor,
-            direction,
-            textFormat,
             displayDragPos,
             cspNonce,
         } = this.props as Required<GuidesProps>;
+        const props = this.props;
         const translateName = this.getTranslateName();
 
+
+        const rulerProps: RulerProps = {};
+
+        RULER_PROPERTIES.forEach(name => {
+            if (name === "style") {
+                return;
+            }
+            (rulerProps as any)[name] = props[name];
+        });
         return <GuidesElement
             ref={ref(this, "manager")}
             cspNonce={cspNonce}
@@ -71,17 +73,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             <div className={prefix("guide-origin")} ref={ref(this, "originElement")}></div>
             <Ruler
                 ref={ref(this, "ruler")}
-                type={type}
-                width={width}
-                height={height}
-                unit={unit}
-                zoom={zoom}
-                backgroundColor={backgroundColor}
-                lineColor={lineColor}
                 style={rulerStyle}
-                textColor={textColor}
-                direction={direction}
-                textFormat={textFormat}
+                {...rulerProps}
             />
             <div className={GUIDES} ref={ref(this, "guidesElement")} style={{
                 transform: `${translateName}(${-this.scrollPos * zoom}px)`,
@@ -220,6 +213,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
 
         /**
          * When the drag starts, the dragStart event is called.
+         * @memberof Guides
          * @event dragStart
          * @param {OnDragStart} - Parameters for the dragStart event
          */
@@ -235,6 +229,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
 
         /**
          * When dragging, the drag event is called.
+         * @memberof Guides
          * @event drag
          * @param {OnDrag} - Parameters for the drag event
          */
@@ -248,8 +243,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         const { datas, isDouble, distX, distY } = e;
         const pos = this.movePos(e);
         const guides = this.state.guides;
-        const { setGuides, onChangeGuides, zoom, displayDragPos } = this.props;
-        const guidePos = Math.round(pos / zoom!);
+        const { onChangeGuides, zoom, displayDragPos, digit } = this.props;
+        const guidePos = parseFloat((pos / zoom!).toFixed(digit || 0));
 
         if (displayDragPos) {
             this.displayElement.style.cssText += `display: none;`;
@@ -257,6 +252,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         removeClass(datas.target, DRAGGING);
         /**
          * When the drag finishes, the dragEnd event is called.
+         * @memberof Guides
          * @event dragEnd
          * @param {OnDragEnd} - Parameters for the dragEnd event
          */
@@ -280,7 +276,6 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                         distX,
                         distY,
                     });
-                    setGuides!(this.state.guides);
                 });
             }
         } else {
@@ -297,7 +292,6 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                 guides: [...guides],
             }, () => {
                 const nextGuides = this.state.guides;
-                setGuides!(nextGuides);
                 onChangeGuides!({
                     distX,
                     distY,
@@ -308,22 +302,25 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     }
     private movePos(e: any) {
         const { datas, distX, distY } = e;
+        const props = this.props;
         const {
             type, zoom, snaps, snapThreshold,
-            displayDragPos, dragPosFormat,
-        } = this.props;
+            displayDragPos,
+            digit,
+        } = props;
+        const dragPosFormat = props.dragPosFormat || (v => v);
         const isHorizontal = type === "horizontal";
         const matrixPos = calculateMatrixDist(datas.matrix, [distX, distY]);
         const offsetPos = datas.offsetPos;
         const offsetX = matrixPos[0] + offsetPos[0];
         const offsetY = matrixPos[1] + offsetPos[1];
         let nextPos = Math.round(isHorizontal ? offsetY : offsetX);
-        let guidePos = Math.round(nextPos / zoom!);
+        let guidePos = parseFloat((nextPos / zoom!).toFixed(digit || 0));
         const guideSnaps = snaps!.slice().sort((a, b) => {
             return Math.abs(guidePos - a) - Math.abs(guidePos - b);
         });
 
-        if (guideSnaps.length && Math.abs(guideSnaps[0] - guidePos) < snapThreshold!) {
+        if (guideSnaps.length && Math.abs(guideSnaps[0] * zoom! - nextPos) < snapThreshold!) {
             guidePos = guideSnaps[0];
             nextPos = guidePos * zoom!;
         }

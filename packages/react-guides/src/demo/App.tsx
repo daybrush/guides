@@ -8,8 +8,8 @@ import Gesto from "gesto";
 
 export default class App extends Component<{}> {
     public state = {
-        zoom: 1,
-        unit: 50,
+        zoom: 72,
+        unit: 1,
     };
     private scene: Scene = new Scene();
     // private editor!: Editor;
@@ -27,7 +27,8 @@ export default class App extends Component<{}> {
                     unit={this.state.unit}
                     snapThreshold={5}
                     textFormat={v => `${v}in`}
-                    snaps={[100, 200, 400]}
+                    snaps={[1, 2, 3]}
+                    digit={1}
                     style={{  height: "30px" }}
                     rulerStyle={{ left: "30px", width: "calc(100% - 30px)", height: "100%" }}
                     displayDragPos={true}
@@ -50,6 +51,7 @@ export default class App extends Component<{}> {
                     type="vertical"
                     zoom={this.state.zoom}
                     unit={this.state.unit}
+                    snaps={[100, 200, 400]}
                     rulerStyle={{ top: "30px", height: "calc(100% - 30px)", width: "100%" }}
                     displayDragPos={true}
                     onChangeGuides={({ guides }) => {

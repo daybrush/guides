@@ -1,5 +1,7 @@
 import { prefix } from "./utils";
 import { prefixCSS } from "framework-utils";
+import { GuidesOptions } from "./types";
+import { PROPERTIES as RULER_PROPERTIES } from "@scena/react-ruler";
 
 export const RULER = prefix("ruler");
 export const ADDER = prefix("guide", "adder");
@@ -93,3 +95,31 @@ canvas {
     display: block;
 }
 `);
+
+export const PROPERTIES: Array<keyof GuidesOptions> = [
+    "className",
+    "rulerStyle",
+    'snapThreshold',
+    "snaps",
+    "displayDragPos",
+    "cspNonce",
+    'dragPosFormat',
+    "defaultGuides",
+    "showGuides",
+    ...RULER_PROPERTIES,
+];
+
+export const METHODS = [
+    "getGuides",
+    "loadGuides",
+    "scroll",
+    "scrollGuides",
+    "resize",
+] as const;
+
+export const EVENTS = [
+    "changeGuides",
+    "dragStart",
+    "drag",
+    "dragEnd",
+] as const;

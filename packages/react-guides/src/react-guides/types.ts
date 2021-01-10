@@ -5,15 +5,29 @@ import {
     OnDrag as OnGestoDrag,
     OnDragEnd as OnGestoDragEnd,
 } from "gesto";
+
+
 export interface GuidesState {
     guides: number[];
 }
+
 /**
  * @typedef
+ * @memberof Guides
+ * @extends Ruler.RulerProps
+ * @property - guides' class name (default: "")
+ * @property - ruler's css style(default: width 100%, height: 100%)
+ * @property - Interval to snap (default: 5)
+ * @property - Positions to snap (default: [])
+ * @property - Whether to show the moving pos when dragging (default: false)
+ * @property - csp nonce
+ * @property - Format of drag pos (default: v => v)
+ * @property - default guidelines (default: [])
+ * @property - Whether to show guidelines (default: true)
+ * @property - pos digit of guidelines (default: 0)
  */
-export interface GuideOptions extends RulerProps {
+export interface GuidesOptions extends RulerProps {
     className?: string;
-    setGuides?: (guides: number[]) => any;
     rulerStyle?: IObject<any>;
     snapThreshold?: number;
     snaps?: number[];
@@ -22,14 +36,23 @@ export interface GuideOptions extends RulerProps {
     dragPosFormat?: (value: number) => string | number;
     defaultGuides?: number[];
     showGuides?: boolean;
-
+    digit?: number;
 }
 
 /**
  * @typedef
- * @extends GuideOptions
+ * @memberof Guides
+ * @extends Guides.GuidesOptions
  */
-export interface GuidesProps extends GuideOptions {
+export interface GuideOptions extends GuidesOptions {
+}
+
+/**
+ * @typedef
+ * @memberof Guides
+ * @extends Guides.GuidesOptions
+ */
+export interface GuidesProps extends GuidesOptions {
     onChangeGuides?: (e: OnChangeGuides) => any;
     onDragStart?: (e: OnDragStart) => any;
     onDrag?: (e: OnDrag) => any;
@@ -37,6 +60,7 @@ export interface GuidesProps extends GuideOptions {
 }
 /**
  * @typedef
+ * @memberof Guides
  */
 export interface OnChangeGuides {
     guides: number[];
@@ -45,26 +69,44 @@ export interface OnChangeGuides {
 }
 /**
  * @typedef
+ * @memberof Guides
  */
 export interface OnDragStart extends OnGestoDragStart {
     dragElement: HTMLElement;
 }
 /**
  * @typedef
+ * @memberof Guides
  */
 export interface OnDrag extends OnGestoDrag {
     dragElement: HTMLElement;
 }
 /**
  * @typedef
+ * @memberof Guides
  */
 export interface OnDragEnd extends OnGestoDragEnd {
     dragElement: HTMLElement;
 }
+/**
+ * @typedef
+ * @memberof Guides
+ */
 export interface GuidesInterface {
     getGuides(): number[];
     scroll(pos: number): void;
     scrollGuides(pos: number): void;
     loadGuides(guides: number[]): void;
     resize(): void;
+}
+
+/**
+ * @typedef
+ * @memberof Guides
+ */
+export interface GuidesEvents {
+    changeGuides: OnChangeGuides;
+    dragStart: OnDragStart;
+    drag: OnDrag;
+    dragEnd: OnDragEnd;
 }

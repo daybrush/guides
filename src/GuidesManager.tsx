@@ -37,13 +37,15 @@ import { camelize } from "@daybrush/utils";
 })
 /**
  * @sort 1
- * @extends eg.Component
+ * @extends EventEmitter
  */
 class Guides extends EventEmitter<GuidesEvents> {
     private tempElement = document.createElement("div");
     private innerGuides!: InnerGuides;
     /**
      * @sort 1
+     * @param - guides' container
+     * @param {$ts:Partial<Guides.GuidesOptions>} - guides' options
      */
     constructor(container: HTMLElement, options: Partial<GuidesOptions> = {}) {
         super();
