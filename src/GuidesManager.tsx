@@ -2,9 +2,8 @@ import { ref, Properties } from "framework-utils";
 import * as React from "react";
 import { render } from "react-dom";
 import { PROPERTIES, METHODS, EVENTS } from "./consts";
-import { GuidesInterface, GuideOptions } from "@scena/react-guides/declaration/types";
+import { GuidesInterface, GuidesEvents, GuidesOptions } from "@scena/react-guides/declaration/types";
 import InnerGuides from "./InnerGuides";
-import { GuidesOptions, GuidesEvents } from "./types";
 import EventEmitter from "@scena/event-emitter";
 import { camelize } from "@daybrush/utils";
 
@@ -13,7 +12,7 @@ import { camelize } from "@daybrush/utils";
         return;
     }
     prototype[property] = function(...args) {
-        const self = this.getPreactGuides();
+        const self = this.getInnerGuides();
 
         if (!self || !self[property]) {
             return;
@@ -24,7 +23,7 @@ import { camelize } from "@daybrush/utils";
 @Properties(PROPERTIES, (prototype, property) => {
     Object.defineProperty(prototype, property, {
         get() {
-            return this.getPreactGuides().props[property];
+            return this.getInnerGuides().props[property];
         },
         set(value) {
             this.innerGuides.setState({
@@ -52,7 +51,7 @@ class Guides extends EventEmitter<GuidesEvents> {
         const events: any = {};
 
         EVENTS.forEach(name => {
-            events[camelize(`on ${name}`)] = (e: any) => this.trigger(name, e);
+            events[camelize(`on ${name}`)] = (e: any) => this.trigger(name as any, e);
         });
 
         render(
@@ -64,7 +63,7 @@ class Guides extends EventEmitter<GuidesEvents> {
      * @param state
      * @param callback
      */
-    public setState(state: Partial<GuideOptions>, callback?: () => void) {
+    public setState(state: Partial<GuidesOptions>, callback?: () => void) {
         this.innerGuides.setState(state, callback);
     }
     /**
@@ -75,7 +74,7 @@ class Guides extends EventEmitter<GuidesEvents> {
         this.tempElement = null;
         this.innerGuides = null;
     }
-    private getPreactGuides() {
+    private getInnerGuides() {
         return this.innerGuides.guides;
     }
 }

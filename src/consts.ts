@@ -1,32 +1,13 @@
-import { GuidesOptions } from "./types";
+import {
+    PROPERTIES as GUIDES_PROPERTIES,
+    METHODS as GUIDES_METHODS,
+    EVENTS as GUIDES_EVENTS,
+} from "@scena/react-guides";
+import {
+    GuidesOptions,
+} from "@scena/react-guides/declaration/types";
+export const PROPERTIES: Array<keyof GuidesOptions> = GUIDES_PROPERTIES;
 
-export const PROPERTIES: Array<keyof GuidesOptions> = [
-    "setGuides",
-    "type", "width", "height", "rulerStyle",
-    "unit", "zoom", "style", "backgroundColor", "lineColor",
-    "snaps", "snapThreshold", "direction",
-    "container",
-    "className",
-    "textColor",
-    "displayDragPos",
-    "dragPosFormat",
-    "cspNonce",
-    "textFormat",
-    "defaultGuides",
-    "showGuides",
-];
+export const METHODS = GUIDES_METHODS as readonly string[];
 
-export const METHODS = [
-    "getGuides",
-    "loadGuides",
-    "scroll",
-    "scrollGuides",
-    "resize",
-] as const;
-
-export const EVENTS = [
-    "changeGuides",
-    "dragStart",
-    "drag",
-    "dragEnd",
-] as const;
+export const EVENTS = GUIDES_EVENTS as readonly string[];

@@ -16,14 +16,16 @@ const defaultOptions = {
 export default builder([
     {
         ...defaultOptions,
-        input: "src/react-guides/index.ts",
+        input: "src/react-guides/index.esm.ts",
         output: "./dist/guides.esm.js",
         format: "es",
+        exports: "named",
     },
     {
         ...defaultOptions,
-        input: "src/react-guides/index.ts",
+        input: "src/react-guides/index.umd.ts",
         output: "./dist/guides.cjs.js",
         format: "cjs",
+        exports: "default",
     },
 ]);
