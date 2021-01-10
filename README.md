@@ -20,7 +20,8 @@
 <p align="middle">
     <a href="https://daybrush.com/guides" target="_blank"><strong>Demo</strong></a> /
     <a href="https://daybrush.com/guides/release/latest/doc/" target="_blank"><strong>API</strong></a> /
-    <a href="https://github.com/daybrush/scenejs-editor" target="_blank"><strong>Main Project</strong></a>
+    <a href="https://github.com/daybrush/ruler" target="_blank"><strong>Ruler</strong></a> /
+    <a href="https://github.com/daybrush/scena" target="_blank"><strong>Main Project</strong></a>
 </p>
 
 
