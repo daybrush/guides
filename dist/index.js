@@ -4,7 +4,7 @@ name: @scena/guides
 license: MIT
 author: Daybrush
 repository: git+https://github.com/daybrush/guides.git
-version: 0.12.1
+version: 0.13.0
 */
 (function () {
     'use strict';
@@ -446,7 +446,7 @@ version: 0.12.1
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/utils
-    @version 1.3.1
+    @version 1.4.0
     */
     /**
     * get string "string"
@@ -458,6 +458,16 @@ version: 0.12.1
     */
 
     var STRING = "string";
+    /**
+    * get string "number"
+    * @memberof Consts
+    * @example
+    import {NUMBER} from "@daybrush/utils";
+
+    console.log(NUMBER); // "number"
+    */
+
+    var NUMBER = "number";
     /**
     * get string "undefined"
     * @memberof Consts
@@ -519,6 +529,9 @@ version: 0.12.1
     function isString(value) {
       return typeof value === STRING;
     }
+    function isNumber(value) {
+      return typeof value === NUMBER;
+    }
     /**
     * transform a camelized string into a lowercased string.
     * @memberof Utils
@@ -548,7 +561,7 @@ version: 0.12.1
     license: MIT
     author: Daybrush
     repository: git+https://github.com/daybrush/react-simple-compat.git
-    version: 0.1.9
+    version: 1.0.0
     */
 
     /*! *****************************************************************************
@@ -686,7 +699,7 @@ version: 0.12.1
     }
 
     function createProvider(el, key, index, container) {
-      if (isString(el)) {
+      if (isString(el) || isNumber(el)) {
         return new TextProvider("text_" + el, key, index, container, null, {});
       }
 
@@ -998,7 +1011,7 @@ version: 0.12.1
         var isMount = !this.base;
 
         if (isMount) {
-          this.base = document.createElement(this.type);
+          this.base = this.props.portalContainer || document.createElement(this.type);
         }
 
         renderProviders(this, this._providers, this.props.children, hooks, null);
@@ -1038,7 +1051,10 @@ version: 0.12.1
         });
 
         this.events = {};
-        base.parentNode.removeChild(base);
+
+        if (!this.props.portalContainer) {
+          base.parentNode.removeChild(base);
+        }
       };
 
       return ElementProvider;
@@ -1440,9 +1456,184 @@ version: 0.12.1
       });
     }
 
-    var PROPERTIES = ["setGuides", "type", "width", "height", "rulerStyle", "unit", "zoom", "style", "backgroundColor", "lineColor", "snaps", "snapThreshold", "direction", "container", "className", "textColor", "displayDragPos", "dragPosFormat", "cspNonce", "textFormat", "defaultGuides", "showGuides"];
-    var METHODS = ["getGuides", "loadGuides", "scroll", "scrollGuides", "resize"];
-    var EVENTS = ["changeGuides", "dragStart", "drag", "dragEnd"];
+    /*
+    Copyright (c) 2018 Daybrush
+    @name: @daybrush/utils
+    license: MIT
+    author: Daybrush
+    repository: https://github.com/daybrush/utils
+    @version 1.4.0
+    */
+    /**
+    * get string "function"
+    * @memberof Consts
+    * @example
+    import {FUNCTION} from "@daybrush/utils";
+
+    console.log(FUNCTION); // "function"
+    */
+
+    var FUNCTION = "function";
+    /**
+    * get string "object"
+    * @memberof Consts
+    * @example
+    import {OBJECT} from "@daybrush/utils";
+
+    console.log(OBJECT); // "object"
+    */
+
+    var OBJECT = "object";
+    var DEFAULT_UNIT_PRESETS = {
+      "cm": function (pos) {
+        return pos * 96 / 2.54;
+      },
+      "mm": function (pos) {
+        return pos * 96 / 254;
+      },
+      "in": function (pos) {
+        return pos * 96;
+      },
+      "pt": function (pos) {
+        return pos * 96 / 72;
+      },
+      "pc": function (pos) {
+        return pos * 96 / 6;
+      },
+      "%": function (pos, size) {
+        return pos * size / 100;
+      },
+      "vw": function (pos, size) {
+        if (size === void 0) {
+          size = window.innerWidth;
+        }
+
+        return pos / 100 * size;
+      },
+      "vh": function (pos, size) {
+        if (size === void 0) {
+          size = window.innerHeight;
+        }
+
+        return pos / 100 * size;
+      },
+      "vmax": function (pos, size) {
+        if (size === void 0) {
+          size = Math.max(window.innerWidth, window.innerHeight);
+        }
+
+        return pos / 100 * size;
+      },
+      "vmin": function (pos, size) {
+        if (size === void 0) {
+          size = Math.min(window.innerWidth, window.innerHeight);
+        }
+
+        return pos / 100 * size;
+      }
+    };
+    /**
+    * Check the type that the value is object.
+    * @memberof Utils
+    * @param {string} value - Value to check the type
+    * @return {} true if the type is correct, false otherwise
+    * @example
+    import {isObject} from "@daybrush/utils";
+
+    console.log(isObject({})); // true
+    console.log(isObject(undefined)); // false
+    console.log(isObject("")); // false
+    console.log(isObject(null)); // false
+    */
+
+    function isObject(value) {
+      return value && typeof value === OBJECT;
+    }
+    /**
+    * Check the type that the value is function.
+    * @memberof Utils
+    * @param {string} value - Value to check the type
+    * @return {} true if the type is correct, false otherwise
+    * @example
+    import {isFunction} from "@daybrush/utils";
+
+    console.log(isFunction(function a() {})); // true
+    console.log(isFunction(() => {})); // true
+    console.log(isFunction("1234")); // false
+    console.log(isFunction(1)); // false
+    console.log(isFunction(null)); // false
+    */
+
+    function isFunction(value) {
+      return typeof value === FUNCTION;
+    }
+    /**
+    * divide text by number and unit.
+    * @memberof Utils
+    * @param {string} text - text to divide
+    * @return {} divided texts
+    * @example
+    import {splitUnit} from "@daybrush/utils";
+
+    console.log(splitUnit("10px"));
+    // {prefix: "", value: 10, unit: "px"}
+    console.log(splitUnit("-10px"));
+    // {prefix: "", value: -10, unit: "px"}
+    console.log(splitUnit("a10%"));
+    // {prefix: "a", value: 10, unit: "%"}
+    */
+
+    function splitUnit(text) {
+      var matches = /^([^\d|e|\-|\+]*)((?:\d|\.|-|e-|e\+)+)(\S*)$/g.exec(text);
+
+      if (!matches) {
+        return {
+          prefix: "",
+          unit: "",
+          value: NaN
+        };
+      }
+
+      var prefix = matches[1];
+      var value = matches[2];
+      var unit = matches[3];
+      return {
+        prefix: prefix,
+        unit: unit,
+        value: parseFloat(value)
+      };
+    }
+    /**
+    * convert unit size to px size
+    * @function
+    * @memberof Utils
+    */
+
+    function convertUnitSize(pos, size) {
+      var _a = splitUnit(pos),
+          value = _a.value,
+          unit = _a.unit;
+
+      if (isObject(size)) {
+        var sizeFunction = size[unit];
+
+        if (sizeFunction) {
+          if (isFunction(sizeFunction)) {
+            return sizeFunction(value);
+          } else if (DEFAULT_UNIT_PRESETS[unit]) {
+            return DEFAULT_UNIT_PRESETS[unit](value, sizeFunction);
+          }
+        }
+      } else if (unit === "%") {
+        return value * size / 100;
+      }
+
+      if (DEFAULT_UNIT_PRESETS[unit]) {
+        return DEFAULT_UNIT_PRESETS[unit](value);
+      }
+
+      return value;
+    }
 
     /*
     Copyright (c) 2019 Daybrush
@@ -1450,7 +1641,7 @@ version: 0.12.1
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/ruler/blob/master/packages/react-ruler
-    version: 0.6.1
+    version: 0.7.2
     */
 
     /*! *****************************************************************************
@@ -1526,10 +1717,19 @@ version: 0.12.1
       __proto.componentDidUpdate = function () {
         this.resize();
       };
+      /**
+       * @method Ruler#scroll
+       * @param scrollPos
+       */
+
 
       __proto.scroll = function (scrollPos) {
         this.draw(scrollPos);
       };
+      /**
+       * @method Ruler#resize
+       */
+
 
       __proto.resize = function () {
         var canvas = this.canvasElement;
@@ -1549,7 +1749,8 @@ version: 0.12.1
           scrollPos = this.state.scrollPos;
         }
 
-        var _a = this.props,
+        var props = this.props;
+        var _a = props,
             unit = _a.unit,
             zoom = _a.zoom,
             type = _a.type,
@@ -1557,6 +1758,8 @@ version: 0.12.1
             lineColor = _a.lineColor,
             textColor = _a.textColor,
             direction = _a.direction,
+            _b = _a.negativeRuler,
+            negativeRuler = _b === void 0 ? true : _b,
             textFormat = _a.textFormat;
         var width = this.width;
         var height = this.height;
@@ -1565,6 +1768,13 @@ version: 0.12.1
         var context = this.canvasContext;
         var isHorizontal = type === "horizontal";
         var isDirectionStart = direction === "start";
+        var isNegative = negativeRuler !== false;
+        var textAlign = props.textAlign || "left";
+        var textOffset = props.textOffset || [0, 0];
+        var containerSize = isHorizontal ? height : width;
+        var mainLineSize = convertUnitSize("" + (props.mainLineSize || "100%"), containerSize);
+        var longLineSize = convertUnitSize("" + (props.longLineSize || 10), containerSize);
+        var shortLineSize = convertUnitSize("" + (props.shortLineSize || 7), containerSize);
 
         if (backgroundColor === "transparent") {
           // Clear existing paths & text
@@ -1594,31 +1804,16 @@ version: 0.12.1
         var minRange = Math.floor(scrollPos * zoom / zoomUnit);
         var maxRange = Math.ceil((scrollPos * zoom + size) / zoomUnit);
         var length = maxRange - minRange;
+        var alignOffset = Math.max(["left", "center", "right"].indexOf(textAlign) - 1, -1);
 
-        for (var i = 0; i < length; ++i) {
-          var startPos = ((i + minRange) * unit - scrollPos) * zoom;
+        for (var i = 0; i <= length; ++i) {
+          var value = i + minRange;
 
-          if (startPos >= -zoomUnit && startPos < size) {
-            var _b = isHorizontal ? [startPos + 3, isDirectionStart ? 17 : height - 17] : [isDirectionStart ? 17 : width - 17, startPos - 4],
-                startX = _b[0],
-                startY = _b[1];
-
-            var text = "" + (i + minRange) * unit;
-
-            if (textFormat) {
-              text = textFormat((i + minRange) * unit);
-            }
-
-            if (isHorizontal) {
-              context.fillText(text, startX, startY);
-            } else {
-              context.save();
-              context.translate(startX, startY);
-              context.rotate(-Math.PI / 2);
-              context.fillText(text, 0, 0);
-              context.restore();
-            }
+          if (!isNegative && value < 0) {
+            continue;
           }
+
+          var startPos = (value * unit - scrollPos) * zoom;
 
           for (var j = 0; j < 10; ++j) {
             var pos = startPos + j / 10 * zoomUnit;
@@ -1627,7 +1822,7 @@ version: 0.12.1
               continue;
             }
 
-            var lineSize = j === 0 ? isHorizontal ? height : width : j % 2 === 0 ? 10 : 7;
+            var lineSize = j === 0 ? mainLineSize : j % 2 === 0 ? longLineSize : shortLineSize;
 
             var _c = isHorizontal ? [pos, isDirectionStart ? 0 : height - lineSize] : [isDirectionStart ? 0 : width - lineSize, pos],
                 x1 = _c[0],
@@ -1639,6 +1834,30 @@ version: 0.12.1
 
             context.moveTo(x1, y1);
             context.lineTo(x2, y2);
+          }
+
+          if (startPos >= -zoomUnit && startPos < size + unit * zoom) {
+            var _e = isHorizontal ? [startPos + alignOffset * -3, isDirectionStart ? 17 : height - 17] : [isDirectionStart ? 17 : width - 17, startPos + alignOffset * 3],
+                startX = _e[0],
+                startY = _e[1];
+
+            var text = "" + value * unit;
+
+            if (textFormat) {
+              text = textFormat(value * unit);
+            }
+
+            context.textAlign = textAlign;
+
+            if (isHorizontal) {
+              context.fillText(text, startX + textOffset[0], startY + textOffset[1]);
+            } else {
+              context.save();
+              context.translate(startX + textOffset[0], startY + textOffset[1]);
+              context.rotate(-Math.PI / 2);
+              context.fillText(text, 0, 0);
+              context.restore();
+            }
           }
         }
 
@@ -1652,6 +1871,10 @@ version: 0.12.1
         width: 0,
         height: 0,
         unit: 50,
+        negativeRuler: true,
+        mainLineSize: "100%",
+        longLineSize: 10,
+        shortLineSize: 7,
         direction: "end",
         style: {
           width: "100%",
@@ -1663,6 +1886,8 @@ version: 0.12.1
       };
       return Ruler;
     }(PureComponent);
+
+    var PROPERTIES = ["type", "width", "height", "unit", "zoom", "style", "backgroundColor", "lineColor", "textColor", "direction", "textFormat", "scrollPos", "textAlign", "mainLineSize", "longLineSize", "shortLineSize", "negativeRuler"];
 
     /*
     Copyright (c) 2018 Daybrush
@@ -1681,7 +1906,7 @@ version: 0.12.1
     console.log(OBJECT); // "object"
     */
 
-    var OBJECT = "object";
+    var OBJECT$1 = "object";
     /**
     * Check the type that the value is object.
     * @memberof Utils
@@ -1696,8 +1921,8 @@ version: 0.12.1
     console.log(isObject(null)); // false
     */
 
-    function isObject(value) {
-      return value && typeof value === OBJECT;
+    function isObject$1(value) {
+      return value && typeof value === OBJECT$1;
     }
     /**
     * Returns the index of the first element in the array that satisfies the provided testing function.
@@ -1804,7 +2029,7 @@ version: 0.12.1
       var __proto = EventEmitter.prototype;
 
       __proto.on = function (eventName, listener) {
-        if (isObject(eventName)) {
+        if (isObject$1(eventName)) {
           for (var name in eventName) {
             this.on(name, eventName[name]);
           }
@@ -1837,7 +2062,7 @@ version: 0.12.1
       __proto.off = function (eventName, listener) {
         if (!eventName) {
           this._events = {};
-        } else if (isObject(eventName)) {
+        } else if (isObject$1(eventName)) {
           for (var name in eventName) {
             this.off(name);
           }
@@ -2015,7 +2240,7 @@ version: 0.12.1
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/utils
-    @version 1.3.1
+    @version 1.4.0
     */
     /**
     * Date.now() method
@@ -2129,7 +2354,7 @@ version: 0.12.1
     license: MIT
     author: Daybrush
     repository: git+https://github.com/daybrush/gesture.git
-    version: 1.2.2
+    version: 1.3.0
     */
 
     /*! *****************************************************************************
@@ -2418,7 +2643,7 @@ version: 0.12.1
         _this.clientStores = [];
         _this.targets = [];
         _this.prevTime = 0;
-        _this.isDouble = false;
+        _this.doubleFlag = false;
 
         _this.onDragStart = function (e, isTrusted) {
           if (isTrusted === void 0) {
@@ -2473,17 +2698,19 @@ version: 0.12.1
               return false;
             }
 
+            _this.doubleFlag = now() - _this.prevTime < 200;
+
             var result = _this.emit("dragStart", __assign$3({
               datas: _this.datas,
               inputEvent: e,
-              isTrusted: isTrusted
+              isTrusted: isTrusted,
+              isDouble: _this.doubleFlag
             }, _this.getCurrentStore().getPosition()));
 
             if (result === false) {
               _this.initDrag();
             }
 
-            _this.isDouble = now() - _this.prevTime < 200;
             _this.flag && preventDefault && e.preventDefault();
           }
 
@@ -2559,7 +2786,7 @@ version: 0.12.1
           var position = _this.getCurrentStore().getPosition();
 
           var currentTime = now();
-          var isDouble = !_this.isDrag && _this.isDouble;
+          var isDouble = !_this.isDrag && _this.doubleFlag;
           _this.prevTime = _this.isDrag || isDouble ? 0 : currentTime;
 
           _this.emit("dragEnd", __assign$3({
@@ -2660,6 +2887,14 @@ version: 0.12.1
 
       __proto.isPinchFlag = function () {
         return this.pinchFlag;
+      };
+      /**
+      * Whether to start double click
+      */
+
+
+      __proto.isDoubleFlag = function () {
+        return this.doubleFlag;
       };
       /**
        * Whether to pinch
@@ -2836,6 +3071,8 @@ version: 0.12.1
       __proto.initDrag = function () {
         this.clientStores = [];
         this.pinchFlag = false;
+        this.doubleFlag = false;
+        this.prevTime = 0;
         this.flag = false;
       };
 
@@ -2867,7 +3104,7 @@ version: 0.12.1
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/utils
-    @version 1.3.1
+    @version 1.4.0
     */
     var OPEN_CLOSED_CHARACTER = ["\"", "'", "\\\"", "\\'"];
 
@@ -3233,7 +3470,7 @@ version: 0.12.1
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/utils
-    @version 1.3.1
+    @version 1.4.0
     */
     var OPEN_CLOSED_CHARACTER$1 = ["\"", "'", "\\\"", "\\'"];
     /**
@@ -3401,7 +3638,7 @@ version: 0.12.1
     // {prefix: "a", value: 10, unit: "%"}
     */
 
-    function splitUnit(text) {
+    function splitUnit$1(text) {
       var matches = /^([^\d|e|\-|\+]*)((?:\d|\.|-|e-|e\+)+)(\S*)$/g.exec(text);
 
       if (!matches) {
@@ -3423,12 +3660,35 @@ version: 0.12.1
     }
 
     /*
+    Copyright (c) 2018 Daybrush
+    @name: @daybrush/utils
+    license: MIT
+    author: Daybrush
+    repository: https://github.com/daybrush/utils
+    @version 1.4.0
+    */
+    var TINY_NUM = 0.0000001;
+    /**
+    * throttle number
+    * @function
+    * @memberof Utils
+    */
+
+    function throttle(num, unit) {
+      if (!unit) {
+        return num;
+      }
+
+      return Math.round(num / unit) * unit;
+    }
+
+    /*
     Copyright (c) 2020 Daybrush
     name: @scena/matrix
     license: MIT
     author: Daybrush
     repository: git+https://github.com/daybrush/matrix
-    version: 1.1.0
+    version: 1.1.1
     */
 
     function add(matrix, inverseMatrix, startIndex, fromIndex, n, k) {
@@ -3460,6 +3720,10 @@ version: 0.12.1
         inverseMatrix[x] /= k;
       }
     }
+    /**
+     * @memberof Matrix
+     */
+
     function invert(matrix, n) {
       if (n === void 0) {
         n = Math.sqrt(matrix.length);
@@ -3472,7 +3736,8 @@ version: 0.12.1
         // diagonal
         var identityIndex = n * i + i;
 
-        if (newMatrix[identityIndex] === 0) {
+        if (!throttle(newMatrix[identityIndex], TINY_NUM)) {
+          // newMatrix[identityIndex] = 0;
           for (var j = i + 1; j < n; ++j) {
             if (newMatrix[n * i + j]) {
               swap(newMatrix, inverseMatrix, i, j, n);
@@ -3481,19 +3746,19 @@ version: 0.12.1
           }
         }
 
-        if (newMatrix[identityIndex]) {
-          divide(newMatrix, inverseMatrix, i, n, newMatrix[identityIndex]);
-        } else {
+        if (!throttle(newMatrix[identityIndex], TINY_NUM)) {
           // no inverse matrix
           return [];
         }
+
+        divide(newMatrix, inverseMatrix, i, n, newMatrix[identityIndex]);
 
         for (var j = 0; j < n; ++j) {
           var targetStartIndex = j;
           var targetIndex = j + i * n;
           var target = newMatrix[targetIndex];
 
-          if (target === 0 || i === j) {
+          if (!throttle(target, TINY_NUM) || i === j) {
             continue;
           }
 
@@ -3503,6 +3768,10 @@ version: 0.12.1
 
       return inverseMatrix;
     }
+    /**
+     * @memberof Matrix
+     */
+
     function multiply(matrix, matrix2, n) {
       if (n === void 0) {
         n = Math.sqrt(matrix.length);
@@ -3539,6 +3808,10 @@ version: 0.12.1
 
       return newMatrix;
     }
+    /**
+     * @memberof Matrix
+     */
+
     function calculate(matrix, matrix2, n) {
       if (n === void 0) {
         n = matrix2.length;
@@ -3550,15 +3823,31 @@ version: 0.12.1
         return v / k;
       });
     }
+    /**
+     * @memberof Matrix
+     */
+
     function rotateX3d(matrix, rad) {
       return multiply(matrix, [1, 0, 0, 0, 0, Math.cos(rad), Math.sin(rad), 0, 0, -Math.sin(rad), Math.cos(rad), 0, 0, 0, 0, 1], 4);
     }
+    /**
+     * @memberof Matrix
+     */
+
     function rotateY3d(matrix, rad) {
       return multiply(matrix, [Math.cos(rad), 0, -Math.sin(rad), 0, 0, 1, 0, 0, Math.sin(rad), 0, Math.cos(rad), 0, 0, 0, 0, 1], 4);
     }
+    /**
+     * @memberof Matrix
+     */
+
     function rotateZ3d(matrix, rad) {
       return multiply(matrix, createRotateMatrix(rad, 4));
     }
+    /**
+     * @memberof Matrix
+     */
+
     function scale3d(matrix, _a) {
       var _b = _a[0],
           sx = _b === void 0 ? 1 : _b,
@@ -3568,6 +3857,10 @@ version: 0.12.1
           sz = _d === void 0 ? 1 : _d;
       return multiply(matrix, [sx, 0, 0, 0, 0, sy, 0, 0, 0, 0, sz, 0, 0, 0, 0, 1], 4);
     }
+    /**
+     * @memberof Matrix
+     */
+
     function translate3d(matrix, _a) {
       var _b = _a[0],
           tx = _b === void 0 ? 0 : _b,
@@ -3577,9 +3870,17 @@ version: 0.12.1
           tz = _d === void 0 ? 0 : _d;
       return multiply(matrix, [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, tx, ty, tz, 1], 4);
     }
+    /**
+     * @memberof Matrix
+     */
+
     function matrix3d(matrix1, matrix2) {
       return multiply(matrix1, matrix2, 4);
     }
+    /**
+     * @memberof Matrix
+     */
+
     function createRotateMatrix(rad, n) {
       var cos = Math.cos(rad);
       var sin = Math.sin(rad);
@@ -3592,6 +3893,10 @@ version: 0.12.1
       m[n + 1] = cos;
       return m;
     }
+    /**
+     * @memberof Matrix
+     */
+
     function createIdentityMatrix(n) {
       var length = n * n;
       var matrix = [];
@@ -3718,7 +4023,7 @@ version: 0.12.1
           matrixFunction = scale3d;
           functionValue = [1, 1, sz];
         } else if (name === "rotate" || name === "rotateZ" || name === "rotateX" || name === "rotateY") {
-          var _h = splitUnit(value),
+          var _h = splitUnit$1(value),
               unit = _h.unit,
               unitValue = _h.value;
 
@@ -3765,7 +4070,7 @@ version: 0.12.1
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/guides/blob/master/packages/react-guides
-    version: 0.11.1
+    version: 0.12.0
     */
 
     /*! *****************************************************************************
@@ -3836,6 +4141,9 @@ version: 0.12.1
     var DRAGGING = prefix("dragging");
     var DISPLAY_DRAG = prefix("display-drag");
     var GUIDES_CSS = prefixCSS("scena-", "\n{\n    position: relative;\n}\ncanvas {\n    position: relative;\n}\n.guide-origin {\n    position: absolute;\n    width: 1px;\n    height: 1px;\n    top: 0;\n    left: 0;\n    opacity: 0;\n}\n.guides {\n    position: absolute;\n    top: 0;\n    left: 0;\n    will-change: transform;\n    z-index: 2000;\n}\n.display-drag {\n    position: absolute;\n    will-change: transform;\n    z-index: 2000;\n    font-weight: bold;\n    font-size: 12px;\n    display: none;\n    left: 20px;\n    top: -20px;\n    color: #f33;\n}\n:host.horizontal .guides {\n    width: 100%;\n    height: 0;\n    top: 30px;\n}\n:host.vertical .guides {\n    height: 100%;\n    width: 0;\n    left: 30px;\n}\n.guide {\n    position: absolute;\n    background: #f33;\n    z-index: 2;\n}\n.guide.dragging:before {\n    position: absolute;\n    content: \"\";\n    width: 100%;\n    height: 100%;\n    top: 50%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n}\n:host.horizontal .guide {\n    width: 100%;\n    height: 1px;\n    cursor: row-resize;\n}\n:host.vertical .guide {\n    width: 1px;\n    height: 100%;\n    cursor: col-resize;\n}\n.mobile :host.horizontal .guide {\n    transform: scale(1, 2);\n}\n.mobile :host.vertical .guide {\n    transform: scale(2, 1);\n}\n:host.horizontal .guide:before {\n    height: 20px;\n}\n:host.vertical .guide:before {\n    width: 20px;\n}\n.adder {\n    display: none;\n}\n.adder.dragging {\n    display: block;\n}\n");
+    var PROPERTIES$1 = ["className", "rulerStyle", 'snapThreshold', "snaps", "displayDragPos", "cspNonce", 'dragPosFormat', "defaultGuides", "showGuides"].concat(PROPERTIES);
+    var METHODS = ["getGuides", "loadGuides", "scroll", "scrollGuides", "resize"];
+    var EVENTS = ["changeGuides", "dragStart", "drag", "dragEnd"];
 
     var GuidesElement = styled$1("div", GUIDES_CSS);
 
@@ -3862,6 +4170,7 @@ version: 0.12.1
           _this.onDrag(e);
           /**
            * When the drag starts, the dragStart event is called.
+           * @memberof Guides
            * @event dragStart
            * @param {OnDragStart} - Parameters for the dragStart event
            */
@@ -3878,6 +4187,7 @@ version: 0.12.1
           var nextPos = _this.movePos(e);
           /**
            * When dragging, the drag event is called.
+           * @memberof Guides
            * @event drag
            * @param {OnDrag} - Parameters for the drag event
            */
@@ -3900,11 +4210,11 @@ version: 0.12.1
 
           var guides = _this.state.guides;
           var _a = _this.props,
-              setGuides = _a.setGuides,
               onChangeGuides = _a.onChangeGuides,
               zoom = _a.zoom,
-              displayDragPos = _a.displayDragPos;
-          var guidePos = Math.round(pos / zoom);
+              displayDragPos = _a.displayDragPos,
+              digit = _a.digit;
+          var guidePos = parseFloat((pos / zoom).toFixed(digit || 0));
 
           if (displayDragPos) {
             _this.displayElement.style.cssText += "display: none;";
@@ -3913,6 +4223,7 @@ version: 0.12.1
           removeClass(datas.target, DRAGGING);
           /**
            * When the drag finishes, the dragEnd event is called.
+           * @memberof Guides
            * @event dragEnd
            * @param {OnDragEnd} - Parameters for the dragEnd event
            */
@@ -3938,7 +4249,6 @@ version: 0.12.1
                   distX: distX,
                   distY: distY
                 });
-                setGuides(_this.state.guides);
               });
             }
           } else {
@@ -3956,7 +4266,6 @@ version: 0.12.1
               guides: guides.slice()
             }, function () {
               var nextGuides = _this.state.guides;
-              setGuides(nextGuides);
               onChangeGuides({
                 distX: distX,
                 distY: distY,
@@ -3975,20 +4284,21 @@ version: 0.12.1
         var _a = this.props,
             className = _a.className,
             type = _a.type,
-            width = _a.width,
-            height = _a.height,
-            unit = _a.unit,
             zoom = _a.zoom,
             style = _a.style,
             rulerStyle = _a.rulerStyle,
-            backgroundColor = _a.backgroundColor,
-            lineColor = _a.lineColor,
-            textColor = _a.textColor,
-            direction = _a.direction,
-            textFormat = _a.textFormat,
             displayDragPos = _a.displayDragPos,
             cspNonce = _a.cspNonce;
+        var props = this.props;
         var translateName = this.getTranslateName();
+        var rulerProps = {};
+        PROPERTIES.forEach(function (name) {
+          if (name === "style") {
+            return;
+          }
+
+          rulerProps[name] = props[name];
+        });
         return createElement(GuidesElement, {
           ref: ref(this, "manager"),
           cspNonce: cspNonce,
@@ -3997,20 +4307,10 @@ version: 0.12.1
         }, createElement("div", {
           className: prefix("guide-origin"),
           ref: ref(this, "originElement")
-        }), createElement(Ruler, {
+        }), createElement(Ruler, __assign$5({
           ref: ref(this, "ruler"),
-          type: type,
-          width: width,
-          height: height,
-          unit: unit,
-          zoom: zoom,
-          backgroundColor: backgroundColor,
-          lineColor: lineColor,
-          style: rulerStyle,
-          textColor: textColor,
-          direction: direction,
-          textFormat: textFormat
-        }), createElement("div", {
+          style: rulerStyle
+        }, rulerProps)), createElement("div", {
           className: GUIDES,
           ref: ref(this, "guidesElement"),
           style: {
@@ -4174,25 +4474,30 @@ version: 0.12.1
         var datas = e.datas,
             distX = e.distX,
             distY = e.distY;
-        var _a = this.props,
-            type = _a.type,
-            zoom = _a.zoom,
-            snaps = _a.snaps,
-            snapThreshold = _a.snapThreshold,
-            displayDragPos = _a.displayDragPos,
-            dragPosFormat = _a.dragPosFormat;
+        var props = this.props;
+        var type = props.type,
+            zoom = props.zoom,
+            snaps = props.snaps,
+            snapThreshold = props.snapThreshold,
+            displayDragPos = props.displayDragPos,
+            digit = props.digit;
+
+        var dragPosFormat = props.dragPosFormat || function (v) {
+          return v;
+        };
+
         var isHorizontal = type === "horizontal";
         var matrixPos = calculateMatrixDist(datas.matrix, [distX, distY]);
         var offsetPos = datas.offsetPos;
         var offsetX = matrixPos[0] + offsetPos[0];
         var offsetY = matrixPos[1] + offsetPos[1];
         var nextPos = Math.round(isHorizontal ? offsetY : offsetX);
-        var guidePos = Math.round(nextPos / zoom);
+        var guidePos = parseFloat((nextPos / zoom).toFixed(digit || 0));
         var guideSnaps = snaps.slice().sort(function (a, b) {
           return Math.abs(guidePos - a) - Math.abs(guidePos - b);
         });
 
-        if (guideSnaps.length && Math.abs(guideSnaps[0] - guidePos) < snapThreshold) {
+        if (guideSnaps.length && Math.abs(guideSnaps[0] * zoom - nextPos) < snapThreshold) {
           guidePos = guideSnaps[0];
           nextPos = guidePos * zoom;
         }
@@ -4217,7 +4522,6 @@ version: 0.12.1
       Guides.defaultProps = {
         className: "",
         type: "horizontal",
-        setGuides: function () {},
         zoom: 1,
         style: {
           width: "100%",
@@ -4225,6 +4529,7 @@ version: 0.12.1
         },
         snapThreshold: 5,
         snaps: [],
+        digit: 0,
         onChangeGuides: function () {},
         onDragStart: function () {},
         onDrag: function () {},
@@ -4238,6 +4543,10 @@ version: 0.12.1
       };
       return Guides;
     }(PureComponent);
+
+    var PROPERTIES$2 = PROPERTIES$1;
+    var METHODS$1 = METHODS;
+    var EVENTS$1 = EVENTS;
 
     var InnerGuides =
     /*#__PURE__*/
@@ -4300,6 +4609,8 @@ version: 0.12.1
       __extends(Guides, _super);
       /**
        * @sort 1
+       * @param - guides' container
+       * @param {$ts:Partial<Guides.GuidesOptions>} - guides' options
        */
 
 
@@ -4312,7 +4623,7 @@ version: 0.12.1
 
         _this.tempElement = document.createElement("div");
         var events = {};
-        EVENTS.forEach(function (name) {
+        EVENTS$1.forEach(function (name) {
           events[camelize("on " + name)] = function (e) {
             return _this.trigger(name, e);
           };
@@ -4345,11 +4656,11 @@ version: 0.12.1
         this.innerGuides = null;
       };
 
-      __proto.getPreactGuides = function () {
+      __proto.getInnerGuides = function () {
         return this.innerGuides.guides;
       };
 
-      Guides = __decorate([Properties(METHODS, function (prototype, property) {
+      Guides = __decorate([Properties(METHODS$1, function (prototype, property) {
         if (prototype[property]) {
           return;
         }
@@ -4361,7 +4672,7 @@ version: 0.12.1
             args[_i] = arguments[_i];
           }
 
-          var self = this.getPreactGuides();
+          var self = this.getInnerGuides();
 
           if (!self || !self[property]) {
             return;
@@ -4369,10 +4680,10 @@ version: 0.12.1
 
           return self[property].apply(self, args);
         };
-      }), Properties(PROPERTIES, function (prototype, property) {
+      }), Properties(PROPERTIES$2, function (prototype, property) {
         Object.defineProperty(prototype, property, {
           get: function () {
-            return this.getPreactGuides().props[property];
+            return this.getInnerGuides().props[property];
           },
           set: function (value) {
             var _a;
@@ -4385,7 +4696,7 @@ version: 0.12.1
       })
       /**
        * @sort 1
-       * @extends eg.Component
+       * @extends EventEmitter
        */
       ], Guides);
       return Guides;
