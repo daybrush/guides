@@ -3,7 +3,7 @@ import {
   ElementRef, OnChanges, SimpleChanges,
   OnDestroy, Output, EventEmitter
 } from '@angular/core';
-import Guides, { GuidesOptions, EVENTS } from '@scena/guides';
+import Guides, { GuidesOptions, EVENTS, PROPERTIES, GuideOptions } from '@scena/guides';
 import { IObject } from '@daybrush/utils';
 import { NgxGuidesInterface } from './ngx-guides.interface';
 import { NgxGuidesEvents } from './types';
@@ -38,7 +38,14 @@ export class NgxGuidesComponent extends NgxGuidesInterface implements GuidesOpti
   @Input() public textFormat?: GuidesOptions['textFormat'];
   @Input() public showGuides?: GuidesOptions['showGuides'];
   @Input() public defaultGuides?: GuidesOptions['defaultGuides'];
-
+  @Input() public digit?: number;
+  @Input() public textAlign?: 'left' | 'center' | 'right';
+  @Input() public mainLineSize?: string | number;
+  @Input() public longLineSize?: string | number;
+  @Input() public shortLineSize?: string | number;
+  @Input() public textOffset?: number[];
+  @Input() public negativeRuler?: boolean;
+  @Input() public scrollPos?: number;
   @Output() public changeGuides: NgxGuidesEvents['changeGuides'];
   @Output() public dragStart: NgxGuidesEvents['dragStart'];
   // tslint:disable-next-line: no-output-native
@@ -51,6 +58,7 @@ export class NgxGuidesComponent extends NgxGuidesInterface implements GuidesOpti
       (this as any)[name] = new EventEmitter();
     });
   }
+
   ngOnChanges(changes: SimpleChanges): void {
     const guides = this.guides;
 
@@ -72,17 +80,17 @@ export class NgxGuidesComponent extends NgxGuidesInterface implements GuidesOpti
   }
   ngAfterViewInit() {
     const el = this.guidesRef.nativeElement;
-    this.guides = new Guides(el, {
-      className: this.className,
-      type: this.type,
-      width: this.width,
-      height: this.height,
-      unit: this.unit,
-      zoom: this.zoom,
-      setGuides: this.setGuides,
-      rulerStyle: this.rulerStyle,
-      backgroundColor: this.backgroundColor,
+    const options: GuideOptions = {};
+
+    PROPERTIES.forEach(name => {
+      if (name === "style") {
+        return;
+      }
+      if (name in this) {
+        (options as any)[name] = this[name];
+      }
     });
+    this.guides = new Guides(el, options);
     this.setStyle();
   }
   ngOnDestroy() {

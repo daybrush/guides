@@ -8,9 +8,10 @@
     "source": {
         "include": [
             "./src",
-            "./packages/react-guides/src/react-guides/",
             "README.md",
-            "node_modules/@egjs/component/src/Component.js"
+            "packages/react-guides/src/react-guides",
+            "node_modules/@scena/event-emitter/src",
+            "packages/react-guides/node_modules/@scena/react-ruler/src/react-ruler"
         ],
         "includePattern": "(.+\\.js(doc|x)?|.+\\.ts(doc|x)?)$",
         "excludePattern": "(^|\\/|\\\\)_"
@@ -23,13 +24,8 @@
             "closure"
         ]
     },
-    "templates": {
-        "cleverLinks": false,
-        "monospaceLinks": false
-    },
     "linkMap": {
-        "IObject": "https://daybrush.com/utils/release/latest/doc/global.html#ObjectInterface",
-        "OnDragStart": "https://daybrush.com/gesto/release/latest/doc/Gesto.html#.OnDragStart"
+        "IObject": "http://daybrush.com/utils/release/latest/doc/global.html#ObjectInterface"
     },
     "docdash": {
         "menu": {

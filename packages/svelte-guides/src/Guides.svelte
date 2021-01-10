@@ -23,8 +23,7 @@
   let guidesElement: HTMLElement;
 
   function setStyle() {
-    const el = options.container || guidesElement;
-    const elStyle = el.style;
+    const elStyle = guidesElement.style;
 
     for (const name in style) {
       if (elStyle[name] === style[name]) {
@@ -51,10 +50,10 @@
   });
   onMount(() => {
     setStyle();
-    guides = new VanillaGuides(options.container || guidesElement, options);
+    guides = new VanillaGuides(guidesElement, options);
 
     EVENTS.forEach((name, i) => {
-      guides.on(name, e => {
+      guides.on(name as any, e => {
         dispatch(name, e);
       });
     });
@@ -67,6 +66,4 @@
     return guides;
   }
 </script>
-{#if !options.container}
 <div class="guides" bind:this={guidesElement} />
-{/if}

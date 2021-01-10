@@ -1,6 +1,6 @@
 {
     "name": "@scena/guides",
-    "version": "0.12.1",
+    "version": "0.13.0",
     "description": "A Vanilla Guides component that can draw ruler and manage guidelines.",
     "main": "./dist/guides.cjs.js",
     "module": "./dist/guides.esm.js",
@@ -13,9 +13,9 @@
         "doc": "rm -rf ./doc && jsdoc -c jsdoc.json",
         "demo:start": "rollup -c rollup.config.demo.js -w",
         "demo:build": "rollup -c rollup.config.demo.js",
-        "prerelease": "npm run build && npm run demo:build && prerelease --dirs=dist,doc",
-        "release": "npm run build && npm run demo:build && release --dirs=dist,doc",
-        "release:init": "npm run build && npm run demo:build && release -i --dirs=dist,doc",
+        "prerelease": "npm run build && npm run doc && prerelease --dirs=dist",
+        "release": "npm run build && npm run doc && npm run demo:build && release --dirs=dist,doc",
+        "release:init": "npm run build && npm run doc && npm run demo:build && release -i --dirs=dist,doc",
         "deploy": "gh-pages -d ./demo --dest=./ --add --remote origin",
         "packages": "npm run packages:update && npm run packages:build && npm run packages:publish",
         "packages:update": "pvu --update=svelte-guides,ngx-guides/projects/ngx-guides,vue-guides",
@@ -43,7 +43,7 @@
     "devDependencies": {
         "@daybrush/builder": "^0.1.2",
         "@daybrush/demo": "0.0.2",
-        "@daybrush/jsdoc": "^0.3.7",
+        "@daybrush/jsdoc": "^0.3.9",
         "@daybrush/release": "^0.2.4",
         "@types/karma-chai": "^0.1.2",
         "@types/mocha": "^5.2.7",
@@ -64,8 +64,7 @@
         "typescript": "^3.5.2"
     },
     "dependencies": {
-        "@egjs/component": "^2.1.2",
         "@scena/event-emitter": "^1.0.4",
-        "react-compat-guides": "^0.9.1"
+        "react-compat-guides": "^0.10.0"
     }
 }

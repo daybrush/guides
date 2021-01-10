@@ -58,7 +58,7 @@ export default class Guides extends Vue {
 
         const guides = this.guides;
         EVENTS.forEach((name, i) => {
-            guides.on(name, e => {
+            guides.on(name as any, e => {
                 this.$emit(name, { ...e });
             });
         });
