@@ -242,7 +242,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     private onDragEnd = (e: OnDragEnd) => {
         const { datas, isDouble, distX, distY } = e;
         const pos = this.movePos(e);
-        const guides = this.state.guides;
+        let guides = this.state.guides;
         const { onChangeGuides, zoom, displayDragPos, digit } = this.props;
         const guidePos = parseFloat((pos / zoom!).toFixed(digit || 0));
 
@@ -280,6 +280,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             }
         } else {
             const index = datas.target.getAttribute("data-index");
+
+            guides = [...guides];
 
             if (isDouble || guidePos < this.scrollPos) {
                 guides.splice(index, 1);
