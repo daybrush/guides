@@ -24,6 +24,7 @@ export interface GuidesState {
  * @property - Format of drag pos (default: v => v)
  * @property - default guidelines (default: [])
  * @property - Whether to show guidelines (default: true)
+ * @property - Whether to lock add/remove/change functions via drag/click of guides (default: false)
  * @property - pos digit of guidelines (default: 0)
  */
 export interface GuidesOptions extends RulerProps {
@@ -36,6 +37,7 @@ export interface GuidesOptions extends RulerProps {
     dragPosFormat?: (value: number) => string | number;
     defaultGuides?: number[];
     showGuides?: boolean;
+    lockGuides?: boolean | Array<"add" | "change" | "remove">;
     digit?: number;
 }
 
@@ -64,6 +66,9 @@ export interface GuidesProps extends GuidesOptions {
  */
 export interface OnChangeGuides {
     guides: number[];
+    isAdd: boolean;
+    isRemove: boolean;
+    isChange: boolean;
     distX: number;
     distY: number;
 }

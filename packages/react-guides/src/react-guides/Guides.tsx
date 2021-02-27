@@ -1,4 +1,4 @@
-import * as React from "react";
+    import * as React from "react";
 import Ruler, { PROPERTIES as RULER_PROPERTIES, RulerProps } from "@scena/react-ruler";
 import { ref, refs } from "framework-utils";
 import Gesto, { OnDragEnd } from "gesto";
@@ -27,6 +27,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         displayDragPos: false,
         dragPosFormat: v => v,
         defaultGuides: [],
+        lockGuides: false,
         showGuides: true,
     };
     public state: GuidesState = {
@@ -99,7 +100,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                     data-index={i}
                     data-pos={pos}
                     style={{
-                        transform: `${translateName}(${pos * zoom}px)`,
+                        transform: `${translateName}(${pos * zoom}px) translateZ(0px)`,
                     }}></div>);
             });
         }
@@ -109,12 +110,22 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         this.gesto = new Gesto(this.manager.getElement(), {
             container: document.body,
         }).on("dragStart", e => {
+            const {
+                type,
+                zoom,
+                lockGuides,
+            } = this.props;
+
+            if (lockGuides === true) {
+                e.stop();
+                return;
+            }
             const inputEvent = e.inputEvent;
             const target = inputEvent.target;
             const datas = e.datas;
             const canvasElement = this.ruler.canvasElement;
             const guidesElement = this.guidesElement;
-            const isHorizontal = this.props.type === "horizontal";
+            const isHorizontal = type === "horizontal";
             const originRect = this.originElement.getBoundingClientRect();
             const matrix = getDistElementMatrix(this.manager.getElement());
             const offsetPos = calculateMatrixDist(matrix, [
@@ -123,16 +134,30 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             ]);
             offsetPos[0] -= guidesElement.offsetLeft;
             offsetPos[1] -= guidesElement.offsetTop;
-            offsetPos[isHorizontal ? 1 : 0] += this.scrollPos * this.props.zoom!;
+            offsetPos[isHorizontal ? 1 : 0] += this.scrollPos * zoom!;
 
             datas.offsetPos = offsetPos;
             datas.matrix = matrix;
 
+            let isLockAdd = lockGuides && lockGuides.indexOf("add") > -1;
+            let isLockRemove = lockGuides && lockGuides.indexOf("remove") > -1;
+            let isLockChange = lockGuides && lockGuides.indexOf("change") > -1;
+
             if (target === canvasElement) {
+                if (isLockAdd) {
+                    e.stop();
+                    return;
+                }
                 datas.fromRuler = true;
                 datas.target = this.adderElement;
+                // add
             } else if (hasClass(target, GUIDE)) {
+                if (isLockRemove && isLockChange) {
+                    e.stop();
+                    return;
+                }
                 datas.target = target;
+                // change
             } else {
                 e.stop();
                 return false;
@@ -206,7 +231,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     }
     private onDragStart = (e: any) => {
         const { datas, inputEvent } = e;
-        const { onDragStart } = this.props;
+        const { onDragStart, lockGuides } = this.props;
 
         addClass(datas.target, DRAGGING);
         this.onDrag(e);
@@ -243,7 +268,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         const { datas, isDouble, distX, distY } = e;
         const pos = this.movePos(e);
         let guides = this.state.guides;
-        const { onChangeGuides, zoom, displayDragPos, digit } = this.props;
+        const { onChangeGuides, zoom, displayDragPos, digit, lockGuides } = this.props;
         const guidePos = parseFloat((pos / zoom!).toFixed(digit || 0));
 
         if (displayDragPos) {
@@ -275,20 +300,33 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                         guides: this.state.guides,
                         distX,
                         distY,
+                        isAdd: true,
+                        isRemove: false,
+                        isChange: false,
                     });
                 });
             }
         } else {
             const index = datas.target.getAttribute("data-index");
+            let isRemove = false;
+            let isChange = false;
 
             guides = [...guides];
 
             if (isDouble || guidePos < this.scrollPos) {
+                if (lockGuides && (lockGuides === true || lockGuides.indexOf("remove") > -1)) {
+                    return;
+                }
                 guides.splice(index, 1);
+                isRemove = true;
             } else if (guides.indexOf(guidePos) > -1) {
                 return;
             } else {
+                if (lockGuides && (lockGuides === true || lockGuides.indexOf("change") > -1)) {
+                    return;
+                }
                 guides[index] = guidePos;
+                isChange = true;
             }
             this.setState({
                 guides: [...guides],
@@ -298,6 +336,9 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                     distX,
                     distY,
                     guides: nextGuides,
+                    isAdd: false,
+                    isChange,
+                    isRemove,
                 });
             });
         }
