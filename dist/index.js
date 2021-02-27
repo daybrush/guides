@@ -4,7 +4,7 @@ name: @scena/guides
 license: MIT
 author: Daybrush
 repository: git+https://github.com/daybrush/guides.git
-version: 0.13.0
+version: 0.14.0
 */
 (function () {
     'use strict';
@@ -561,7 +561,7 @@ version: 0.13.0
     license: MIT
     author: Daybrush
     repository: git+https://github.com/daybrush/react-simple-compat.git
-    version: 1.0.0
+    version: 1.1.0
     */
 
     /*! *****************************************************************************
@@ -1455,6 +1455,7 @@ version: 0.13.0
         container: container
       });
     }
+    var version = "simple-1.1.0";
 
     /*
     Copyright (c) 2018 Daybrush
@@ -3331,7 +3332,7 @@ version: 0.13.0
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/css-styled/tree/master/packages/react-css-styled
-    version: 1.0.0
+    version: 1.0.2
     */
 
     /*! *****************************************************************************
@@ -3415,15 +3416,24 @@ version: 0.13.0
             _b = _a.className,
             className = _b === void 0 ? "" : _b,
             cspNonce = _a.cspNonce,
-            attributes = __rest$2(_a, ["className", "cspNonce"]);
+            portalContainer = _a.portalContainer,
+            attributes = __rest$2(_a, ["className", "cspNonce", "portalContainer"]);
 
         var cssId = this.injector.className;
         var Tag = this.tag;
+        var portalAttributes = {};
+
+        if ((version ).indexOf("simple") > -1 && portalContainer) {
+          portalAttributes = {
+            portalContainer: portalContainer
+          };
+        }
+
         return createElement(Tag, __assign$4({
           "ref": ref(this, "element"),
           "data-styled-id": cssId,
           "className": className + " " + cssId
-        }, attributes));
+        }, portalAttributes, attributes));
       };
 
       __proto.componentDidMount = function () {
@@ -4070,7 +4080,7 @@ version: 0.13.0
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/guides/blob/master/packages/react-guides
-    version: 0.12.0
+    version: 0.13.0
     */
 
     /*! *****************************************************************************
@@ -4164,7 +4174,9 @@ version: 0.13.0
         _this.onDragStart = function (e) {
           var datas = e.datas,
               inputEvent = e.inputEvent;
-          var onDragStart = _this.props.onDragStart;
+          var _a = _this.props,
+              onDragStart = _a.onDragStart,
+              lockGuides = _a.lockGuides;
           addClass(datas.target, DRAGGING);
 
           _this.onDrag(e);
@@ -4213,7 +4225,8 @@ version: 0.13.0
               onChangeGuides = _a.onChangeGuides,
               zoom = _a.zoom,
               displayDragPos = _a.displayDragPos,
-              digit = _a.digit;
+              digit = _a.digit,
+              lockGuides = _a.lockGuides;
           var guidePos = parseFloat((pos / zoom).toFixed(digit || 0));
 
           if (displayDragPos) {
@@ -4247,19 +4260,35 @@ version: 0.13.0
                 onChangeGuides({
                   guides: _this.state.guides,
                   distX: distX,
-                  distY: distY
+                  distY: distY,
+                  isAdd: true,
+                  isRemove: false,
+                  isChange: false
                 });
               });
             }
           } else {
             var index = datas.target.getAttribute("data-index");
+            var isRemove_1 = false;
+            var isChange_1 = false;
+            guides = guides.slice();
 
             if (isDouble || guidePos < _this.scrollPos) {
+              if (lockGuides && (lockGuides === true || lockGuides.indexOf("remove") > -1)) {
+                return;
+              }
+
               guides.splice(index, 1);
+              isRemove_1 = true;
             } else if (guides.indexOf(guidePos) > -1) {
               return;
             } else {
+              if (lockGuides && (lockGuides === true || lockGuides.indexOf("change") > -1)) {
+                return;
+              }
+
               guides[index] = guidePos;
+              isChange_1 = true;
             }
 
             _this.setState({
@@ -4269,7 +4298,10 @@ version: 0.13.0
               onChangeGuides({
                 distX: distX,
                 distY: distY,
-                guides: nextGuides
+                guides: nextGuides,
+                isAdd: false,
+                isChange: isChange_1,
+                isRemove: isRemove_1
               });
             });
           }
@@ -4345,7 +4377,7 @@ version: 0.13.0
               "data-index": i,
               "data-pos": pos,
               style: {
-                transform: translateName + "(" + pos * zoom + "px)"
+                transform: translateName + "(" + pos * zoom + "px) translateZ(0px)"
               }
             });
           });
@@ -4360,12 +4392,22 @@ version: 0.13.0
         this.gesto = new Gesto(this.manager.getElement(), {
           container: document.body
         }).on("dragStart", function (e) {
+          var _a = _this.props,
+              type = _a.type,
+              zoom = _a.zoom,
+              lockGuides = _a.lockGuides;
+
+          if (lockGuides === true) {
+            e.stop();
+            return;
+          }
+
           var inputEvent = e.inputEvent;
           var target = inputEvent.target;
           var datas = e.datas;
           var canvasElement = _this.ruler.canvasElement;
           var guidesElement = _this.guidesElement;
-          var isHorizontal = _this.props.type === "horizontal";
+          var isHorizontal = type === "horizontal";
 
           var originRect = _this.originElement.getBoundingClientRect();
 
@@ -4373,15 +4415,28 @@ version: 0.13.0
           var offsetPos = calculateMatrixDist(matrix, [e.clientX - originRect.left, e.clientY - originRect.top]);
           offsetPos[0] -= guidesElement.offsetLeft;
           offsetPos[1] -= guidesElement.offsetTop;
-          offsetPos[isHorizontal ? 1 : 0] += _this.scrollPos * _this.props.zoom;
+          offsetPos[isHorizontal ? 1 : 0] += _this.scrollPos * zoom;
           datas.offsetPos = offsetPos;
           datas.matrix = matrix;
+          var isLockAdd = lockGuides && lockGuides.indexOf("add") > -1;
+          var isLockRemove = lockGuides && lockGuides.indexOf("remove") > -1;
+          var isLockChange = lockGuides && lockGuides.indexOf("change") > -1;
 
           if (target === canvasElement) {
+            if (isLockAdd) {
+              e.stop();
+              return;
+            }
+
             datas.fromRuler = true;
-            datas.target = _this.adderElement;
+            datas.target = _this.adderElement; // add
           } else if (hasClass(target, GUIDE)) {
-            datas.target = target;
+            if (isLockRemove && isLockChange) {
+              e.stop();
+              return;
+            }
+
+            datas.target = target; // change
           } else {
             e.stop();
             return false;
@@ -4539,6 +4594,7 @@ version: 0.13.0
           return v;
         },
         defaultGuides: [],
+        lockGuides: false,
         showGuides: true
       };
       return Guides;
