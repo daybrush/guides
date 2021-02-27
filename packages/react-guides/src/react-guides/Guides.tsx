@@ -329,7 +329,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                 isChange = true;
             }
             this.setState({
-                guides: [...guides],
+                guides,
             }, () => {
                 const nextGuides = this.state.guides;
                 onChangeGuides!({
