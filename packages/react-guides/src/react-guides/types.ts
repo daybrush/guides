@@ -36,10 +36,14 @@ export interface GuidesOptions extends RulerProps {
     cspNonce?: string;
     dragPosFormat?: (value: number) => string | number;
     defaultGuides?: number[];
+    guidesColor: string;
+    guidesStyle: BorderStyle;
     showGuides?: boolean;
     lockGuides?: boolean | Array<"add" | "change" | "remove">;
     digit?: number;
 }
+
+export type BorderStyle = 'solid' | 'dotted' | 'dashed';
 
 /**
  * @typedef

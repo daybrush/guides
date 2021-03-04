@@ -46,8 +46,10 @@
     "print-sizes": "0.0.4",
     "pvu": "^0.3.1",
     "react": "^16.8.6",
+    "react-color": "^2.19.3",
     "react-dom": "^16.8.6",
     "react-scripts": "^3.0.1",
+    "react-select": "^4.1.0",
     "shape-svg": "^0.3.3",
     "tslint": "^5.20.1",
     "typescript": "^3.4.5"

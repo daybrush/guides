@@ -1,4 +1,4 @@
-    import * as React from "react";
+import * as React from "react";
 import Ruler, { PROPERTIES as RULER_PROPERTIES, RulerProps } from "@scena/react-ruler";
 import { ref, refs } from "framework-utils";
 import Gesto, { OnDragEnd } from "gesto";
@@ -6,7 +6,7 @@ import styled, { StyledElement } from "react-css-styled";
 import { GUIDES, GUIDE, DRAGGING, ADDER, DISPLAY_DRAG, GUIDES_CSS } from "./consts";
 import { prefix } from "./utils";
 import { hasClass, addClass, removeClass } from "@daybrush/utils";
-import { GuidesState, GuidesProps, GuidesInterface } from "./types";
+import { GuidesState, GuidesProps, GuidesInterface, BorderStyle } from "./types";
 import { getDistElementMatrix, calculateMatrixDist } from "css-to-mat";
 
 const GuidesElement = styled("div", GUIDES_CSS);
@@ -27,6 +27,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         displayDragPos: false,
         dragPosFormat: v => v,
         defaultGuides: [],
+        guidesStyle: 'solid',
+        guidesColor: "#f33",
         lockGuides: false,
         showGuides: true,
     };
@@ -46,6 +48,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     public render() {
         const {
             className,
+            guidesColor,
             type,
             zoom,
             style,
@@ -65,6 +68,9 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             }
             (rulerProps as any)[name] = props[name];
         });
+
+        const { draggingGuideStyle, staticGuideStyle } = this.getGuideColorStyle(type, guidesColor);
+
         return <GuidesElement
             ref={ref(this, "manager")}
             cspNonce={cspNonce}
@@ -80,13 +86,25 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             <div className={GUIDES} ref={ref(this, "guidesElement")} style={{
                 transform: `${translateName}(${-this.scrollPos * zoom}px)`,
             }}>
-                {displayDragPos && <div className={DISPLAY_DRAG} ref={ref(this, "displayElement")} />}
-                <div className={ADDER} ref={ref(this, "adderElement")} />
-                {this.renderGuides()}
+                {displayDragPos && <div className={DISPLAY_DRAG} ref={ref(this, "displayElement")}  style={{ color: this.props.guidesColor }} />}
+                <div className={ADDER} ref={ref(this, "adderElement")} style={draggingGuideStyle} />
+                {this.renderGuides(staticGuideStyle)}
             </div>
         </GuidesElement>;
     }
-    public renderGuides() {
+
+
+    private getGuideColorStyle(type: string, guidesColor: string) {
+        const guideColorStyle = (guidesStyle: BorderStyle): React.CSSProperties => type === "horizontal"
+            ? { borderTop: `1px ${guidesStyle} ${guidesColor}` }
+            : { borderLeft: `1px ${guidesStyle} ${guidesColor}` };
+
+        const draggingGuideStyle: React.CSSProperties = { ...guideColorStyle("solid") };
+        const staticGuideStyle: React.CSSProperties = { ...guideColorStyle(this.props.guidesStyle) };
+        return { draggingGuideStyle, staticGuideStyle };
+    }
+
+    public renderGuides(staticGuideStyle: React.CSSProperties) {
         const { type, zoom, showGuides } = this.props as Required<GuidesProps>;
         const translateName = this.getTranslateName();
         const guides = this.state.guides;
@@ -100,6 +118,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                     data-index={i}
                     data-pos={pos}
                     style={{
+                        ...staticGuideStyle,
                         transform: `${translateName}(${pos * zoom}px) translateZ(0px)`,
                     }}></div>);
             });
