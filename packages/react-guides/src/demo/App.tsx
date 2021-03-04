@@ -10,6 +10,7 @@ export default class App extends Component<{}> {
     public state = {
         zoom: 72,
         unit: 1,
+        lockGuides: false,
     };
     private scene: Scene = new Scene();
     // private editor!: Editor;
@@ -18,6 +19,7 @@ export default class App extends Component<{}> {
     private scrollX: number = 0;
     private scrollY: number = 0;
     public render() {
+        const lockText = this.state.lockGuides ? 'unlock' : 'lock';
         return (<div className="page">
             <div className="box" onClick={this.restore}></div>
             <div className="ruler horizontal" style={{ }}>
@@ -25,6 +27,7 @@ export default class App extends Component<{}> {
                     type="horizontal"
                     zoom={this.state.zoom}
                     unit={this.state.unit}
+                    lockGuides={this.state.lockGuides}
                     snapThreshold={5}
                     textFormat={v => `${v}in`}
                     snaps={[1, 2, 3]}
@@ -49,6 +52,7 @@ export default class App extends Component<{}> {
             <div className="ruler vertical">
                 <Guides ref={ref(this, "guides2")}
                     type="vertical"
+                    lockGuides={this.state.lockGuides}
                     zoom={this.state.zoom}
                     unit={this.state.unit}
                     snaps={[100, 200, 400]}
@@ -56,6 +60,15 @@ export default class App extends Component<{}> {
                     displayDragPos={true}
                     onChangeGuides={({ guides }) => {
                         console.log("vertical", guides);
+                    }}
+                    onDragStart={e => {
+                        console.log("dragStart", e);
+                    }}
+                    onDrag={e => {
+                        console.log("drag", e);
+                    }}
+                    onDragEnd={e => {
+                        console.log("dragEnd", e);
                     }}
                 />
             </div>
@@ -73,6 +86,11 @@ export default class App extends Component<{}> {
                         unit: this.state.unit / 2,
                     });
                 }}>+</button></p>
+                <div className="buttons">
+                    <button onClick={() => this.setState({ lockGuides: !this.state.lockGuides })}>
+                        <i className={`fa fa-${lockText}`}></i> 
+                        {" " + lockText[0].toUpperCase() + lockText.slice(1)} Guides</button>
+                </div>
                 <p className="badges">
                     <a href="https://www.npmjs.com/package/svelte-guides" target="_blank">
                         <img src="https://img.shields.io/npm/v/svelte-guides.svg?style=flat-square&color=007acc&label=version"
