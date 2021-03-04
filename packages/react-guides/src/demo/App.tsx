@@ -5,11 +5,30 @@ import "./App.css";
 import Guides from "../react-guides/Guides";
 import { ref } from "framework-utils";
 import Gesto from "gesto";
+import Select from 'react-select';
+import { SketchPicker } from 'react-color'
+import { BorderStyle } from "../react-guides/types";
 
+interface State {
+    guideColor: string;
+    guideStyle: BorderStyle;
+    showColorPicker: boolean;
+    unit: number,
+    zoom: number,
+}
+
+const guideStyleOptions = [
+    { value: 'dashed', label: 'Dashed' },
+    { value: 'dotted', label: 'Dotted' },
+    { value: 'solid', label: 'Solid' },
+];
 export default class App extends Component<{}> {
-    public state = {
+    public state: State = {
         zoom: 72,
         unit: 1,
+        guideColor: '#f33',
+        guideStyle: 'solid',
+        showColorPicker: false,
     };
     private scene: Scene = new Scene();
     // private editor!: Editor;
@@ -23,6 +42,8 @@ export default class App extends Component<{}> {
             <div className="ruler horizontal" style={{ }}>
                 <Guides ref={ref(this, "guides1")}
                     type="horizontal"
+                    guidesColor={this.state.guideColor}
+                    guidesStyle={this.state.guideStyle}
                     zoom={this.state.zoom}
                     unit={this.state.unit}
                     snapThreshold={5}
@@ -48,6 +69,8 @@ export default class App extends Component<{}> {
             </div>
             <div className="ruler vertical">
                 <Guides ref={ref(this, "guides2")}
+                    guidesColor={this.state.guideColor}
+                    guidesStyle={this.state.guideStyle}
                     type="vertical"
                     zoom={this.state.zoom}
                     unit={this.state.unit}
@@ -57,9 +80,24 @@ export default class App extends Component<{}> {
                     onChangeGuides={({ guides }) => {
                         console.log("vertical", guides);
                     }}
+                    onDragStart={e => {
+                        console.log("dragStart", e);
+                    }}
+                    onDrag={e => {
+                        console.log("drag", e);
+                    }}
+                    onDragEnd={e => {
+                        console.log("dragEnd", e);
+                    }}
                 />
             </div>
             <div className="container">
+                {this.state.showColorPicker && <div style={{ position: 'absolute', marginLeft: '30%' }}>
+                        <SketchPicker 
+                            color={this.state.guideColor} 
+                            onChangeComplete={(color) => this.setState({ guideColor: color.hex}) }/>
+                            </div>}
+
                 <img src="https://daybrush.com/guides/images/guides.png" width="200" alt="guides" />
                 <p className="dragit">Drag Screen & Rulers!</p>
                 <p><button onClick={() => {
@@ -73,6 +111,20 @@ export default class App extends Component<{}> {
                         unit: this.state.unit / 2,
                     });
                 }}>+</button></p>
+
+                <div className="buttons">
+                    <button onClick={() => this.setState({ showColorPicker: !this.state.showColorPicker })}>Change Guides Color</button>
+                </div>
+
+                <div style={{ width: 200, display: 'block', marginLeft: 'auto', marginRight: 'auto', marginTop: 5, marginBottom: 2, fontSize: 12 }} >
+                    <Select
+                        value={this.state.guideStyle}
+                        placeholder='Change Guides Style'
+                        onChange={({ value }) => this.setState({ guideStyle: value })}
+                        options={guideStyleOptions}
+                        />
+                </div>
+
                 <p className="badges">
                     <a href="https://www.npmjs.com/package/svelte-guides" target="_blank">
                         <img src="https://img.shields.io/npm/v/svelte-guides.svg?style=flat-square&color=007acc&label=version"
