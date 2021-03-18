@@ -267,7 +267,6 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     }
     private onDragEnd = (e: OnDragEnd) => {
         const { datas, isDouble, distX, distY } = e;
-        console.log(datas, isDouble);
         const pos = this.movePos(e);
         let guides = this.state.guides;
         const { onChangeGuides, zoom, displayDragPos, digit, lockGuides } = this.props;
