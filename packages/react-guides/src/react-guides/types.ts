@@ -39,6 +39,7 @@ export interface GuidesOptions extends RulerProps {
     showGuides?: boolean;
     lockGuides?: boolean | Array<"add" | "change" | "remove">;
     digit?: number;
+    deleteOnDbClick?: boolean;
 }
 
 /**
