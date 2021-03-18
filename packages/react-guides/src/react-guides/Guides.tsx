@@ -29,7 +29,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         defaultGuides: [],
         lockGuides: false,
         showGuides: true,
-        deleteOnDbClick: true,
+        deleteOnDblclick: true,
     };
     public state: GuidesState = {
         guides: [],
@@ -267,6 +267,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     }
     private onDragEnd = (e: OnDragEnd) => {
         const { datas, isDouble, distX, distY } = e;
+        console.log(datas, isDouble);
         const pos = this.movePos(e);
         let guides = this.state.guides;
         const { onChangeGuides, zoom, displayDragPos, digit, lockGuides } = this.props;
@@ -313,9 +314,9 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             let isChange = false;
 
             guides = [...guides];
-            const deleteOnDbClick = this.props.deleteOnDbClick && isDouble;
+            const deleteOnDblclick = this.props.deleteOnDblclick && isDouble;
 
-            if (deleteOnDbClick || guidePos < this.scrollPos) {
+            if (deleteOnDblclick || guidePos < this.scrollPos) {
                 if (lockGuides && (lockGuides === true || lockGuides.indexOf("remove") > -1)) {
                     return;
                 }
