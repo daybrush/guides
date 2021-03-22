@@ -1,6 +1,6 @@
 {
     "name": "@scena/guides",
-    "version": "0.14.0",
+    "version": "0.15.0",
     "description": "A Vanilla Guides component that can draw ruler and manage guidelines.",
     "main": "./dist/guides.cjs.js",
     "module": "./dist/guides.esm.js",
@@ -54,7 +54,7 @@
         "gh-pages": "^2.0.1",
         "keycon": "^1.1.0",
         "print-sizes": "0.0.4",
-        "pvu": "^0.3.1",
+        "pvu": "^0.5.1",
         "react": "^16.12.0",
         "react-dom": "^16.12.0",
         "rollup-plugin-css-bundle": "^1.0.4",
@@ -65,6 +65,6 @@
     },
     "dependencies": {
         "@scena/event-emitter": "^1.0.4",
-        "react-compat-guides": "^0.11.0"
+        "react-compat-guides": "~0.12.0"
     }
 }
