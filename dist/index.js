@@ -4,7 +4,7 @@ name: @scena/guides
 license: MIT
 author: Daybrush
 repository: git+https://github.com/daybrush/guides.git
-version: 0.14.0
+version: 0.15.0
 */
 (function () {
     'use strict';
@@ -74,7 +74,7 @@ version: 0.14.0
     license: MIT
     author: Daybrush
     repository: git+https://github.com/daybrush/framework-utils.git
-    version: 0.3.4
+    version: 1.1.0
     */
     function prefixNames(prefix) {
       var classNames = [];
@@ -90,7 +90,7 @@ version: 0.14.0
       }).join(" ");
     }
     function prefixCSS(prefix, css) {
-      return css.replace(/([^}{]*){/mg, function (_, selector) {
+      return css.replace(/([^}{]*){/gm, function (_, selector) {
         return selector.replace(/\.([^{,\s\d.]+)/g, "." + prefix + "$1") + "{";
       });
     }
@@ -1642,7 +1642,7 @@ version: 0.14.0
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/ruler/blob/master/packages/react-ruler
-    version: 0.7.2
+    version: 0.7.3
     */
 
     /*! *****************************************************************************
@@ -3328,6 +3328,22 @@ version: 0.14.0
 
     /*
     Copyright (c) 2019 Daybrush
+    name: framework-utils
+    license: MIT
+    author: Daybrush
+    repository: git+https://github.com/daybrush/framework-utils.git
+    version: 0.3.4
+    */
+    /* react */
+
+    function ref$1(target, name) {
+      return function (e) {
+        e && (target[name] = e);
+      };
+    }
+
+    /*
+    Copyright (c) 2019 Daybrush
     name: react-css-styled
     license: MIT
     author: Daybrush
@@ -3430,7 +3446,7 @@ version: 0.14.0
         }
 
         return createElement(Tag, __assign$4({
-          "ref": ref(this, "element"),
+          "ref": ref$1(this, "element"),
           "data-styled-id": cssId,
           "className": className + " " + cssId
         }, portalAttributes, attributes));
@@ -4080,7 +4096,7 @@ version: 0.14.0
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/guides/blob/master/packages/react-guides
-    version: 0.13.0
+    version: 0.14.0
     */
 
     /*! *****************************************************************************
@@ -4292,7 +4308,7 @@ version: 0.14.0
             }
 
             _this.setState({
-              guides: guides.slice()
+              guides: guides
             }, function () {
               var nextGuides = _this.state.guides;
               onChangeGuides({
@@ -4320,7 +4336,8 @@ version: 0.14.0
             style = _a.style,
             rulerStyle = _a.rulerStyle,
             displayDragPos = _a.displayDragPos,
-            cspNonce = _a.cspNonce;
+            cspNonce = _a.cspNonce,
+            dragGuideStyle = _a.dragGuideStyle;
         var props = this.props;
         var translateName = this.getTranslateName();
         var rulerProps = {};
@@ -4350,7 +4367,8 @@ version: 0.14.0
           }
         }, displayDragPos && createElement("div", {
           className: DISPLAY_DRAG,
-          ref: ref(this, "displayElement")
+          ref: ref(this, "displayElement"),
+          style: dragGuideStyle
         }), createElement("div", {
           className: ADDER,
           ref: ref(this, "adderElement")
@@ -4363,7 +4381,8 @@ version: 0.14.0
         var _a = this.props,
             type = _a.type,
             zoom = _a.zoom,
-            showGuides = _a.showGuides;
+            showGuides = _a.showGuides,
+            guideStyle = _a.guideStyle;
         var translateName = this.getTranslateName();
         var guides = this.state.guides;
         this.guideElements = [];
@@ -4376,9 +4395,9 @@ version: 0.14.0
               key: i,
               "data-index": i,
               "data-pos": pos,
-              style: {
+              style: __assign$5({}, guideStyle, {
                 transform: translateName + "(" + pos * zoom + "px) translateZ(0px)"
-              }
+              })
             });
           });
         }
@@ -4559,9 +4578,9 @@ version: 0.14.0
 
         if (displayDragPos) {
           var displayPos = type === "horizontal" ? [offsetX, nextPos] : [nextPos, offsetY];
-          this.displayElement.style.cssText += "display: block;transform: translate(-50%, -50%) translate(" + displayPos.map(function (v) {
+          this.displayElement.style.cssText += "display: block;" + "transform: translate(-50%, -50%) " + ("translate(" + displayPos.map(function (v) {
             return v + "px";
-          }).join(", ") + ")";
+          }).join(", ") + ")");
           this.displayElement.innerHTML = "" + dragPosFormat(guidePos);
         }
 
@@ -4595,7 +4614,9 @@ version: 0.14.0
         },
         defaultGuides: [],
         lockGuides: false,
-        showGuides: true
+        showGuides: true,
+        guideStyle: {},
+        dragGuideStyle: {}
       };
       return Guides;
     }(PureComponent);
