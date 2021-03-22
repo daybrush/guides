@@ -6,10 +6,25 @@ import Guides from "../react-guides/Guides";
 import { ref } from "framework-utils";
 import Gesto from "gesto";
 
+type LockGuides = boolean | Array<"add" | "change" | "remove">;
+
+interface State {
+    lockGuides: LockGuides;
+    lockAdd: boolean;
+    lockRemove: boolean;
+    lockChange: boolean;
+    unit: number,
+    zoom: number,
+}
+
 export default class App extends Component<{}> {
-    public state = {
+    public state: State = {
         zoom: 72,
         unit: 1,
+        lockGuides: false,
+        lockAdd: false,
+        lockChange: false,
+        lockRemove: false,
     };
     private scene: Scene = new Scene();
     // private editor!: Editor;
@@ -17,7 +32,37 @@ export default class App extends Component<{}> {
     private guides2: Guides;
     private scrollX: number = 0;
     private scrollY: number = 0;
+    private lockGuides: LockGuides = [];
+
+    private handleLockRemoveClick = () => {
+        const lockRemove = !this.state.lockRemove;
+        lockRemove ? this.lockGuides.push("remove") : this.lockGuides.remove("remove");
+        this.setState({ lockRemove, lockGuides: this.lockGuides });
+    }
+
+    private handleLockAddClick = () => {
+        const lockAdd = !this.state.lockAdd;
+        lockAdd ? this.lockGuides.push("add") : this.lockGuides.remove("add");
+        this.setState({ lockAdd, lockGuides: this.lockGuides });
+    }
+
+    private handleLockChangeClick = () => {
+        const lockChange = !this.state.lockChange;
+        const lockRemove = !this.state.lockRemove && true;
+        lockChange ? this.lockGuides.push("change") : this.lockGuides.remove("change");
+        lockRemove ? this.lockGuides.push("remove") : this.lockGuides.remove("remove");
+        this.setState({ lockChange, lockRemove, lockGuides: this.lockGuides });
+    }
+
+    private handleLockToggleClick = () => {
+        if (typeof !this.state.lockGuides === 'boolean') {
+            this.setState({ lockGuides: !this.state.lockGuides, lockAdd: false, lockRemove: false, lockChange: false });
+        }
+    }
+    
     public render() {
+        const lockText = this.state.lockGuides ? 'unlock' : 'lock';
+        const isLockButtonActive = (lockType: boolean) => lockType && { background: '#333', color: '#fff'};
         return (<div className="page">
             <div className="box" onClick={this.restore}></div>
             <div className="ruler horizontal" style={{ }}>
@@ -25,6 +70,7 @@ export default class App extends Component<{}> {
                     type="horizontal"
                     zoom={this.state.zoom}
                     unit={this.state.unit}
+                    lockGuides={this.state.lockGuides}
                     snapThreshold={5}
                     textFormat={v => `${v}in`}
                     snaps={[1, 2, 3]}
@@ -49,6 +95,7 @@ export default class App extends Component<{}> {
             <div className="ruler vertical">
                 <Guides ref={ref(this, "guides2")}
                     type="vertical"
+                    lockGuides={this.state.lockGuides}
                     zoom={this.state.zoom}
                     unit={this.state.unit}
                     snaps={[100, 200, 400]}
@@ -56,6 +103,15 @@ export default class App extends Component<{}> {
                     displayDragPos={true}
                     onChangeGuides={({ guides }) => {
                         console.log("vertical", guides);
+                    }}
+                    onDragStart={e => {
+                        console.log("dragStart", e);
+                    }}
+                    onDrag={e => {
+                        console.log("drag", e);
+                    }}
+                    onDragEnd={e => {
+                        console.log("dragEnd", e);
                     }}
                 />
             </div>
@@ -73,6 +129,15 @@ export default class App extends Component<{}> {
                         unit: this.state.unit / 2,
                     });
                 }}>+</button></p>
+                <div className="buttons">
+                    <button onClick={this.handleLockToggleClick}>
+                        <i className={`fa fa-${lockText}`}></i> 
+                        {" " + lockText[0].toUpperCase() + lockText.slice(1)} Guides
+                    </button>
+                    <button style={{...isLockButtonActive(this.state.lockAdd)}} onClick={this.handleLockAddClick}> Add</button>
+                    <button style={{...isLockButtonActive(this.state.lockChange)}} onClick={this.handleLockChangeClick}> Change</button>
+                    <button style={{...isLockButtonActive(this.state.lockRemove)}} onClick={this.handleLockRemoveClick}> Remove</button>
+                </div>
                 <p className="badges">
                     <a href="https://www.npmjs.com/package/svelte-guides" target="_blank">
                         <img src="https://img.shields.io/npm/v/svelte-guides.svg?style=flat-square&color=007acc&label=version"
@@ -105,6 +170,7 @@ export default class App extends Component<{}> {
         </div>
         );
     }
+
     public componentDidMount() {
         new Gesto(document.body).on("drag", e => {
             this.scrollX -= e.deltaX;
@@ -130,3 +196,14 @@ export default class App extends Component<{}> {
         this.guides2.scrollGuides(0);
     }
 }
+
+Object.defineProperty(Array.prototype, "remove", {
+    value: function(value) {
+        for (let key in this) {
+            if (this[key] === value) {    
+                this.splice(key,1);
+            }
+        }
+        return this;
+    } 
+});
