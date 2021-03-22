@@ -26,6 +26,8 @@ export interface GuidesState {
  * @property - Whether to show guidelines (default: true)
  * @property - Whether to lock add/remove/change functions via drag/click of guides (default: false)
  * @property - pos digit of guidelines (default: 0)
+ * @property - CSS style objects for guide elements (default: {})
+ * @property - CSS style objects for drag guide element (default: {})
  */
 export interface GuidesOptions extends RulerProps {
     className?: string;
@@ -39,6 +41,8 @@ export interface GuidesOptions extends RulerProps {
     showGuides?: boolean;
     lockGuides?: boolean | Array<"add" | "change" | "remove">;
     digit?: number;
+    guideStyle?: Record<string, any>;
+    dragGuideStyle?: Record<string, any>;
 }
 
 /**

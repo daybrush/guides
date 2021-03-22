@@ -1,4 +1,4 @@
-    import * as React from "react";
+import * as React from "react";
 import Ruler, { PROPERTIES as RULER_PROPERTIES, RulerProps } from "@scena/react-ruler";
 import { ref, refs } from "framework-utils";
 import Gesto, { OnDragEnd } from "gesto";
@@ -29,6 +29,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         defaultGuides: [],
         lockGuides: false,
         showGuides: true,
+        guideStyle: {},
+        dragGuideStyle: {},
     };
     public state: GuidesState = {
         guides: [],
@@ -52,6 +54,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             rulerStyle,
             displayDragPos,
             cspNonce,
+            dragGuideStyle,
         } = this.props as Required<GuidesProps>;
         const props = this.props;
         const translateName = this.getTranslateName();
@@ -80,14 +83,20 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             <div className={GUIDES} ref={ref(this, "guidesElement")} style={{
                 transform: `${translateName}(${-this.scrollPos * zoom}px)`,
             }}>
-                {displayDragPos && <div className={DISPLAY_DRAG} ref={ref(this, "displayElement")} />}
+                {displayDragPos && <div className={DISPLAY_DRAG}
+                    ref={ref(this, "displayElement")} style={dragGuideStyle} />}
                 <div className={ADDER} ref={ref(this, "adderElement")} />
                 {this.renderGuides()}
             </div>
         </GuidesElement>;
     }
     public renderGuides() {
-        const { type, zoom, showGuides } = this.props as Required<GuidesProps>;
+        const {
+            type,
+            zoom,
+            showGuides,
+            guideStyle,
+        } = this.props as Required<GuidesProps>;
         const translateName = this.getTranslateName();
         const guides = this.state.guides;
 
@@ -100,6 +109,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                     data-index={i}
                     data-pos={pos}
                     style={{
+                        ...guideStyle,
                         transform: `${translateName}(${pos * zoom}px) translateZ(0px)`,
                     }}></div>);
             });
@@ -371,9 +381,9 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             const displayPos = type === "horizontal"
                 ? [offsetX, nextPos]
                 : [nextPos, offsetY];
-            this.displayElement.style.cssText += `display: block;transform: translate(-50%, -50%) translate(${
-                displayPos.map(v => `${v}px`).join(", ")
-                })`;
+            this.displayElement.style.cssText += `display: block;`
+                + `transform: translate(-50%, -50%) `
+                + `translate(${displayPos.map(v => `${v}px`).join(", ")})`;
             this.displayElement.innerHTML = `${dragPosFormat!(guidePos)}`;
         }
         datas.target.setAttribute("data-pos", guidePos);
