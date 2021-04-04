@@ -15,37 +15,42 @@ import { NgxGuidesEvents } from './types';
   `,
   styles: []
 })
-export class NgxGuidesComponent extends NgxGuidesInterface implements GuidesOptions, NgxGuidesEvents, AfterViewInit, OnChanges, OnDestroy {
+export class NgxGuidesComponent extends NgxGuidesInterface implements Required<GuidesOptions>, NgxGuidesEvents, AfterViewInit, OnChanges, OnDestroy {
   @ViewChild('guidesRef', { static: false }) private guidesRef: ElementRef;
-  @Input() public className?: string;
-  @Input() public type?: 'horizontal' | 'vertical';
-  @Input() public width?: number;
-  @Input() public height?: number;
-  @Input() public unit?: number;
-  @Input() public zoom?: number;
-  @Input() public direction?: GuidesOptions['direction'];
-  @Input() public snapThreshold?: GuidesOptions['snapThreshold'];
-  @Input() public snaps?: GuidesOptions['snaps'];
+  @Input() public className: string;
+  @Input() public type: 'horizontal' | 'vertical';
+  @Input() public width: number;
+  @Input() public height: number;
+  @Input() public unit: number;
+  @Input() public zoom: number;
+  @Input() public direction: GuidesOptions['direction'];
+  @Input() public snapThreshold: GuidesOptions['snapThreshold'];
+  @Input() public snaps: GuidesOptions['snaps'];
   @Input() public style: IObject<any> = { width: '100%', height: '100%' };
-  @Input() public backgroundColor?: string;
-  @Input() public lineColor?: string;
-  @Input() public textColor?: string;
-  @Input() public setGuides?: (guides: number[]) => any;
-  @Input() public rulerStyle?: GuidesOptions['rulerStyle'];
-  @Input() public cspNonce?: GuidesOptions['cspNonce'];
-  @Input() public displayDragPos?: GuidesOptions['displayDragPos'];
-  @Input() public dragPosFormat?: GuidesOptions['dragPosFormat'];
-  @Input() public textFormat?: GuidesOptions['textFormat'];
-  @Input() public showGuides?: GuidesOptions['showGuides'];
-  @Input() public defaultGuides?: GuidesOptions['defaultGuides'];
-  @Input() public digit?: number;
-  @Input() public textAlign?: 'left' | 'center' | 'right';
-  @Input() public mainLineSize?: string | number;
-  @Input() public longLineSize?: string | number;
-  @Input() public shortLineSize?: string | number;
-  @Input() public textOffset?: number[];
-  @Input() public negativeRuler?: boolean;
-  @Input() public scrollPos?: number;
+  @Input() public backgroundColor: string;
+  @Input() public lineColor: string;
+  @Input() public textColor: string;
+  @Input() public setGuides: (guides: number[]) => any;
+  @Input() public rulerStyle: GuidesOptions['rulerStyle'];
+  @Input() public cspNonce: GuidesOptions['cspNonce'];
+  @Input() public displayDragPos: GuidesOptions['displayDragPos'];
+  @Input() public dragPosFormat: GuidesOptions['dragPosFormat'];
+  @Input() public textFormat: GuidesOptions['textFormat'];
+  @Input() public showGuides: GuidesOptions['showGuides'];
+  @Input() public defaultGuides: GuidesOptions['defaultGuides'];
+  @Input() public digit: number;
+  @Input() public textAlign: 'left' | 'center' | 'right';
+  @Input() public mainLineSize: string | number;
+  @Input() public longLineSize: string | number;
+  @Input() public shortLineSize: string | number;
+  @Input() public textOffset: number[];
+  @Input() public negativeRuler: boolean;
+  @Input() public scrollPos: number;
+  @Input() public lockGuides: boolean | ('add' | 'change' | 'remove')[];
+  @Input() public guideStyle: Record<string, any>;
+  @Input() public dragGuideStyle: Record<string, any>;
+  @Input() public portalContainer: HTMLElement;
+
   @Output() public changeGuides: NgxGuidesEvents['changeGuides'];
   @Output() public dragStart: NgxGuidesEvents['dragStart'];
   // tslint:disable-next-line: no-output-native
@@ -58,6 +63,7 @@ export class NgxGuidesComponent extends NgxGuidesInterface implements GuidesOpti
       (this as any)[name] = new EventEmitter();
     });
   }
+
 
   ngOnChanges(changes: SimpleChanges): void {
     const guides = this.guides;
