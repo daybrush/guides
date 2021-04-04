@@ -1,6 +1,6 @@
 {
     "name": "vue-guides",
-    "version": "0.15.1",
+    "version": "0.15.2",
     "description": "A Vue Guides component that can draw grids and scroll infinitely.",
     "main": "./dist/guides.cjs.js",
     "module": "./dist/guides.esm.js",
@@ -30,7 +30,7 @@
     "scripts": {
         "serve": "vue-cli-service serve",
         "build": "rollup -c && npm run declaration",
-        "declaration": "rm -rf declaration && tsc -p tsconfig.declaration.json",
+        "declaration": "rm -rf declaration && tsc -p tsconfig.declaration.json && cp ./src/components/Guides.vue.d.ts ./declaration/",
         "lint": "vue-cli-service lint"
     },
     "dependencies": {
