@@ -1,19 +1,24 @@
 
 import builder from "@daybrush/builder";
+import vuePlugin from "rollup-plugin-vue";
 
 export default builder([
     {
-        input: "src/components/Guides.ts",
+        input: "src/components/index.ts",
         output: "./dist/guides.esm.js",
         exports: "named",
         format: "es",
-        plugins: [],
+        plugins: [
+            vuePlugin(),
+        ],
     },
     {
-        input: "src/components/Guides.ts",
+        input: "src/components/index.ts",
         output: "./dist/guides.cjs.js",
         exports: "default",
         format: "cjs",
-        plugins: [],
+        plugins: [
+            vuePlugin(),
+        ],
     },
 ]);
