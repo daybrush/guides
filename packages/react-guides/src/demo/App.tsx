@@ -59,7 +59,7 @@ export default class App extends Component<{}> {
             this.setState({ lockGuides: !this.state.lockGuides, lockAdd: false, lockRemove: false, lockChange: false });
         }
     }
-    
+
     public render() {
         const lockText = this.state.lockGuides ? 'unlock' : 'lock';
         const isLockButtonActive = (lockType: boolean) => lockType && { background: '#333', color: '#fff'};
@@ -131,7 +131,7 @@ export default class App extends Component<{}> {
                 }}>+</button></p>
                 <div className="buttons">
                     <button onClick={this.handleLockToggleClick}>
-                        <i className={`fa fa-${lockText}`}></i> 
+                        <i className={`fa fa-${lockText}`}></i>
                         {" " + lockText[0].toUpperCase() + lockText.slice(1)} Guides
                     </button>
                     <button style={{...isLockButtonActive(this.state.lockAdd)}} onClick={this.handleLockAddClick}> Add</button>
@@ -200,10 +200,10 @@ export default class App extends Component<{}> {
 Object.defineProperty(Array.prototype, "remove", {
     value: function(value) {
         for (let key in this) {
-            if (this[key] === value) {    
+            if (this[key] === value) {
                 this.splice(key,1);
             }
         }
         return this;
-    } 
+    }
 });

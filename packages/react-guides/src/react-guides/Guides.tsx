@@ -31,6 +31,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         showGuides: true,
         guideStyle: {},
         dragGuideStyle: {},
+        portalContainer: null,
     };
     public state: GuidesState = {
         guides: [],
@@ -55,6 +56,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             displayDragPos,
             cspNonce,
             dragGuideStyle,
+            portalContainer,
         } = this.props as Required<GuidesProps>;
         const props = this.props;
         const translateName = this.getTranslateName();
@@ -72,6 +74,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             ref={ref(this, "manager")}
             cspNonce={cspNonce}
             className={`${prefix("manager", type)} ${className}`}
+            portalContainer={portalContainer}
             style={style}
         >
             <div className={prefix("guide-origin")} ref={ref(this, "originElement")}></div>
@@ -241,7 +244,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     }
     private onDragStart = (e: any) => {
         const { datas, inputEvent } = e;
-        const { onDragStart, lockGuides } = this.props;
+        const { onDragStart } = this.props;
 
         addClass(datas.target, DRAGGING);
         this.onDrag(e);
