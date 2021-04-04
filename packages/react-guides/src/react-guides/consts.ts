@@ -12,6 +12,8 @@ export const DISPLAY_DRAG = prefix("display-drag");
 export const GUIDES_CSS = prefixCSS("scena-", `
 {
     position: relative;
+    width: 100%;
+    height: 100%;
 }
 canvas {
     position: relative;

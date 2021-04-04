@@ -16,7 +16,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         className: "",
         type: "horizontal",
         zoom: 1,
-        style: { width: "100%", height: "100%" },
+        style: {},
         snapThreshold: 5,
         snaps: [],
         digit: 0,
