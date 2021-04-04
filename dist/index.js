@@ -4,7 +4,7 @@ name: @scena/guides
 license: MIT
 author: Daybrush
 repository: git+https://github.com/daybrush/guides.git
-version: 0.15.0
+version: 0.16.2
 */
 (function () {
     'use strict';
@@ -4096,7 +4096,7 @@ version: 0.15.0
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/guides/blob/master/packages/react-guides
-    version: 0.14.0
+    version: 0.15.1
     */
 
     /*! *****************************************************************************
@@ -4166,7 +4166,7 @@ version: 0.15.0
     var GUIDE = prefix("guide");
     var DRAGGING = prefix("dragging");
     var DISPLAY_DRAG = prefix("display-drag");
-    var GUIDES_CSS = prefixCSS("scena-", "\n{\n    position: relative;\n}\ncanvas {\n    position: relative;\n}\n.guide-origin {\n    position: absolute;\n    width: 1px;\n    height: 1px;\n    top: 0;\n    left: 0;\n    opacity: 0;\n}\n.guides {\n    position: absolute;\n    top: 0;\n    left: 0;\n    will-change: transform;\n    z-index: 2000;\n}\n.display-drag {\n    position: absolute;\n    will-change: transform;\n    z-index: 2000;\n    font-weight: bold;\n    font-size: 12px;\n    display: none;\n    left: 20px;\n    top: -20px;\n    color: #f33;\n}\n:host.horizontal .guides {\n    width: 100%;\n    height: 0;\n    top: 30px;\n}\n:host.vertical .guides {\n    height: 100%;\n    width: 0;\n    left: 30px;\n}\n.guide {\n    position: absolute;\n    background: #f33;\n    z-index: 2;\n}\n.guide.dragging:before {\n    position: absolute;\n    content: \"\";\n    width: 100%;\n    height: 100%;\n    top: 50%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n}\n:host.horizontal .guide {\n    width: 100%;\n    height: 1px;\n    cursor: row-resize;\n}\n:host.vertical .guide {\n    width: 1px;\n    height: 100%;\n    cursor: col-resize;\n}\n.mobile :host.horizontal .guide {\n    transform: scale(1, 2);\n}\n.mobile :host.vertical .guide {\n    transform: scale(2, 1);\n}\n:host.horizontal .guide:before {\n    height: 20px;\n}\n:host.vertical .guide:before {\n    width: 20px;\n}\n.adder {\n    display: none;\n}\n.adder.dragging {\n    display: block;\n}\n");
+    var GUIDES_CSS = prefixCSS("scena-", "\n{\n    position: relative;\n    width: 100%;\n    height: 100%;\n}\ncanvas {\n    position: relative;\n}\n.guide-origin {\n    position: absolute;\n    width: 1px;\n    height: 1px;\n    top: 0;\n    left: 0;\n    opacity: 0;\n}\n.guides {\n    position: absolute;\n    top: 0;\n    left: 0;\n    will-change: transform;\n    z-index: 2000;\n}\n.display-drag {\n    position: absolute;\n    will-change: transform;\n    z-index: 2000;\n    font-weight: bold;\n    font-size: 12px;\n    display: none;\n    left: 20px;\n    top: -20px;\n    color: #f33;\n}\n:host.horizontal .guides {\n    width: 100%;\n    height: 0;\n    top: 30px;\n}\n:host.vertical .guides {\n    height: 100%;\n    width: 0;\n    left: 30px;\n}\n.guide {\n    position: absolute;\n    background: #f33;\n    z-index: 2;\n}\n.guide.dragging:before {\n    position: absolute;\n    content: \"\";\n    width: 100%;\n    height: 100%;\n    top: 50%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n}\n:host.horizontal .guide {\n    width: 100%;\n    height: 1px;\n    cursor: row-resize;\n}\n:host.vertical .guide {\n    width: 1px;\n    height: 100%;\n    cursor: col-resize;\n}\n.mobile :host.horizontal .guide {\n    transform: scale(1, 2);\n}\n.mobile :host.vertical .guide {\n    transform: scale(2, 1);\n}\n:host.horizontal .guide:before {\n    height: 20px;\n}\n:host.vertical .guide:before {\n    width: 20px;\n}\n.adder {\n    display: none;\n}\n.adder.dragging {\n    display: block;\n}\n");
     var PROPERTIES$1 = ["className", "rulerStyle", 'snapThreshold', "snaps", "displayDragPos", "cspNonce", 'dragPosFormat', "defaultGuides", "showGuides"].concat(PROPERTIES);
     var METHODS = ["getGuides", "loadGuides", "scroll", "scrollGuides", "resize"];
     var EVENTS = ["changeGuides", "dragStart", "drag", "dragEnd"];
@@ -4190,9 +4190,7 @@ version: 0.15.0
         _this.onDragStart = function (e) {
           var datas = e.datas,
               inputEvent = e.inputEvent;
-          var _a = _this.props,
-              onDragStart = _a.onDragStart,
-              lockGuides = _a.lockGuides;
+          var onDragStart = _this.props.onDragStart;
           addClass(datas.target, DRAGGING);
 
           _this.onDrag(e);
@@ -4337,7 +4335,8 @@ version: 0.15.0
             rulerStyle = _a.rulerStyle,
             displayDragPos = _a.displayDragPos,
             cspNonce = _a.cspNonce,
-            dragGuideStyle = _a.dragGuideStyle;
+            dragGuideStyle = _a.dragGuideStyle,
+            portalContainer = _a.portalContainer;
         var props = this.props;
         var translateName = this.getTranslateName();
         var rulerProps = {};
@@ -4352,6 +4351,7 @@ version: 0.15.0
           ref: ref(this, "manager"),
           cspNonce: cspNonce,
           className: prefix("manager", type) + " " + className,
+          portalContainer: portalContainer,
           style: style
         }, createElement("div", {
           className: prefix("guide-origin"),
@@ -4597,10 +4597,7 @@ version: 0.15.0
         className: "",
         type: "horizontal",
         zoom: 1,
-        style: {
-          width: "100%",
-          height: "100%"
-        },
+        style: {},
         snapThreshold: 5,
         snaps: [],
         digit: 0,
@@ -4616,7 +4613,8 @@ version: 0.15.0
         lockGuides: false,
         showGuides: true,
         guideStyle: {},
-        dragGuideStyle: {}
+        dragGuideStyle: {},
+        portalContainer: null
       };
       return Guides;
     }(PureComponent);
