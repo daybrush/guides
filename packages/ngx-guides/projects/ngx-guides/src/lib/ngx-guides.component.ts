@@ -50,7 +50,8 @@ export class NgxGuidesComponent extends NgxGuidesInterface implements Required<G
   @Input() public guideStyle: Record<string, any>;
   @Input() public dragGuideStyle: Record<string, any>;
   @Input() public portalContainer: HTMLElement;
-
+  @Input() public font: string;
+  @Input() public segment: number;
   @Output() public changeGuides: NgxGuidesEvents['changeGuides'];
   @Output() public dragStart: NgxGuidesEvents['dragStart'];
   // tslint:disable-next-line: no-output-native
@@ -63,6 +64,7 @@ export class NgxGuidesComponent extends NgxGuidesInterface implements Required<G
       (this as any)[name] = new EventEmitter();
     });
   }
+
 
 
   ngOnChanges(changes: SimpleChanges): void {
