@@ -50,10 +50,7 @@
     "dependencies": {
         "@scena/react-guides": "~0.15.2",
         "react-compat-css-styled": "^1.0.6",
-        "react-compat-ruler": "^0.6.2",
+        "react-compat-ruler": "^0.7.1",
         "react-simple-compat": "^1.1.0"
-    },
-    "peerDependencies": {
-        "react-compat-ruler": ">=0.6.2"
     }
 }
