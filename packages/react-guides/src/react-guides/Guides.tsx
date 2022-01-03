@@ -305,7 +305,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         * @param {OnChangeGuides} - Parameters for the changeGuides event
         */
         if (datas.fromRuler) {
-            if (pos >= this.scrollPos && guides.indexOf(guidePos) < 0) {
+            if (guidePos >= this.scrollPos && guides.indexOf(guidePos) < 0) {
                 this.setState({
                     guides: [...guides, guidePos],
                 }, () => {
