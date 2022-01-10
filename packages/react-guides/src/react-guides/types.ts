@@ -28,6 +28,9 @@ export interface GuidesState {
  * @property - pos digit of guidelines (default: 0)
  * @property - CSS style objects for guide elements (default: {})
  * @property - CSS style objects for drag guide element (default: {})
+ * @property - Whether to show the guide pos text (default: false)
+ * @property - Format of displayed guide pos (default: dragPosFormat)
+ * @property - CSS style objects for displayed guide element (default: {})
  * @property - Guides Portal Container to support other frameworks. Don't set it. (default: null)
  */
 export interface GuidesOptions extends RulerProps {
@@ -44,6 +47,9 @@ export interface GuidesOptions extends RulerProps {
     digit?: number;
     guideStyle?: Record<string, any>;
     dragGuideStyle?: Record<string, any>;
+    displayGuidePos?: boolean;
+    guidePosFormat?: (value: number) => string | number;
+    guidePosStyle?: IObject<any>;
     portalContainer?: HTMLElement | null;
 }
 

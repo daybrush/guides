@@ -31,6 +31,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         showGuides: true,
         guideStyle: {},
         dragGuideStyle: {},
+        guidePosStyle: {},
         portalContainer: null,
     };
     public state: GuidesState = {
@@ -45,6 +46,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     private originElement!: HTMLElement;
     private gesto!: Gesto;
     private guideElements: HTMLElement[] = [];
+    private _isFirstMove = false;
 
     public render() {
         const {
@@ -94,14 +96,18 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         </GuidesElement>;
     }
     public renderGuides() {
+        const props = this.props;
         const {
             type,
             zoom,
             showGuides,
             guideStyle,
-        } = this.props as Required<GuidesProps>;
+            displayGuidePos,
+            guidePosStyle = {},
+        } = props as Required<GuidesProps>;
         const translateName = this.getTranslateName();
         const guides = this.state.guides;
+        const guidePosFormat = props.guidePosFormat || props.dragPosFormat || (v => v);
 
         this.guideElements = [];
         if (showGuides) {
@@ -114,7 +120,11 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                     style={{
                         ...guideStyle,
                         transform: `${translateName}(${pos * zoom}px) translateZ(0px)`,
-                    }}></div>);
+                    }}>
+                        {displayGuidePos && <div className={prefix("guide-pos")} style={guidePosStyle || {}}>
+                            {guidePosFormat!(pos)}
+                        </div>}
+                    </div>);
             });
         }
         return;
@@ -244,10 +254,9 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     }
     private onDragStart = (e: any) => {
         const { datas, inputEvent } = e;
-        const { onDragStart } = this.props;
 
-        addClass(datas.target, DRAGGING);
-        this.onDrag(e);
+        this._isFirstMove = true;
+        this.movePos(e);
 
         /**
          * When the drag starts, the dragStart event is called.
@@ -255,7 +264,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
          * @event dragStart
          * @param {OnDragStart} - Parameters for the dragStart event
          */
-        onDragStart!({
+        this.props.onDragStart!({
             ...e,
             dragElement: datas.target,
         });
@@ -263,6 +272,10 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         inputEvent.preventDefault();
     }
     private onDrag = (e: any) => {
+        if (this._isFirstMove) {
+            this._isFirstMove = false;
+            addClass(e.datas.target, DRAGGING);
+        }
         const nextPos = this.movePos(e);
 
         /**
@@ -380,17 +393,21 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             guidePos = guideSnaps[0];
             nextPos = guidePos * zoom!;
         }
-        if (displayDragPos) {
-            const displayPos = type === "horizontal"
-                ? [offsetX, nextPos]
-                : [nextPos, offsetY];
-            this.displayElement.style.cssText += `display: block;`
-                + `transform: translate(-50%, -50%) `
-                + `translate(${displayPos.map(v => `${v}px`).join(", ")})`;
-            this.displayElement.innerHTML = `${dragPosFormat!(guidePos)}`;
+        if (!datas.fromRuler || !this._isFirstMove) {
+            if (displayDragPos) {
+                const displayPos = type === "horizontal"
+                    ? [offsetX, nextPos]
+                    : [nextPos, offsetY];
+                this.displayElement.style.cssText += `display: block;`
+                    + `transform: translate(-50%, -50%) `
+                    + `translate(${displayPos.map(v => `${v}px`).join(", ")})`;
+                this.displayElement.innerHTML = `${dragPosFormat!(guidePos)}`;
+            }
+            const target = datas.target;
+
+            target.setAttribute("data-pos", guidePos);
+            target.style.transform = `${this.getTranslateName()}(${nextPos}px)`;
         }
-        datas.target.setAttribute("data-pos", guidePos);
-        datas.target.style.transform = `${this.getTranslateName()}(${nextPos}px)`;
 
         return nextPos;
 

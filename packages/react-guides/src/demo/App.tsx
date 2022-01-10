@@ -19,8 +19,8 @@ interface State {
 
 export default class App extends Component<{}> {
     public state: State = {
-        zoom: 72,
-        unit: 1,
+        zoom: 1,
+        unit: 50,
         lockGuides: false,
         lockAdd: false,
         lockChange: false,
@@ -72,12 +72,14 @@ export default class App extends Component<{}> {
                     unit={this.state.unit}
                     lockGuides={this.state.lockGuides}
                     snapThreshold={5}
-                    textFormat={v => `${v}in`}
+                    textFormat={v => `${v}px`}
                     snaps={[1, 2, 3]}
                     digit={1}
                     style={{  height: "30px" }}
                     rulerStyle={{ left: "30px", width: "calc(100% - 30px)", height: "100%" }}
+                    dragPosFormat={v => `${v}px`}
                     displayDragPos={true}
+                    displayGuidePos={true}
                     onChangeGuides={({ guides }) => {
                         console.log("horizontal", guides);
                     }}

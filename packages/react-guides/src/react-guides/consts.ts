@@ -28,10 +28,26 @@ canvas {
 }
 .guides {
     position: absolute;
-    top: 0;
-    left: 0;
+    bottom: 0;
+    right: 0;
     will-change: transform;
     z-index: 2000;
+}
+.guide-pos {
+    position: absolute;
+    font-weight: bold;
+    font-size: 12px;
+    color: #f33;
+}
+.horizontal .guide-pos {
+    bottom: 100%;
+    left: 50%;
+    transform: translate(-50%);
+}
+.vertical .guide-pos {
+    left: calc(100% + 2px);
+    top: 50%;
+    transform: translateY(-50%);
 }
 .display-drag {
     position: absolute;
@@ -47,12 +63,10 @@ canvas {
 :host.horizontal .guides {
     width: 100%;
     height: 0;
-    top: 30px;
 }
 :host.vertical .guides {
     height: 100%;
     width: 0;
-    left: 30px;
 }
 .guide {
     position: absolute;
