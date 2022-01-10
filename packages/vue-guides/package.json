@@ -34,7 +34,8 @@
         "lint": "vue-cli-service lint"
     },
     "dependencies": {
-        "@scena/guides": "~0.17.0"
+        "@scena/guides": "~0.17.0",
+        "framework-utils": "^1.1.0"
     },
     "devDependencies": {
         "@daybrush/builder": "^0.1.2",
