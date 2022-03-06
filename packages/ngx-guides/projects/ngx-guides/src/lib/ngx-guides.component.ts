@@ -3,7 +3,7 @@ import {
   ElementRef, OnChanges, SimpleChanges,
   OnDestroy, Output, EventEmitter
 } from '@angular/core';
-import Guides, { GuidesOptions, EVENTS, PROPERTIES, GuideOptions } from '@scena/guides';
+import Guides, { GuidesOptions, EVENTS, PROPERTIES, GuideOptions, OnClickRuler } from '@scena/guides';
 import { IObject } from '@daybrush/utils';
 import { NgxGuidesInterface } from './ngx-guides.interface';
 import { NgxGuidesEvents } from './types';
@@ -52,18 +52,24 @@ export class NgxGuidesComponent extends NgxGuidesInterface implements Required<G
   @Input() public portalContainer: HTMLElement;
   @Input() public font: string;
   @Input() public segment: number;
+  @Input() displayGuidePos: GuideOptions['displayGuidePos'];
+  @Input() guidePosFormat: GuideOptions['guidePosFormat'];
+  @Input() guidePosStyle: GuideOptions['guidePosStyle'];
+  @Input() range: GuideOptions['range'];
+
   @Output() public changeGuides: NgxGuidesEvents['changeGuides'];
   @Output() public dragStart: NgxGuidesEvents['dragStart'];
   // tslint:disable-next-line: no-output-native
   @Output() public drag: NgxGuidesEvents['drag'];
   @Output() public dragEnd: NgxGuidesEvents['dragEnd'];
-
+  @Output() public clickRuler: NgxGuidesEvents['clickRuler'];
   constructor() {
     super();
     EVENTS.forEach(name => {
       (this as any)[name] = new EventEmitter();
     });
   }
+
 
 
 

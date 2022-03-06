@@ -33,7 +33,6 @@ $ npm i @scena/react-guides
 
 ## 🚀 How to use
 ```tsx
-
 import * as React from "react";
 import Guides from "@scena/react-guides";
 
@@ -66,41 +65,23 @@ export default class App extends React.Component {
         });
     }
 }
-
-export interface RulerProps {
-    type?: "horizontal" | "vertical";
-    width?: number;
-    height?: number;
-    unit?: number;
-    zoom?: number;
-    direction?: "start" | "end";
-    style?: IObject<any>;
-    backgroundColor?: string;
-    lineColor?: string;
-    textColor?: string;
-}
-
-export interface GuidesOptions extends RulerProps {
-    className?: string;
-    setGuides?: (guides: number[]) => any;
-    rulerStyle?: IObject<any>;
-    snapThreshold?: number;
-    snaps?: number[];
-    displayDragPos?: boolean;
-    dragPosFormat?: (value: number) => string | number;
-}
-
-export interface GuidesInterface {
-    getGuides(): number[];
-    scroll(pos: number): void;
-    scrollGuides(pos: number): void;
-    loadGuides(guides: number[]): void;
-    resize(): void;
-}
-
-
 ```
 
+### Ruler Units
+
+The default unit is px, and a line is drawn every 50px. If you want to use a different unit instead of the px unit, use it like this:
+
+* 1px (Default)
+    * zoom: 1
+    * unit: 50 (every 50px)
+* 1cm = 37.7952px
+    * zoom: 37.7952
+    * unit: 1 (every 1cm)
+* 1in = 96px = 2.54cm
+    * zoom: 96
+    * unit: 1 (every 1in)
+
+See: https://www.w3schools.com/cssref/css_units.asp
 
 
 ## ⚙️ Developments

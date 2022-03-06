@@ -20,7 +20,7 @@ interface State {
 export default class App extends Component<{}> {
     public state: State = {
         zoom: 1,
-        unit: 50,
+        unit: 37.7,
         lockGuides: false,
         lockAdd: false,
         lockChange: false,
@@ -68,8 +68,8 @@ export default class App extends Component<{}> {
             <div className="ruler horizontal" style={{ }}>
                 <Guides ref={ref(this, "guides1")}
                     type="horizontal"
-                    zoom={this.state.zoom}
-                    unit={this.state.unit}
+                    zoom={37.7}
+                    unit={1}
                     lockGuides={this.state.lockGuides}
                     snapThreshold={5}
                     textFormat={v => `${v}px`}
@@ -77,7 +77,7 @@ export default class App extends Component<{}> {
                     digit={1}
                     style={{  height: "30px" }}
                     rulerStyle={{ left: "30px", width: "calc(100% - 30px)", height: "100%" }}
-                    dragPosFormat={v => `${v}px`}
+                    dragPosFormat={v => `${v}cm`}
                     displayDragPos={true}
                     displayGuidePos={true}
                     onChangeGuides={({ guides }) => {
@@ -91,6 +91,9 @@ export default class App extends Component<{}> {
                     }}
                     onDragEnd={e => {
                         console.log("dragEnd", e);
+                    }}
+                    onClickRuler={e => {
+                        console.log("?", e);
                     }}
                 />
             </div>
