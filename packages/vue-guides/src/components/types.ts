@@ -3,6 +3,7 @@ import VanillaGuides, { GuideOptions, GuidesInterface } from "@scena/guides";
 
 export interface VueGuidesInterface
     extends MethodInterface<GuidesInterface, VanillaGuides, VueGuidesInterface> {
+    name: string;
     $el: HTMLElement;
     $props: GuideOptions & { vueStyle: Record<string, any> };
     $refs: any;
