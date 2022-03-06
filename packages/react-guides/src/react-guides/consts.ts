@@ -138,4 +138,5 @@ export const EVENTS = [
     "dragStart",
     "drag",
     "dragEnd",
+    "clickRuler",
 ] as const;

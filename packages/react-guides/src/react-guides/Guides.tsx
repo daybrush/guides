@@ -20,6 +20,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         snapThreshold: 5,
         snaps: [],
         digit: 0,
+        onClickRuler: () => { },
         onChangeGuides: () => { },
         onDragStart: () => { },
         onDrag: () => { },
@@ -311,17 +312,29 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             ...e,
             dragElement: datas.target,
         });
-        /**
-        * The `changeGuides` event occurs when the guideline is added / removed / changed.
-        * @memberof Guides
-        * @event changeGuides
-        * @param {OnChangeGuides} - Parameters for the changeGuides event
-        */
         if (datas.fromRuler) {
+            if (this._isFirstMove) {
+                /**
+                 * When click the ruler, the click ruler is called.
+                 * @memberof Guides
+                 * @event clickRuler
+                 * @param {OnClickRuler} - Parameters for the clickRuler event
+                 */
+                this.props.onClickRuler!({
+                    ...e,
+                    pos: 0,
+                });
+            }
             if (guidePos >= this.scrollPos && guides.indexOf(guidePos) < 0) {
                 this.setState({
                     guides: [...guides, guidePos],
                 }, () => {
+                    /**
+                     * The `changeGuides` event occurs when the guideline is added / removed / changed.
+                     * @memberof Guides
+                     * @event changeGuides
+                     * @param {OnChangeGuides} - Parameters for the changeGuides event
+                     */
                     onChangeGuides!({
                         guides: this.state.guides,
                         distX,
