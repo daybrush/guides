@@ -4,7 +4,7 @@ name: @scena/guides
 license: MIT
 author: Daybrush
 repository: git+https://github.com/daybrush/guides.git
-version: 0.17.0
+version: 0.18.1
 */
 (function () {
     'use strict';
@@ -446,7 +446,7 @@ version: 0.17.0
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/utils
-    @version 1.4.0
+    @version 1.6.0
     */
     /**
     * get string "string"
@@ -561,7 +561,7 @@ version: 0.17.0
     license: MIT
     author: Daybrush
     repository: git+https://github.com/daybrush/react-simple-compat.git
-    version: 1.2.0
+    version: 1.2.2
     */
 
     /*! *****************************************************************************
@@ -1108,7 +1108,7 @@ version: 0.17.0
         return comp;
       }
 
-      var providers = comp._provider._providers;
+      var providers = comp.$_provider._providers;
 
       if (!providers.length) {
         return null;
@@ -1195,7 +1195,7 @@ version: 0.17.0
 
         if (isMount) {
           this.base = new this.type(this.props);
-          this.base._provider = this;
+          this.base.$_provider = this;
         } else {
           this.base.props = this.props;
         }
@@ -1223,11 +1223,12 @@ version: 0.17.0
       };
 
       __proto._setState = function (nextState) {
-        if (!nextState) {
+        var base = this.base;
+
+        if (!base || !nextState) {
           return;
         }
 
-        var base = this.base;
         base.state = nextState;
       };
 
@@ -1236,6 +1237,7 @@ version: 0.17.0
           provider._unmount();
         });
 
+        clearTimeout(this.base.$_timer);
         this.base.componentWillUnmount();
       };
 
@@ -1252,6 +1254,8 @@ version: 0.17.0
 
         this.props = props;
         this.state = {};
+        this.$_timer = 0;
+        this.$_state = {};
       }
 
       var __proto = Component.prototype;
@@ -1265,9 +1269,43 @@ version: 0.17.0
       };
 
       __proto.setState = function (state, callback, isForceUpdate) {
+        var _this = this;
+
+        if (!this.$_timer) {
+          this.$_state = {};
+        }
+
+        clearTimeout(this.$_timer);
+        this.$_timer = 0;
+        this.$_state = __assign$1(__assign$1({}, this.$_state), state);
+
+        if (!isForceUpdate) {
+          this.$_timer = setTimeout(function () {
+            _this.$_timer = 0;
+
+            _this.$_setState(callback, isForceUpdate);
+          });
+        } else {
+          this.$_setState(callback, isForceUpdate);
+        }
+
+        return;
+      };
+
+      __proto.forceUpdate = function (callback) {
+        this.setState({}, callback, true);
+      };
+
+      __proto.componentDidMount = function () {};
+
+      __proto.componentDidUpdate = function (prevProps, prevState) {};
+
+      __proto.componentWillUnmount = function () {};
+
+      __proto.$_setState = function (callback, isForceUpdate) {
         var hooks = [];
-        var provider = this._provider;
-        var isUpdate = renderProviders(provider.container, [provider], [provider.original], hooks, __assign$1(__assign$1({}, this.state), state), isForceUpdate);
+        var provider = this.$_provider;
+        var isUpdate = renderProviders(provider.container, [provider], [provider.original], hooks, __assign$1(__assign$1({}, this.state), this.$_state), isForceUpdate);
 
         if (isUpdate) {
           if (callback) {
@@ -1277,16 +1315,6 @@ version: 0.17.0
           executeHooks(hooks);
         }
       };
-
-      __proto.forceUpdate = function (callback) {
-        this.setState(this.state, callback, true);
-      };
-
-      __proto.componentDidMount = function () {};
-
-      __proto.componentDidUpdate = function (prevProps, prevState) {};
-
-      __proto.componentWillUnmount = function () {};
 
       return Component;
     }();
@@ -1488,7 +1516,7 @@ version: 0.17.0
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/utils
-    @version 1.4.0
+    @version 1.6.0
     */
     /**
     * get string "function"
@@ -1667,7 +1695,7 @@ version: 0.17.0
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/ruler/blob/master/packages/react-ruler
-    version: 0.8.1
+    version: 0.9.1
     */
 
     /*! *****************************************************************************
@@ -1788,7 +1816,9 @@ version: 0.17.0
             negativeRuler = _b === void 0 ? true : _b,
             _c = _a.segment,
             segment = _c === void 0 ? 10 : _c,
-            textFormat = _a.textFormat;
+            textFormat = _a.textFormat,
+            _d = _a.range,
+            range = _d === void 0 ? [-Infinity, Infinity] : _d;
         var width = this.width;
         var height = this.height;
         var state = this.state;
@@ -1842,51 +1872,55 @@ version: 0.17.0
             continue;
           }
 
-          var startPos = (value * unit - scrollPos) * zoom;
+          var startValue = value * unit;
+          var startPos = (startValue - scrollPos) * zoom;
 
           for (var j = 0; j < segment; ++j) {
             var pos = startPos + j / segment * zoomUnit;
+            var value_1 = startValue + j / segment * unit;
 
-            if (pos < 0 || pos >= size) {
+            if (pos < 0 || pos >= size || value_1 < range[0] || value_1 > range[1]) {
               continue;
             }
 
             var lineSize = j === 0 ? mainLineSize : j % 2 === 0 ? longLineSize : shortLineSize;
 
-            var _d = isHorizontal ? [pos, isDirectionStart ? 0 : height - lineSize] : [isDirectionStart ? 0 : width - lineSize, pos],
-                x1 = _d[0],
-                y1 = _d[1];
+            var _e = isHorizontal ? [pos, isDirectionStart ? 0 : height - lineSize] : [isDirectionStart ? 0 : width - lineSize, pos],
+                x1 = _e[0],
+                y1 = _e[1];
 
-            var _e = isHorizontal ? [x1, y1 + lineSize] : [x1 + lineSize, y1],
-                x2 = _e[0],
-                y2 = _e[1];
+            var _f = isHorizontal ? [x1, y1 + lineSize] : [x1 + lineSize, y1],
+                x2 = _f[0],
+                y2 = _f[1];
 
             context.moveTo(x1, y1);
             context.lineTo(x2, y2);
           }
 
-          if (startPos >= -zoomUnit && startPos < size + unit * zoom) {
-            var _f = isHorizontal ? [startPos + alignOffset * -3, isDirectionStart ? 17 : height - 17] : [isDirectionStart ? 17 : width - 17, startPos + alignOffset * 3],
-                startX = _f[0],
-                startY = _f[1];
+          if (startPos < -zoomUnit || startPos >= size + unit * zoom || startValue < range[0] || startValue > range[1]) {
+            continue;
+          }
 
-            var text = "" + value * unit;
+          var _g = isHorizontal ? [startPos + alignOffset * -3, isDirectionStart ? 17 : height - 17] : [isDirectionStart ? 17 : width - 17, startPos + alignOffset * 3],
+              startX = _g[0],
+              startY = _g[1];
 
-            if (textFormat) {
-              text = textFormat(value * unit);
-            }
+          var text = "" + startValue;
 
-            context.textAlign = textAlign;
+          if (textFormat) {
+            text = textFormat(startValue);
+          }
 
-            if (isHorizontal) {
-              context.fillText(text, startX + textOffset[0], startY + textOffset[1]);
-            } else {
-              context.save();
-              context.translate(startX + textOffset[0], startY + textOffset[1]);
-              context.rotate(-Math.PI / 2);
-              context.fillText(text, 0, 0);
-              context.restore();
-            }
+          context.textAlign = textAlign;
+
+          if (isHorizontal) {
+            context.fillText(text, startX + textOffset[0], startY + textOffset[1]);
+          } else {
+            context.save();
+            context.translate(startX + textOffset[0], startY + textOffset[1]);
+            context.rotate(-Math.PI / 2);
+            context.fillText(text, 0, 0);
+            context.restore();
           }
         }
 
@@ -1913,7 +1947,8 @@ version: 0.17.0
         backgroundColor: "#333333",
         font: "10px sans-serif",
         textColor: "#ffffff",
-        lineColor: "#777777"
+        lineColor: "#777777",
+        range: [-Infinity, Infinity]
       };
       return Ruler;
     }(PureComponent);
@@ -2271,7 +2306,7 @@ version: 0.17.0
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/utils
-    @version 1.4.0
+    @version 1.6.0
     */
     /**
     * Date.now() method
@@ -2348,7 +2383,7 @@ version: 0.17.0
     * @param - event target
     * @param - A case-sensitive string representing the event type to listen for.
     * @param - The object which receives a notification (an object that implements the Event interface) when an event of the specified type occurs
-    * @param - An options object that specifies characteristics about the event listener. The available options are:
+    * @param - An options object that specifies characteristics about the event listener.
     * @example
     import {addEvent} from "@daybrush/utils";
 
@@ -2366,6 +2401,7 @@ version: 0.17.0
     * @param - event target
     * @param - A case-sensitive string representing the event type to listen for.
     * @param - The EventListener function of the event handler to remove from the event target.
+    * @param - An options object that specifies characteristics about the event listener.
     * @example
     import {addEvent, removeEvent} from "@daybrush/utils";
     const listener = e => {
@@ -2375,8 +2411,8 @@ version: 0.17.0
     removeEvent(el, "click", listener);
     */
 
-    function removeEvent(el, type, listener) {
-      el.removeEventListener(type, listener);
+    function removeEvent(el, type, listener, options) {
+      el.removeEventListener(type, listener, options);
     }
 
     /*
@@ -2385,7 +2421,7 @@ version: 0.17.0
     license: MIT
     author: Daybrush
     repository: git+https://github.com/daybrush/gesture.git
-    version: 1.3.0
+    version: 1.5.1
     */
 
     /*! *****************************************************************************
@@ -2705,7 +2741,8 @@ version: 0.17.0
               if (checkInput || activeElement === target) {
                 // force false or already focused.
                 return false;
-              }
+              } // no focus
+
 
               if (activeElement && hasContentEditable && activeElement.isContentEditable && activeElement.contains(target)) {
                 return false;
@@ -2786,10 +2823,16 @@ version: 0.17.0
           var result = _this.moveClients(clients, e, false);
 
           if (_this.pinchFlag || result.deltaX || result.deltaY) {
-            _this.emit("drag", __assign$3({}, result, {
+            var dragResult = _this.emit("drag", __assign$3({}, result, {
               isScroll: !!isScroll,
               inputEvent: e
             }));
+
+            if (dragResult === false) {
+              _this.stop();
+
+              return;
+            }
           }
 
           if (_this.pinchFlag) {
@@ -2824,6 +2867,7 @@ version: 0.17.0
             datas: _this.datas,
             isDouble: isDouble,
             isDrag: _this.isDrag,
+            isClick: !_this.isDrag,
             inputEvent: e
           }, position));
 
@@ -2884,11 +2928,22 @@ version: 0.17.0
         return _this;
       }
       /**
-       * The total moved distance
+       * Stop Gesto's drag events.
        */
 
 
       var __proto = Gesto.prototype;
+
+      __proto.stop = function () {
+        this.isDrag = false;
+        this.flag = false;
+        this.clientStores = [];
+        this.datas = {};
+      };
+      /**
+       * The total moved distance
+       */
+
 
       __proto.getMovement = function (clients) {
         return this.getCurrentStore().getMovement(clients) + this.clientStores.slice(1).reduce(function (prev, cur) {
@@ -3114,7 +3169,11 @@ version: 0.17.0
       __proto.moveClients = function (clients, inputEvent, isAdd) {
         var store = this.getCurrentStore();
         var position = store[isAdd ? "addClients" : "getPosition"](clients);
-        this.isDrag = true;
+
+        if (position.deltaX || position.deltaY) {
+          this.isDrag = true;
+        }
+
         return __assign$3({
           datas: this.datas
         }, position, {
@@ -3135,61 +3194,198 @@ version: 0.17.0
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/utils
-    @version 1.4.0
+    @version 1.6.0
     */
-    var OPEN_CLOSED_CHARACTER = ["\"", "'", "\\\"", "\\'"];
+    /**
+    * get string "string"
+    * @memberof Consts
+    * @example
+    import {STRING} from "@daybrush/utils";
 
-    function findClosed(closedCharacter, texts, index, length) {
-      for (var i = index; i < length; ++i) {
+    console.log(STRING); // "string"
+    */
+
+    var STRING$1 = "string";
+    var OPEN_CLOSED_CHARACTERS = [{
+      open: "(",
+      close: ")"
+    }, {
+      open: "\"",
+      close: "\""
+    }, {
+      open: "'",
+      close: "'"
+    }, {
+      open: "\\\"",
+      close: "\\\""
+    }, {
+      open: "\\'",
+      close: "\\'"
+    }];
+    /**
+    * Check the type that the value is string.
+    * @memberof Utils
+    * @param {string} value - Value to check the type
+    * @return {} true if the type is correct, false otherwise
+    * @example
+    import {isString} from "@daybrush/utils";
+
+    console.log(isString("1234")); // true
+    console.log(isString(undefined)); // false
+    console.log(isString(1)); // false
+    console.log(isString(null)); // false
+    */
+
+    function isString$1(value) {
+      return typeof value === STRING$1;
+    }
+
+    function isEqualSeparator(character, separator) {
+      var isCharacterSpace = character === "" || character == " ";
+      var isSeparatorSpace = separator === "" || separator == " ";
+      return isSeparatorSpace && isCharacterSpace || character === separator;
+    }
+
+    function findOpen(openCharacter, texts, index, length, openCloseCharacters) {
+      var isIgnore = findIgnore(openCharacter, texts, index);
+
+      if (!isIgnore) {
+        return findClose(openCharacter, texts, index + 1, length, openCloseCharacters);
+      }
+
+      return index;
+    }
+
+    function findIgnore(character, texts, index) {
+      if (!character.ignore) {
+        return null;
+      }
+
+      var otherText = texts.slice(Math.max(index - 3, 0), index + 3).join("");
+      return new RegExp(character.ignore).exec(otherText);
+    }
+
+    function findClose(closeCharacter, texts, index, length, openCloseCharacters) {
+      var _loop_1 = function (i) {
         var character = texts[i].trim();
 
-        if (character === closedCharacter) {
-          return i;
+        if (character === closeCharacter.close && !findIgnore(closeCharacter, texts, i)) {
+          return {
+            value: i
+          };
         }
 
-        var nextIndex = i;
+        var nextIndex = i; // re open
 
-        if (character === "(") {
-          nextIndex = findClosed(")", texts, i + 1, length);
-        } else if (OPEN_CLOSED_CHARACTER.indexOf(character) > -1) {
-          nextIndex = findClosed(character, texts, i + 1, length);
+        var openCharacter = find(openCloseCharacters, function (_a) {
+          var open = _a.open;
+          return open === character;
+        });
+
+        if (openCharacter) {
+          nextIndex = findOpen(openCharacter, texts, i, length, openCloseCharacters);
         }
 
         if (nextIndex === -1) {
-          break;
+          return out_i_1 = i, "break";
         }
 
         i = nextIndex;
+        out_i_1 = i;
+      };
+
+      var out_i_1;
+
+      for (var i = index; i < length; ++i) {
+        var state_1 = _loop_1(i);
+
+        i = out_i_1;
+        if (typeof state_1 === "object") return state_1.value;
+        if (state_1 === "break") break;
       }
 
       return -1;
     }
 
-    function splitText(text, separator) {
-      var regexText = "(\\s*" + (separator || ",") + "\\s*|\\(|\\)|\"|'|\\\\\"|\\\\'|\\s+)";
+    function splitText(text, splitOptions) {
+      var _a = isString$1(splitOptions) ? {
+        separator: splitOptions
+      } : splitOptions,
+          _b = _a.separator,
+          separator = _b === void 0 ? "," : _b,
+          isSeparateFirst = _a.isSeparateFirst,
+          isSeparateOnlyOpenClose = _a.isSeparateOnlyOpenClose,
+          _c = _a.isSeparateOpenClose,
+          isSeparateOpenClose = _c === void 0 ? isSeparateOnlyOpenClose : _c,
+          _d = _a.openCloseCharacters,
+          openCloseCharacters = _d === void 0 ? OPEN_CLOSED_CHARACTERS : _d;
+
+      var openClosedText = openCloseCharacters.map(function (_a) {
+        var open = _a.open,
+            close = _a.close;
+
+        if (open === close) {
+          return open;
+        }
+
+        return open + "|" + close;
+      }).join("|");
+      var regexText = "(\\s*" + separator + "\\s*|" + openClosedText + "|\\s+)";
       var regex = new RegExp(regexText, "g");
       var texts = text.split(regex).filter(Boolean);
       var length = texts.length;
       var values = [];
       var tempValues = [];
 
-      for (var i = 0; i < length; ++i) {
+      function resetTemp() {
+        if (tempValues.length) {
+          values.push(tempValues.join(""));
+          tempValues = [];
+          return true;
+        }
+
+        return false;
+      }
+
+      var _loop_2 = function (i) {
         var character = texts[i].trim();
         var nextIndex = i;
+        var openCharacter = find(openCloseCharacters, function (_a) {
+          var open = _a.open;
+          return open === character;
+        });
+        var closeCharacter = find(openCloseCharacters, function (_a) {
+          var close = _a.close;
+          return close === character;
+        });
 
-        if (character === "(") {
-          nextIndex = findClosed(")", texts, i + 1, length);
-        } else if (character === ")") {
-          throw new Error("invalid format");
-        } else if (OPEN_CLOSED_CHARACTER.indexOf(character) > -1) {
-          nextIndex = findClosed(character, texts, i + 1, length);
-        } else if (character === separator) {
-          if (tempValues.length) {
-            values.push(tempValues.join(""));
-            tempValues = [];
+        if (openCharacter) {
+          nextIndex = findOpen(openCharacter, texts, i, length, openCloseCharacters);
+
+          if (nextIndex !== -1 && isSeparateOpenClose) {
+            if (resetTemp() && isSeparateFirst) {
+              return out_i_2 = i, "break";
+            }
+
+            values.push(texts.slice(i, nextIndex + 1).join(""));
+            i = nextIndex;
+
+            if (isSeparateFirst) {
+              return out_i_2 = i, "break";
+            }
+
+            return out_i_2 = i, "continue";
+          }
+        } else if (closeCharacter && !findIgnore(closeCharacter, texts, i)) {
+          throw new Error("invalid format: " + closeCharacter.close);
+        } else if (isEqualSeparator(character, separator) && !isSeparateOnlyOpenClose) {
+          resetTemp();
+
+          if (isSeparateFirst) {
+            return out_i_2 = i, "break";
           }
 
-          continue;
+          return out_i_2 = i, "continue";
         }
 
         if (nextIndex === -1) {
@@ -3198,6 +3394,16 @@ version: 0.17.0
 
         tempValues.push(texts.slice(i, nextIndex + 1).join(""));
         i = nextIndex;
+        out_i_2 = i;
+      };
+
+      var out_i_2;
+
+      for (var i = 0; i < length; ++i) {
+        var state_2 = _loop_2(i);
+
+        i = out_i_2;
+        if (state_2 === "break") break;
       }
 
       if (tempValues.length) {
@@ -3224,6 +3430,51 @@ version: 0.17.0
       // divide comma(,)
       // "[^"]*"|'[^']*'
       return splitText(text, ",");
+    }
+    /**
+    * Returns the index of the first element in the array that satisfies the provided testing function.
+    * @function
+    * @memberof CrossBrowser
+    * @param - The array `findIndex` was called upon.
+    * @param - A function to execute on each value in the array until the function returns true, indicating that the satisfying element was found.
+    * @param - Returns defaultIndex if not found by the function.
+    * @example
+    import { findIndex } from "@daybrush/utils";
+
+    findIndex([{a: 1}, {a: 2}, {a: 3}, {a: 4}], ({ a }) => a === 2); // 1
+    */
+
+    function findIndex$1(arr, callback, defaultIndex) {
+      if (defaultIndex === void 0) {
+        defaultIndex = -1;
+      }
+
+      var length = arr.length;
+
+      for (var i = 0; i < length; ++i) {
+        if (callback(arr[i], i, arr)) {
+          return i;
+        }
+      }
+
+      return defaultIndex;
+    }
+    /**
+    * Returns the value of the first element in the array that satisfies the provided testing function.
+    * @function
+    * @memberof CrossBrowser
+    * @param - The array `find` was called upon.
+    * @param - A function to execute on each value in the array,
+    * @param - Returns defalutValue if not found by the function.
+    * @example
+    import { find } from "@daybrush/utils";
+
+    find([{a: 1}, {a: 2}, {a: 3}, {a: 4}], ({ a }) => a === 2); // {a: 2}
+    */
+
+    function find(arr, callback, defalutValue) {
+      var index = findIndex$1(arr, callback);
+      return index > -1 ? arr[index] : defalutValue;
     }
 
     /*
@@ -3358,27 +3609,11 @@ version: 0.17.0
 
     /*
     Copyright (c) 2019 Daybrush
-    name: framework-utils
-    license: MIT
-    author: Daybrush
-    repository: git+https://github.com/daybrush/framework-utils.git
-    version: 0.3.4
-    */
-    /* react */
-
-    function ref$1(target, name) {
-      return function (e) {
-        e && (target[name] = e);
-      };
-    }
-
-    /*
-    Copyright (c) 2019 Daybrush
     name: react-css-styled
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/css-styled/tree/master/packages/react-css-styled
-    version: 1.0.2
+    version: 1.0.3
     */
 
     /*! *****************************************************************************
@@ -3476,7 +3711,7 @@ version: 0.17.0
         }
 
         return createElement(Tag, __assign$4({
-          "ref": ref$1(this, "element"),
+          "ref": ref(this, "element"),
           "data-styled-id": cssId,
           "className": className + " " + cssId
         }, portalAttributes, attributes));
@@ -3526,9 +3761,34 @@ version: 0.17.0
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/utils
-    @version 1.4.0
+    @version 1.6.0
     */
-    var OPEN_CLOSED_CHARACTER$1 = ["\"", "'", "\\\"", "\\'"];
+    /**
+    * get string "string"
+    * @memberof Consts
+    * @example
+    import {STRING} from "@daybrush/utils";
+
+    console.log(STRING); // "string"
+    */
+
+    var STRING$2 = "string";
+    var OPEN_CLOSED_CHARACTERS$1 = [{
+      open: "(",
+      close: ")"
+    }, {
+      open: "\"",
+      close: "\""
+    }, {
+      open: "'",
+      close: "'"
+    }, {
+      open: "\\\"",
+      close: "\\\""
+    }, {
+      open: "\\'",
+      close: "\\'"
+    }];
     /**
     * Check the type that the value is isArray.
     * @memberof Utils
@@ -3546,58 +3806,170 @@ version: 0.17.0
     function isArray$1(value) {
       return Array.isArray(value);
     }
+    /**
+    * Check the type that the value is string.
+    * @memberof Utils
+    * @param {string} value - Value to check the type
+    * @return {} true if the type is correct, false otherwise
+    * @example
+    import {isString} from "@daybrush/utils";
 
-    function findClosed$1(closedCharacter, texts, index, length) {
-      for (var i = index; i < length; ++i) {
+    console.log(isString("1234")); // true
+    console.log(isString(undefined)); // false
+    console.log(isString(1)); // false
+    console.log(isString(null)); // false
+    */
+
+    function isString$2(value) {
+      return typeof value === STRING$2;
+    }
+
+    function isEqualSeparator$1(character, separator) {
+      var isCharacterSpace = character === "" || character == " ";
+      var isSeparatorSpace = separator === "" || separator == " ";
+      return isSeparatorSpace && isCharacterSpace || character === separator;
+    }
+
+    function findOpen$1(openCharacter, texts, index, length, openCloseCharacters) {
+      var isIgnore = findIgnore$1(openCharacter, texts, index);
+
+      if (!isIgnore) {
+        return findClose$1(openCharacter, texts, index + 1, length, openCloseCharacters);
+      }
+
+      return index;
+    }
+
+    function findIgnore$1(character, texts, index) {
+      if (!character.ignore) {
+        return null;
+      }
+
+      var otherText = texts.slice(Math.max(index - 3, 0), index + 3).join("");
+      return new RegExp(character.ignore).exec(otherText);
+    }
+
+    function findClose$1(closeCharacter, texts, index, length, openCloseCharacters) {
+      var _loop_1 = function (i) {
         var character = texts[i].trim();
 
-        if (character === closedCharacter) {
-          return i;
+        if (character === closeCharacter.close && !findIgnore$1(closeCharacter, texts, i)) {
+          return {
+            value: i
+          };
         }
 
-        var nextIndex = i;
+        var nextIndex = i; // re open
 
-        if (character === "(") {
-          nextIndex = findClosed$1(")", texts, i + 1, length);
-        } else if (OPEN_CLOSED_CHARACTER$1.indexOf(character) > -1) {
-          nextIndex = findClosed$1(character, texts, i + 1, length);
+        var openCharacter = find$1(openCloseCharacters, function (_a) {
+          var open = _a.open;
+          return open === character;
+        });
+
+        if (openCharacter) {
+          nextIndex = findOpen$1(openCharacter, texts, i, length, openCloseCharacters);
         }
 
         if (nextIndex === -1) {
-          break;
+          return out_i_1 = i, "break";
         }
 
         i = nextIndex;
+        out_i_1 = i;
+      };
+
+      var out_i_1;
+
+      for (var i = index; i < length; ++i) {
+        var state_1 = _loop_1(i);
+
+        i = out_i_1;
+        if (typeof state_1 === "object") return state_1.value;
+        if (state_1 === "break") break;
       }
 
       return -1;
     }
 
-    function splitText$1(text, separator) {
-      var regexText = "(\\s*" + (separator || ",") + "\\s*|\\(|\\)|\"|'|\\\\\"|\\\\'|\\s+)";
+    function splitText$1(text, splitOptions) {
+      var _a = isString$2(splitOptions) ? {
+        separator: splitOptions
+      } : splitOptions,
+          _b = _a.separator,
+          separator = _b === void 0 ? "," : _b,
+          isSeparateFirst = _a.isSeparateFirst,
+          isSeparateOnlyOpenClose = _a.isSeparateOnlyOpenClose,
+          _c = _a.isSeparateOpenClose,
+          isSeparateOpenClose = _c === void 0 ? isSeparateOnlyOpenClose : _c,
+          _d = _a.openCloseCharacters,
+          openCloseCharacters = _d === void 0 ? OPEN_CLOSED_CHARACTERS$1 : _d;
+
+      var openClosedText = openCloseCharacters.map(function (_a) {
+        var open = _a.open,
+            close = _a.close;
+
+        if (open === close) {
+          return open;
+        }
+
+        return open + "|" + close;
+      }).join("|");
+      var regexText = "(\\s*" + separator + "\\s*|" + openClosedText + "|\\s+)";
       var regex = new RegExp(regexText, "g");
       var texts = text.split(regex).filter(Boolean);
       var length = texts.length;
       var values = [];
       var tempValues = [];
 
-      for (var i = 0; i < length; ++i) {
+      function resetTemp() {
+        if (tempValues.length) {
+          values.push(tempValues.join(""));
+          tempValues = [];
+          return true;
+        }
+
+        return false;
+      }
+
+      var _loop_2 = function (i) {
         var character = texts[i].trim();
         var nextIndex = i;
+        var openCharacter = find$1(openCloseCharacters, function (_a) {
+          var open = _a.open;
+          return open === character;
+        });
+        var closeCharacter = find$1(openCloseCharacters, function (_a) {
+          var close = _a.close;
+          return close === character;
+        });
 
-        if (character === "(") {
-          nextIndex = findClosed$1(")", texts, i + 1, length);
-        } else if (character === ")") {
-          throw new Error("invalid format");
-        } else if (OPEN_CLOSED_CHARACTER$1.indexOf(character) > -1) {
-          nextIndex = findClosed$1(character, texts, i + 1, length);
-        } else if (character === separator) {
-          if (tempValues.length) {
-            values.push(tempValues.join(""));
-            tempValues = [];
+        if (openCharacter) {
+          nextIndex = findOpen$1(openCharacter, texts, i, length, openCloseCharacters);
+
+          if (nextIndex !== -1 && isSeparateOpenClose) {
+            if (resetTemp() && isSeparateFirst) {
+              return out_i_2 = i, "break";
+            }
+
+            values.push(texts.slice(i, nextIndex + 1).join(""));
+            i = nextIndex;
+
+            if (isSeparateFirst) {
+              return out_i_2 = i, "break";
+            }
+
+            return out_i_2 = i, "continue";
+          }
+        } else if (closeCharacter && !findIgnore$1(closeCharacter, texts, i)) {
+          throw new Error("invalid format: " + closeCharacter.close);
+        } else if (isEqualSeparator$1(character, separator) && !isSeparateOnlyOpenClose) {
+          resetTemp();
+
+          if (isSeparateFirst) {
+            return out_i_2 = i, "break";
           }
 
-          continue;
+          return out_i_2 = i, "continue";
         }
 
         if (nextIndex === -1) {
@@ -3606,6 +3978,16 @@ version: 0.17.0
 
         tempValues.push(texts.slice(i, nextIndex + 1).join(""));
         i = nextIndex;
+        out_i_2 = i;
+      };
+
+      var out_i_2;
+
+      for (var i = 0; i < length; ++i) {
+        var state_2 = _loop_2(i);
+
+        i = out_i_2;
+        if (state_2 === "break") break;
       }
 
       if (tempValues.length) {
@@ -3629,7 +4011,7 @@ version: 0.17.0
     */
 
     function splitSpace(text) {
-      // divide comma(,)
+      // divide comma(space)
       return splitText$1(text, "");
     }
     /**
@@ -3714,6 +4096,51 @@ version: 0.17.0
         value: parseFloat(value)
       };
     }
+    /**
+    * Returns the index of the first element in the array that satisfies the provided testing function.
+    * @function
+    * @memberof CrossBrowser
+    * @param - The array `findIndex` was called upon.
+    * @param - A function to execute on each value in the array until the function returns true, indicating that the satisfying element was found.
+    * @param - Returns defaultIndex if not found by the function.
+    * @example
+    import { findIndex } from "@daybrush/utils";
+
+    findIndex([{a: 1}, {a: 2}, {a: 3}, {a: 4}], ({ a }) => a === 2); // 1
+    */
+
+    function findIndex$2(arr, callback, defaultIndex) {
+      if (defaultIndex === void 0) {
+        defaultIndex = -1;
+      }
+
+      var length = arr.length;
+
+      for (var i = 0; i < length; ++i) {
+        if (callback(arr[i], i, arr)) {
+          return i;
+        }
+      }
+
+      return defaultIndex;
+    }
+    /**
+    * Returns the value of the first element in the array that satisfies the provided testing function.
+    * @function
+    * @memberof CrossBrowser
+    * @param - The array `find` was called upon.
+    * @param - A function to execute on each value in the array,
+    * @param - Returns defalutValue if not found by the function.
+    * @example
+    import { find } from "@daybrush/utils";
+
+    find([{a: 1}, {a: 2}, {a: 3}, {a: 4}], ({ a }) => a === 2); // {a: 2}
+    */
+
+    function find$1(arr, callback, defalutValue) {
+      var index = findIndex$2(arr, callback);
+      return index > -1 ? arr[index] : defalutValue;
+    }
 
     /*
     Copyright (c) 2018 Daybrush
@@ -3721,11 +4148,11 @@ version: 0.17.0
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/utils
-    @version 1.4.0
+    @version 1.6.0
     */
     var TINY_NUM = 0.0000001;
     /**
-    * throttle number
+    * throttle number depending on the unit.
     * @function
     * @memberof Utils
     */
@@ -4126,7 +4553,7 @@ version: 0.17.0
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/guides/blob/master/packages/react-guides
-    version: 0.16.0
+    version: 0.17.1
     */
 
     /*! *****************************************************************************
@@ -4196,10 +4623,10 @@ version: 0.17.0
     var GUIDE = prefix("guide");
     var DRAGGING = prefix("dragging");
     var DISPLAY_DRAG = prefix("display-drag");
-    var GUIDES_CSS = prefixCSS("scena-", "\n{\n    position: relative;\n    width: 100%;\n    height: 100%;\n}\ncanvas {\n    position: relative;\n}\n.guide-origin {\n    position: absolute;\n    width: 1px;\n    height: 1px;\n    top: 0;\n    left: 0;\n    opacity: 0;\n}\n.guides {\n    position: absolute;\n    top: 0;\n    left: 0;\n    will-change: transform;\n    z-index: 2000;\n}\n.display-drag {\n    position: absolute;\n    will-change: transform;\n    z-index: 2000;\n    font-weight: bold;\n    font-size: 12px;\n    display: none;\n    left: 20px;\n    top: -20px;\n    color: #f33;\n}\n:host.horizontal .guides {\n    width: 100%;\n    height: 0;\n    top: 30px;\n}\n:host.vertical .guides {\n    height: 100%;\n    width: 0;\n    left: 30px;\n}\n.guide {\n    position: absolute;\n    background: #f33;\n    z-index: 2;\n}\n.guide.dragging:before {\n    position: absolute;\n    content: \"\";\n    width: 100%;\n    height: 100%;\n    top: 50%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n}\n:host.horizontal .guide {\n    width: 100%;\n    height: 1px;\n    cursor: row-resize;\n}\n:host.vertical .guide {\n    width: 1px;\n    height: 100%;\n    cursor: col-resize;\n}\n.mobile :host.horizontal .guide {\n    transform: scale(1, 2);\n}\n.mobile :host.vertical .guide {\n    transform: scale(2, 1);\n}\n:host.horizontal .guide:before {\n    height: 20px;\n}\n:host.vertical .guide:before {\n    width: 20px;\n}\n.adder {\n    display: none;\n}\n.adder.dragging {\n    display: block;\n}\n");
+    var GUIDES_CSS = prefixCSS("scena-", "\n{\n    position: relative;\n    width: 100%;\n    height: 100%;\n}\ncanvas {\n    position: relative;\n}\n.guide-origin {\n    position: absolute;\n    width: 1px;\n    height: 1px;\n    top: 0;\n    left: 0;\n    opacity: 0;\n}\n.guides {\n    position: absolute;\n    bottom: 0;\n    right: 0;\n    will-change: transform;\n    z-index: 2000;\n}\n.guide-pos {\n    position: absolute;\n    font-weight: bold;\n    font-size: 12px;\n    color: #f33;\n}\n.horizontal .guide-pos {\n    bottom: 100%;\n    left: 50%;\n    transform: translate(-50%);\n}\n.vertical .guide-pos {\n    left: calc(100% + 2px);\n    top: 50%;\n    transform: translateY(-50%);\n}\n.display-drag {\n    position: absolute;\n    will-change: transform;\n    z-index: 2000;\n    font-weight: bold;\n    font-size: 12px;\n    display: none;\n    left: 20px;\n    top: -20px;\n    color: #f33;\n}\n:host.horizontal .guides {\n    width: 100%;\n    height: 0;\n}\n:host.vertical .guides {\n    height: 100%;\n    width: 0;\n}\n.guide {\n    position: absolute;\n    background: #f33;\n    z-index: 2;\n}\n.guide.dragging:before {\n    position: absolute;\n    content: \"\";\n    width: 100%;\n    height: 100%;\n    top: 50%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n}\n:host.horizontal .guide {\n    width: 100%;\n    height: 1px;\n    cursor: row-resize;\n}\n:host.vertical .guide {\n    width: 1px;\n    height: 100%;\n    cursor: col-resize;\n}\n.mobile :host.horizontal .guide {\n    transform: scale(1, 2);\n}\n.mobile :host.vertical .guide {\n    transform: scale(2, 1);\n}\n:host.horizontal .guide:before {\n    height: 20px;\n}\n:host.vertical .guide:before {\n    width: 20px;\n}\n.adder {\n    display: none;\n}\n.adder.dragging {\n    display: block;\n}\n");
     var PROPERTIES$1 = ["className", "rulerStyle", 'snapThreshold', "snaps", "displayDragPos", "cspNonce", 'dragPosFormat', "defaultGuides", "showGuides"].concat(PROPERTIES);
     var METHODS = ["getGuides", "loadGuides", "scroll", "scrollGuides", "resize"];
-    var EVENTS = ["changeGuides", "dragStart", "drag", "dragEnd"];
+    var EVENTS = ["changeGuides", "dragStart", "drag", "dragEnd", "clickRuler"];
 
     var GuidesElement = styled$1("div", GUIDES_CSS);
 
@@ -4216,14 +4643,14 @@ version: 0.17.0
         };
         _this.scrollPos = 0;
         _this.guideElements = [];
+        _this._isFirstMove = false;
 
         _this.onDragStart = function (e) {
           var datas = e.datas,
               inputEvent = e.inputEvent;
-          var onDragStart = _this.props.onDragStart;
-          addClass(datas.target, DRAGGING);
+          _this._isFirstMove = true;
 
-          _this.onDrag(e);
+          _this.movePos(e);
           /**
            * When the drag starts, the dragStart event is called.
            * @memberof Guides
@@ -4232,14 +4659,20 @@ version: 0.17.0
            */
 
 
-          onDragStart(__assign$5({}, e, {
+          _this.props.onDragStart(__assign$5({}, e, {
             dragElement: datas.target
           }));
+
           inputEvent.stopPropagation();
           inputEvent.preventDefault();
         };
 
         _this.onDrag = function (e) {
+          if (_this._isFirstMove) {
+            _this._isFirstMove = false;
+            addClass(e.datas.target, DRAGGING);
+          }
+
           var nextPos = _this.movePos(e);
           /**
            * When dragging, the drag event is called.
@@ -4288,19 +4721,30 @@ version: 0.17.0
           _this.props.onDragEnd(__assign$5({}, e, {
             dragElement: datas.target
           }));
-          /**
-          * The `changeGuides` event occurs when the guideline is added / removed / changed.
-          * @memberof Guides
-          * @event changeGuides
-          * @param {OnChangeGuides} - Parameters for the changeGuides event
-          */
-
 
           if (datas.fromRuler) {
-            if (pos >= _this.scrollPos && guides.indexOf(guidePos) < 0) {
+            if (_this._isFirstMove) {
+              /**
+               * When click the ruler, the click ruler is called.
+               * @memberof Guides
+               * @event clickRuler
+               * @param {OnClickRuler} - Parameters for the clickRuler event
+               */
+              _this.props.onClickRuler(__assign$5({}, e, {
+                pos: 0
+              }));
+            }
+
+            if (guidePos >= _this.scrollPos && guides.indexOf(guidePos) < 0) {
               _this.setState({
                 guides: guides.concat([guidePos])
               }, function () {
+                /**
+                 * The `changeGuides` event occurs when the guideline is added / removed / changed.
+                 * @memberof Guides
+                 * @event changeGuides
+                 * @param {OnChangeGuides} - Parameters for the changeGuides event
+                 */
                 onChangeGuides({
                   guides: _this.state.guides,
                   distX: distX,
@@ -4408,13 +4852,22 @@ version: 0.17.0
       __proto.renderGuides = function () {
         var _this = this;
 
-        var _a = this.props,
+        var props = this.props;
+        var _a = props,
             type = _a.type,
             zoom = _a.zoom,
             showGuides = _a.showGuides,
-            guideStyle = _a.guideStyle;
+            guideStyle = _a.guideStyle,
+            displayGuidePos = _a.displayGuidePos,
+            _b = _a.guidePosStyle,
+            guidePosStyle = _b === void 0 ? {} : _b;
         var translateName = this.getTranslateName();
         var guides = this.state.guides;
+
+        var guidePosFormat = props.guidePosFormat || props.dragPosFormat || function (v) {
+          return v;
+        };
+
         this.guideElements = [];
 
         if (showGuides) {
@@ -4428,7 +4881,10 @@ version: 0.17.0
               style: __assign$5({}, guideStyle, {
                 transform: translateName + "(" + pos * zoom + "px) translateZ(0px)"
               })
-            });
+            }, displayGuidePos && createElement("div", {
+              className: prefix("guide-pos"),
+              style: guidePosStyle || {}
+            }, guidePosFormat(pos)));
           });
         }
 
@@ -4606,16 +5062,20 @@ version: 0.17.0
           nextPos = guidePos * zoom;
         }
 
-        if (displayDragPos) {
-          var displayPos = type === "horizontal" ? [offsetX, nextPos] : [nextPos, offsetY];
-          this.displayElement.style.cssText += "display: block;" + "transform: translate(-50%, -50%) " + ("translate(" + displayPos.map(function (v) {
-            return v + "px";
-          }).join(", ") + ")");
-          this.displayElement.innerHTML = "" + dragPosFormat(guidePos);
+        if (!datas.fromRuler || !this._isFirstMove) {
+          if (displayDragPos) {
+            var displayPos = type === "horizontal" ? [offsetX, nextPos] : [nextPos, offsetY];
+            this.displayElement.style.cssText += "display: block;" + "transform: translate(-50%, -50%) " + ("translate(" + displayPos.map(function (v) {
+              return v + "px";
+            }).join(", ") + ")");
+            this.displayElement.innerHTML = "" + dragPosFormat(guidePos);
+          }
+
+          var target = datas.target;
+          target.setAttribute("data-pos", guidePos);
+          target.style.transform = this.getTranslateName() + "(" + nextPos + "px)";
         }
 
-        datas.target.setAttribute("data-pos", guidePos);
-        datas.target.style.transform = this.getTranslateName() + "(" + nextPos + "px)";
         return nextPos;
       };
 
@@ -4631,6 +5091,7 @@ version: 0.17.0
         snapThreshold: 5,
         snaps: [],
         digit: 0,
+        onClickRuler: function () {},
         onChangeGuides: function () {},
         onDragStart: function () {},
         onDrag: function () {},
@@ -4644,6 +5105,7 @@ version: 0.17.0
         showGuides: true,
         guideStyle: {},
         dragGuideStyle: {},
+        guidePosStyle: {},
         portalContainer: null
       };
       return Guides;
