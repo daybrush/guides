@@ -64,7 +64,7 @@ export default {
       });
     });
   },
-  beforeDestroy(this: VueGuidesInterface) {
+  beforeUnmount(this: VueGuidesInterface) {
     this.$_guides.destroy();
   },
 };

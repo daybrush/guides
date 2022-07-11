@@ -19,6 +19,7 @@
 <p align="middle">A Vue Guides component that can draw grids and scroll infinitely.</p>
 <p align="middle">
     <a href="https://daybrush.com/guides" target="_blank"><strong>Demo</strong></a> /
+    <a href="https://github.com/daybrush/guides/tree/master/packages/vue3-guides" target="_blank"><strong>Vue 3</strong></a> /
     <a href="https://daybrush.com/guides/release/latest/doc/" target="_blank"><strong>API</strong></a> /
     <a href="https://github.com/daybrush/ruler" target="_blank"><strong>Ruler</strong></a> /
     <a href="https://github.com/daybrush/scena" target="_blank"><strong>Main Project</strong></a>
@@ -126,7 +127,7 @@ Please give a ⭐️ if this project helped you!
 
 ## 👏 Contributing
 
-If you have any questions or requests or want to contribute to `vud-guides` or other packages, please write the [issue](https://github.com/daybrush/guides/issues) or give me a Pull Request freely.
+If you have any questions or requests or want to contribute to `vue-guides` or other packages, please write the [issue](https://github.com/daybrush/guides/issues) or give me a Pull Request freely.
 
 ## 🐞 Bug Report
 

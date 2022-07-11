@@ -18,9 +18,9 @@
         "release:init": "npm run build && npm run doc && npm run demo:build && release -i --dirs=dist,doc",
         "deploy": "gh-pages -d ./demo --dest=./ --add --remote origin",
         "packages": "npm run packages:update && npm run packages:build && npm run packages:publish",
-        "packages:update": "pvu --update=svelte-guides,ngx-guides/projects/ngx-guides,vue-guides",
-        "packages:build": "pvu --build=svelte-guides,ngx-guides,vue-guides",
-        "packages:publish": "pvu --publish=svelte-guides,ngx-guides/dist/ngx-guides,vue-guides"
+        "packages:update": "pvu --update=svelte-guides,ngx-guides/projects/ngx-guides,vue-guides,vue3-guides",
+        "packages:build": "pvu --build=svelte-guides,ngx-guides,vue-guides,vue3-guides",
+        "packages:publish": "pvu --publish=svelte-guides,ngx-guides/dist/ngx-guides,vue-guides,vue3-guides"
     },
     "keywords": [
         "scene",

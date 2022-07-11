@@ -1,9 +1,9 @@
 
 
 <p align="middle" ><img src="https://raw.githubusercontent.com/daybrush/guides/master/demo/images/guides.png"/></p>
-<h2 align="middle">Guides</h2>
+<h2 align="middle">Vue 3 Guides</h2>
 <p align="middle">
-<a href="https://www.npmjs.com/package/@scena/guides" target="_blank"><img src="https://img.shields.io/npm/v/@scena/guides.svg?style=flat-square&color=007acc&label=version" alt="npm version" /></a>
+<a href="https://www.npmjs.com/package/vue3-guides" target="_blank"><img src="https://img.shields.io/npm/v/vue3-guides.svg?style=flat-square&color=007acc&label=version" alt="npm version" /></a>
 <img src="https://img.shields.io/badge/language-typescript-blue.svg?style=flat-square"/>
 <a href="https://github.com/daybrush/guides/blob/master/LICENSE" target="_blank"><img src="https://img.shields.io/github/license/daybrush/guides.svg?style=flat-square&label=license&color=08CE5D"/></a>
 <a href="https://github.com/daybrush/guides/tree/master/packages/react-guides" target="_blank"><img alt="React" src="https://img.shields.io/static/v1.svg?label=&message=React&style=flat-square&color=61daeb"></a>
@@ -16,12 +16,13 @@
     alt="Vue3"
     src="https://img.shields.io/static/v1.svg?label=&message=Vue3&style=flat-square&color=3fb984"></a>
 <a href="https://github.com/daybrush/guides/tree/master/packages/svelte-guides" target="_blank"><img
-    alt="Svelte"
+    alt="Vue"
     src="https://img.shields.io/static/v1.svg?label=&message=Svelte&style=flat-square&color=C82B38"></a>
 </p>
-<p align="middle">A Guides component that can draw ruler and manage guidelines.</p>
+<p align="middle">A Vue 3 Guides component that can draw grids and scroll infinitely.</p>
 <p align="middle">
     <a href="https://daybrush.com/guides" target="_blank"><strong>Demo</strong></a> /
+    <a href="https://github.com/daybrush/guides/tree/master/packages/vue-guides" target="_blank"><strong>Vue 2</strong></a> /
     <a href="https://daybrush.com/guides/release/latest/doc/" target="_blank"><strong>API</strong></a> /
     <a href="https://github.com/daybrush/ruler" target="_blank"><strong>Ruler</strong></a> /
     <a href="https://github.com/daybrush/scena" target="_blank"><strong>Main Project</strong></a>
@@ -31,63 +32,97 @@
 ## ⚙️ Installation
 ### npm
 ```sh
-$ npm i @scena/guides
-```
-
-### scripts
-```html
-<script src="//daybrush.com/guides/release/latest/dist/guides.min.js"></script>
+$ npm i vue3-guides
 ```
 
 ## 🚀 How to use
-```tsx
+```html
+<template>
+    <div class="guides">
+        <vue-guides
+            type="horizontal" ref="guides"
+            v-on:changeGuides="onChangeGuides"
+            />
+    </div>
+</template>
+<script>
+    import Guides from "vue3-guides";
 
-import Guides from "@scena/guides";
+    export default {
+        components: {
+            "vue-guides": Guides,
+        },
+        methods: {
+            onChangeGuides(e) {
+                console.log(e.guides);
+            },
+        },
+        mounted() {
+            const guides = this.$refs.guides;
+            let scrollX = 0;
+            let scrollY = 0;
+            guides.resize();
 
-const guides = new Guides(document.body, {
-    type: "horizontal",
-}).on("changeGuides", e => {
-    console.log(e.guides);
-});
+            window.addEventListener("resize", () => {
+                guides.resize();
+            });
+            window.addEventListener("wheel", e => {
+                scrollX += e.deltaX;
+                scrollY += e.deltaY;
+                guides.scroll(scrollX);
+                guides.scrollGuides(scrollY);
+            });
+        },
+    };
+</script>
+```
+
+```ts
 
 
-let scrollX = 0;
-let scrollY = 0;
-window.addEventListener("resize", () => {
-    guides.resize();
-});
+export interface RulerProps {
+    type?: "horizontal" | "vertical";
+    width?: number;
+    height?: number;
+    unit?: number;
+    zoom?: number;
+    direction?: "start" | "end";
+    style?: IObject<any>;
+    backgroundColor?: string;
+    lineColor?: string;
+    textColor?: string;
+}
 
-window.addEventListener("wheel", e => {
-    scrollX += e.deltaX;
-    scrollY += e.deltaY;
+export interface GuidesOptions extends RulerProps {
+    className?: string;
+    setGuides?: (guides: number[]) => any;
+    rulerStyle?: IObject<any>;
+    snapThreshold?: number;
+    snaps?: number[];
+    displayDragPos?: boolean;
+    dragPosFormat?: (value: number) => string | number;
+}
 
-    guides.scrollGuides(scrollY);
-    guides.scroll(scrollX);
-});
+export interface GuidesInterface {
+    getGuides(): number[];
+    scroll(pos: number): void;
+    scrollGuides(pos: number): void;
+    loadGuides(guides: number[]): void;
+    resize(): void;
+}
 
 ```
 
-### Ruler Units
-
-The default unit is px, and a line is drawn every 50px. If you want to use a different unit instead of the px unit, use it like this:
-
-* 1px (Default)
-    * zoom: 1
-    * unit: 50 (every 50px)
-* 1cm = 37.7952px
-    * zoom: 37.7952
-    * unit: 1 (every 1cm)
-* 1in = 96px = 2.54cm
-    * zoom: 96
-    * unit: 1 (every 1in)
-
-See: https://www.w3schools.com/cssref/css_units.asp
 
 ## ⚙️ Developments
-### `npm run demo:start`
+### `npm run serve`
 
 Runs the app in the development mode.<br>
-Open `demo/index.html` file.
+Open [http://localhost:8080](http://localhost:8080) to view it in the browser.
+
+The page will reload if you make edits.<br>
+You will also see any lint errors in the console.
+
 
 
 ## ⭐️ Show Your Support
@@ -95,7 +130,7 @@ Please give a ⭐️ if this project helped you!
 
 ## 👏 Contributing
 
-If you have any questions or requests or want to contribute to `guides` or other packages, please write the [issue](https://github.com/daybrush/guides/issues) or give me a Pull Request freely.
+If you have any questions or requests or want to contribute to `vue3-guides` or other packages, please write the [issue](https://github.com/daybrush/guides/issues) or give me a Pull Request freely.
 
 ## 🐞 Bug Report
 
@@ -129,3 +164,4 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
