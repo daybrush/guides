@@ -81,7 +81,9 @@ The default unit is px, and a line is drawn every 50px. If you want to use a dif
     * zoom: 96
     * unit: 1 (every 1in)
 
-See: https://www.w3schools.com/cssref/css_units.asp
+See: 
+- https://www.w3schools.com/cssref/css_units.asp
+- https://www.scaler.com/topics/css/css-units/
 
 ## ⚙️ Developments
 ### `npm run demo:start`
