@@ -1,6 +1,6 @@
 {
   "name": "ngx-guides",
-  "version": "0.17.1",
+  "version": "0.17.2",
   "description": "An Angular Guides component that can draw ruler and manage guidelines.",
   "keywords": [
     "scene",

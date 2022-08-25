@@ -104,8 +104,16 @@ export class NgxGuidesComponent extends NgxGuidesInterface implements Required<G
         (options as any)[name] = this[name];
       }
     });
-    this.guides = new Guides(el, options);
+    const guides = new Guides(el, options);
+
+    this.guides = guides;
     this.setStyle();
+
+    EVENTS.forEach(name => {
+      guides.on(name as any, e => {
+        this[name].emit(e as any);
+      });
+    });
   }
   ngOnDestroy() {
     this.guides.destroy();
