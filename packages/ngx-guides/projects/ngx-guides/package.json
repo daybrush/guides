@@ -23,7 +23,7 @@
     "url": "https://github.com/daybrush/guides/issues"
   },
   "homepage": "https://daybrush.com/guides",
-  "peerDependencies": {
+  "devDependencies": {
     "@angular/common": "^8.2.13",
     "@angular/core": "^8.2.13"
   },
