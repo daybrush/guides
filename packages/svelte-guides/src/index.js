@@ -4,6 +4,9 @@ import { METHODS } from "@scena/guides";
 export default /*#__PURE__*/ (() => {
     const prototype = Guides.prototype;
 
+    if (!prototype) {
+        return Guides;
+    }
     METHODS.forEach(name => {
         prototype[name] = function (...args) {
             const self = this.getInstance();

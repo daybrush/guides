@@ -1,6 +1,5 @@
-<script lang="ts">
+<script>
   import VanillaGuides, {
-    GuidesOptions,
     PROPERTIES,
     EVENTS
   } from "@scena/guides";
@@ -17,10 +16,9 @@
 
   export let style = { width: "100%", height: "100%"};
 
-  declare var $$props: any;
-  let options: Partial<GuidesOptions> = {};
-  let guides: VanillaGuides;
-  let guidesElement: HTMLElement;
+  let options = {};
+  let guides;
+  let guidesElement;
 
   function setStyle() {
     const elStyle = guidesElement.style;
@@ -41,7 +39,7 @@
         return;
       }
       if (name in props) {
-        (options as any)[name] = props[name];
+        options[name] = props[name];
       }
     });
     if (guides) {
@@ -53,7 +51,7 @@
     guides = new VanillaGuides(guidesElement, options);
 
     EVENTS.forEach((name, i) => {
-      guides.on(name as any, e => {
+      guides.on(name, e => {
         dispatch(name, e);
       });
     });

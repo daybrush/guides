@@ -1,9 +1,10 @@
 {
     "name": "svelte-guides",
-    "version": "0.17.1",
+    "version": "0.17.2",
     "description": "A Svelte Guides component that can draw ruler and manage guidelines.",
     "main": "./dist/guides.cjs.js",
     "module": "./dist/guides.esm.js",
+    "svelte": "./src/index.js",
     "sideEffects": false,
     "types": "src/index.d.ts",
     "repository": {
