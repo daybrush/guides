@@ -1,9 +1,9 @@
 <script lang="ts">
   import VanillaGuides, {
-    GuidesOptions,
     PROPERTIES,
     EVENTS
   } from "@scena/guides";
+  import type { GuidesOptions } from '@scena/guides';
 
   import {
     onMount,
