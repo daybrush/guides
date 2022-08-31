@@ -8,9 +8,7 @@
     onMount,
     onDestroy,
     beforeUpdate,
-    afterUpdate,
-    createEventDispatcher,
-    tick
+    createEventDispatcher
   } from "svelte";
   const dispatch = createEventDispatcher();
 
