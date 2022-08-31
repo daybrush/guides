@@ -59,7 +59,7 @@
     });
   });
   onDestroy(() => {
-    guides.destroy();
+    if (guides) guides.destroy();
   });
 
   export function getInstance() {
