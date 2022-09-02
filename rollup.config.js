@@ -48,9 +48,9 @@ export default builder([
         external,
     },
     {
-        input: "src/index.umd.ts",
+        input: "src/index.cjs.ts",
         output: "./dist/guides.cjs.js",
-        exports: "default",
+        exports: "named",
         format: "cjs",
         plugins: [reactCompat],
         external,
