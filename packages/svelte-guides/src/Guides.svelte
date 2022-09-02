@@ -42,6 +42,9 @@
     });
     if (guides) {
       setStyle();
+      for (const name in options) {
+        guides[name] = options[name];
+      }
     }
   });
   onMount(() => {
