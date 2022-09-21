@@ -59,7 +59,7 @@
   },
   "dependencies": {
     "@daybrush/utils": "^1.4.0",
-    "@scena/react-ruler": "^0.9.1",
+    "@scena/react-ruler": "^0.11.0",
     "css-to-mat": "^1.0.3",
     "framework-utils": "^1.1.0",
     "gesto": "^1.5.1",

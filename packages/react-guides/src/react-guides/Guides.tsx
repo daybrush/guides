@@ -48,6 +48,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     private gesto!: Gesto;
     private guideElements: HTMLElement[] = [];
     private _isFirstMove = false;
+    private _zoom = 0;
 
     public render() {
         const {
@@ -63,8 +64,6 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         } = this.props as Required<GuidesProps>;
         const props = this.props;
         const translateName = this.getTranslateName();
-
-
         const rulerProps: RulerProps = {};
 
         RULER_PROPERTIES.forEach(name => {
@@ -73,6 +72,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             }
             (rulerProps as any)[name] = props[name];
         });
+
+        this._zoom = zoom;
         return <GuidesElement
             ref={ref(this, "manager")}
             cspNonce={cspNonce}
@@ -100,12 +101,13 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         const props = this.props;
         const {
             type,
-            zoom,
             showGuides,
             guideStyle,
             displayGuidePos,
             guidePosStyle = {},
         } = props as Required<GuidesProps>;
+
+        const zoom = this._zoom;
         const translateName = this.getTranslateName();
         const guides = this.state.guides;
         const guidePosFormat = props.guidePosFormat || props.dragPosFormat || (v => v);
@@ -136,9 +138,9 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         }).on("dragStart", e => {
             const {
                 type,
-                zoom,
                 lockGuides,
             } = this.props;
+            const zoom = this._zoom;
 
             if (lockGuides === true) {
                 e.stop();
@@ -222,12 +224,12 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
      * @memberof Guides
      * @instance
      */
-    public scrollGuides(pos: number) {
-        const { zoom } = this.props as Required<GuidesProps>;
+    public scrollGuides(pos: number, nextZoom = this._zoom) {
+        this._zoom = nextZoom;
         const guidesElement = this.guidesElement;
 
         this.scrollPos = pos;
-        guidesElement.style.transform = `${this.getTranslateName()}(${-pos * zoom}px)`;
+        guidesElement.style.transform = `${this.getTranslateName()}(${-pos * nextZoom}px)`;
 
         const guides = this.state.guides;
         this.guideElements.forEach((el, i) => {
@@ -238,20 +240,21 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         });
     }
     /**
-     * Recalculate the size of the ruler.
-     * @memberof Guides
-     * @instance
-     */
-    public resize() {
-        this.ruler.resize();
-    }
-    /**
      * Scroll the position of the ruler.
      * @memberof Guides
      * @instance
      */
-    public scroll(pos: number) {
-        this.ruler.scroll(pos);
+      public scroll(pos: number, nextZoom = this._zoom) {
+        this._zoom = nextZoom;
+        this.ruler.scroll(pos, nextZoom);
+    }
+    /**
+     * Recalculate the size of the ruler.
+     * @memberof Guides
+     * @instance
+     */
+    public resize(nextZoom = this._zoom) {
+        this.ruler.resize(nextZoom);
     }
     private onDragStart = (e: any) => {
         const { datas, inputEvent } = e;
@@ -295,7 +298,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         const { datas, isDouble, distX, distY } = e;
         const pos = this.movePos(e);
         let guides = this.state.guides;
-        const { onChangeGuides, zoom, displayDragPos, digit, lockGuides } = this.props;
+        const { onChangeGuides, displayDragPos, digit, lockGuides } = this.props;
+        const zoom = this._zoom;
         const guidePos = parseFloat((pos / zoom!).toFixed(digit || 0));
 
         if (displayDragPos) {
@@ -386,10 +390,11 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         const { datas, distX, distY } = e;
         const props = this.props;
         const {
-            type, zoom, snaps, snapThreshold,
+            type, snaps, snapThreshold,
             displayDragPos,
             digit,
         } = props;
+        const zoom = this._zoom;
         const dragPosFormat = props.dragPosFormat || (v => v);
         const isHorizontal = type === "horizontal";
         const matrixPos = calculateMatrixDist(datas.matrix, [distX, distY]);

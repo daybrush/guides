@@ -67,6 +67,12 @@ class Guides extends EventEmitter<GuidesEvents> {
         this.innerGuides.setState(state, callback);
     }
     /**
+     * @param callback
+     */
+    public forceUpdate(callback?: () => void) {
+        this.innerGuides.forceUpdate(callback);
+    }
+    /**
      * destroy guides
      */
     public destroy() {

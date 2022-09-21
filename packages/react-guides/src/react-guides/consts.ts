@@ -131,6 +131,7 @@ export const METHODS = [
     "scroll",
     "scrollGuides",
     "resize",
+    "forceUpdate",
 ] as const;
 
 export const EVENTS = [
