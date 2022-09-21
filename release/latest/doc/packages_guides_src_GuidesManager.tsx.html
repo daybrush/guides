@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>packages/react-guides/src/react-guides/types.ts - Documentation</title>
+    <title>packages/guides/src/GuidesManager.tsx - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -14,7 +14,7 @@
     <link type="text/css" rel="stylesheet" href="styles/daybrush.css">
     <link type="text/css" rel="stylesheet" href="styles/custom.css">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <meta name="description" content="packages/react-guides/src/react-guides/types.ts - Documentation"/>
+    <meta name="description" content="packages/guides/src/GuidesManager.tsx - Documentation"/>
 
 </head>
 <body>
@@ -32,7 +32,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">packages/react-guides/src/react-guides/types.ts</h1>
+    <h1 class="page-title">packages/guides/src/GuidesManager.tsx</h1>
     
 
     
@@ -42,149 +42,95 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { RulerProps } from "@scena/react-ruler/declaration/types";
-import { IObject } from "@daybrush/utils";
-import {
-    OnDragStart as OnGestoDragStart,
-    OnDrag as OnGestoDrag,
-    OnDragEnd as OnGestoDragEnd,
-} from "gesto";
+            <pre class="prettyprint source linenums"><code>import { ref, Properties } from "framework-utils";
+import * as React from "react";
+import { render } from "react-dom";
+import { PROPERTIES, METHODS, EVENTS } from "./consts";
+import { GuidesInterface, GuidesEvents, GuidesOptions } from "@scena/react-guides/declaration/types";
+import InnerGuides from "./InnerGuides";
+import EventEmitter from "@scena/event-emitter";
+import { camelize } from "@daybrush/utils";
 
+@Properties(METHODS as any, (prototype, property) => {
+    if (prototype[property]) {
+        return;
+    }
+    prototype[property] = function(...args) {
+        const self = this.getInnerGuides();
 
-export interface GuidesState {
-    guides: number[];
-}
-
+        if (!self || !self[property]) {
+            return;
+        }
+        return self[property](...args);
+    };
+})
+@Properties(PROPERTIES, (prototype, property) => {
+    Object.defineProperty(prototype, property, {
+        get() {
+            return this.getInnerGuides().props[property];
+        },
+        set(value) {
+            this.innerGuides.setState({
+                [property]: value,
+            });
+        },
+        enumerable: true,
+        configurable: true,
+    });
+})
 /**
- * @typedef
- * @memberof Guides
- * @extends Ruler.RulerProps
- * @property - guides' class name (default: "")
- * @property - ruler's css style(default: width 100%, height: 100%)
- * @property - Interval to snap (default: 5)
- * @property - Positions to snap (default: [])
- * @property - Whether to show the moving pos when dragging (default: false)
- * @property - csp nonce
- * @property - Format of drag pos (default: v => v)
- * @property - default guidelines (default: [])
- * @property - Whether to show guidelines (default: true)
- * @property - Whether to lock add/remove/change functions via drag/click of guides (default: false)
- * @property - pos digit of guidelines (default: 0)
- * @property - CSS style objects for guide elements (default: {})
- * @property - CSS style objects for drag guide element (default: {})
- * @property - Whether to show the guide pos text (default: false)
- * @property - Format of displayed guide pos (default: dragPosFormat)
- * @property - CSS style objects for displayed guide element (default: {})
+ * @sort 1
+ * @extends EventEmitter
  */
-export interface GuidesOptions extends RulerProps {
-    className?: string;
-    rulerStyle?: IObject&lt;any>;
-    snapThreshold?: number;
-    snaps?: number[];
-    displayDragPos?: boolean;
-    cspNonce?: string;
-    dragPosFormat?: (value: number) => string | number;
-    defaultGuides?: number[];
-    showGuides?: boolean;
-    lockGuides?: boolean | Array&lt;"add" | "change" | "remove">;
+class Guides extends EventEmitter&lt;GuidesEvents> {
+    private tempElement = document.createElement("div");
+    private innerGuides!: InnerGuides;
     /**
-     * pos digit of guidelines (default: 0)
+     * @sort 1
+     * @param - guides' container
+     * @param {$ts:Partial&lt;Guides.GuidesOptions>} - guides' options
      */
-    digit?: number;
-    guideStyle?: Record&lt;string, any>;
-    dragGuideStyle?: Record&lt;string, any>;
-    displayGuidePos?: boolean;
-    guidePosFormat?: (value: number) => string | number;
-    guidePosStyle?: IObject&lt;any>;
-}
+    constructor(container: HTMLElement, options: Partial&lt;GuidesOptions> = {}) {
+        super();
+        const events: any = {};
 
-/**
- * @typedef
- * @memberof Guides
- * @extends Guides.GuidesOptions
- */
-export interface GuideOptions extends GuidesOptions {
-}
+        EVENTS.forEach(name => {
+            events[camelize(`on ${name}`)] = (e: any) => this.trigger(name as any, e);
+        });
 
-/**
- * @typedef
- * @memberof Guides
- * @extends Guides.GuidesOptions
- */
-export interface GuidesProps extends GuidesOptions {
-    onChangeGuides?: (e: OnChangeGuides) => any;
-    onDragStart?: (e: OnDragStart) => any;
-    onDrag?: (e: OnDrag) => any;
-    onDragEnd?: (e: OnDragEnd) => any;
-    onClickRuler?: (e: OnClickRuler) => any;
+        render(
+            &lt;InnerGuides  {...options} {...events} container={container} ref={ref(this, "innerGuides")} />,
+            this.tempElement,
+        );
+    }
+    /**
+     * @param state
+     * @param callback
+     */
+    public setState(state: Partial&lt;GuidesOptions>, callback?: () => void) {
+        this.innerGuides.setState(state, callback);
+    }
+    /**
+     * @param callback
+     */
+    public forceUpdate(callback?: () => void) {
+        this.innerGuides.forceUpdate(callback);
+    }
+    /**
+     * destroy guides
+     */
+    public destroy() {
+        render(null, this.tempElement);
+        this.tempElement = null;
+        this.innerGuides = null;
+    }
+    private getInnerGuides() {
+        return this.innerGuides.guides;
+    }
 }
-/**
- * @typedef
- * @memberof Guides
- */
-export interface OnChangeGuides {
-    guides: number[];
-    isAdd: boolean;
-    isRemove: boolean;
-    isChange: boolean;
-    distX: number;
-    distY: number;
-}
-/**
- * @typedef
- * @memberof Guides
- * @extends Gesto.OnDragStart
- */
-export interface OnDragStart extends OnGestoDragStart {
-    dragElement: HTMLElement;
-}
-/**
- * @typedef
- * @memberof Guides
- * @extends Gesto.OnDrag
- */
-export interface OnDrag extends OnGestoDrag {
-    dragElement: HTMLElement;
-}
-/**
- * @typedef
- * @memberof Guides
- * @extends Gesto.OnDragEnd
- */
-export interface OnDragEnd extends OnGestoDragEnd {
-    dragElement: HTMLElement;
-}
-/**
- * @typedef
- * @memberof Guides
- * @extends Gesto.OnDragEnd
- */
-export interface OnClickRuler extends OnGestoDragEnd {
-    pos: number;
-}
-/**
- * @typedef
- * @memberof Guides
- */
-export interface GuidesInterface {
-    getGuides(): number[];
-    scroll(pos: number): void;
-    scrollGuides(pos: number): void;
-    loadGuides(guides: number[]): void;
-    resize(): void;
-}
+interface Guides extends GuidesInterface {}
 
-/**
- * @typedef
- * @memberof Guides
- */
-export interface GuidesEvents {
-    changeGuides: OnChangeGuides;
-    dragStart: OnDragStart;
-    drag: OnDrag;
-    dragEnd: OnDragEnd;
-    clickRuler: OnClickRuler;
-}
+export default Guides;
 </code></pre>
         </article>
     </section>
@@ -196,10 +142,10 @@ export interface GuidesEvents {
 <style>
 
 
-nav li[file="packages/react-guides/src/react-guides/types"]:after {
+nav li[file="packages/guides/src/guidesmanager"]:after {
     display: none;
 }
-nav li[file="packages/react-guides/src/react-guides/types"] h4, nav li[file="packages/react-guides/src/react-guides/types"] ul {
+nav li[file="packages/guides/src/guidesmanager"] h4, nav li[file="packages/guides/src/guidesmanager"] ul {
     display: block;
 }
 </style>
