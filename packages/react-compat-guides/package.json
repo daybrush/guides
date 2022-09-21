@@ -10,8 +10,7 @@
         "lint": "tslint -c tslint.json 'src/**/*.ts'",
         "start": "open ./demo/index.html && rollup -c rollup.config.demo.js -w",
         "build": "rollup -c && npm run declaration && print-sizes ./dist ",
-        "declaration": "rm -rf declaration && tsc -p tsconfig.declaration.json",
-        "packages:update": "pvu --path=../../ --update=./"
+        "declaration": "rm -rf declaration && tsc -p tsconfig.declaration.json"
     },
     "keywords": [
         "scene",
@@ -38,15 +37,14 @@
         "@scenejs/effects": "^1.0.1",
         "@types/react": "^16.0.0",
         "keycon": "^0.3.0",
-        "print-sizes": "^0.1.0",
-        "pvu": "^0.5.1",
+        "print-sizes": "^0.2.0",
         "react-simple-compat": "^1.2.2",
         "rollup-plugin-css-bundle": "^1.0.4",
         "rollup-plugin-react-compat": "^0.1.0",
         "scenejs": "^1.1.4",
         "shape-svg": "^0.3.3",
         "tslint": "^5.16.0",
-        "typescript": "^3.4.5"
+        "typescript": "^4.5.0 <4.6.0"
     },
     "dependencies": {
         "@scena/react-guides": "~0.17.1",

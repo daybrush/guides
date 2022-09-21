@@ -33,7 +33,6 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         guideStyle: {},
         dragGuideStyle: {},
         guidePosStyle: {},
-        portalContainer: null,
     };
     public state: GuidesState = {
         guides: [],
@@ -67,7 +66,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         const rulerProps: RulerProps = {};
 
         RULER_PROPERTIES.forEach(name => {
-            if (name === "style") {
+            if (name === "style" || name === "portalContainer") {
                 return;
             }
             (rulerProps as any)[name] = props[name];

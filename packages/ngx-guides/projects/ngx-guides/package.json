@@ -23,11 +23,8 @@
     "url": "https://github.com/daybrush/guides/issues"
   },
   "homepage": "https://daybrush.com/guides",
-  "devDependencies": {
-    "@angular/common": "^8.2.13",
-    "@angular/core": "^8.2.13"
-  },
   "dependencies": {
-    "@scena/guides": "~0.18.2"
+    "@scena/guides": "~0.18.2",
+    "tslib": "^2.3.0"
   }
 }

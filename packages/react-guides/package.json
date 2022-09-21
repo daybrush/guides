@@ -14,12 +14,7 @@
     "update": "npm run update:react && npm run update:preact && npm run update:react-compat",
     "update:react": "npm i @scena/react-ruler@latest",
     "update:react-compat": "cd ../react-compat-guides && npm i react-compat-ruler@latest",
-    "update:preact": "cd ../preact-guides && npm i preact-ruler@latest",
-    "packages": "npm run packages:update && npm run packages:build && npm run packages:publish && npm run packages:vanilla",
-    "packages:update": "pvu --path=../ --update=preact-guides,react-compat-guides",
-    "packages:build": "pvu --path=../ --build=preact-guides,react-compat-guides",
-    "packages:publish": "pvu --path=../ --publish=preact-guides,react-compat-guides",
-    "packages:vanilla": "cd ../react-compat-guides && npm run packages:update"
+    "update:preact": "cd ../preact-guides && npm i preact-ruler@latest"
   },
   "keywords": [
     "scene",
@@ -48,14 +43,13 @@
     "@types/react": "^16.8.18",
     "@types/react-color": "^3.0.1",
     "@types/react-dom": "^16.8.4",
-    "print-sizes": "0.0.4",
-    "pvu": "^0.5.1",
+    "print-sizes": "^0.2.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "^3.0.1",
     "shape-svg": "^0.3.3",
     "tslint": "^5.20.1",
-    "typescript": "^3.4.5"
+    "typescript": "^4.5.0 <4.6.0"
   },
   "dependencies": {
     "@daybrush/utils": "^1.4.0",

@@ -1,78 +1,29 @@
 import {
-  Component, Input, AfterViewInit, ViewChild,
+  Component, AfterViewInit, ViewChild,
   ElementRef, OnChanges, SimpleChanges,
-  OnDestroy, Output, EventEmitter
+  OnDestroy, EventEmitter
 } from '@angular/core';
-import Guides, { GuidesOptions, EVENTS, PROPERTIES, GuideOptions, OnClickRuler } from '@scena/guides';
-import { IObject } from '@daybrush/utils';
+import Guides, { EVENTS, PROPERTIES, GuideOptions } from '@scena/guides';
 import { NgxGuidesInterface } from './ngx-guides.interface';
-import { NgxGuidesEvents } from './types';
+import { ANGULAR_GUIDES_INPUTS, ANGULAR_GUIDES_OUTPUTS } from './consts';
 
 @Component({
   selector: 'ngx-guides',
   template: `
     <div class="guides" #guidesRef></div>
   `,
-  styles: []
+  styles: [],
+  inputs: ANGULAR_GUIDES_INPUTS,
+  outputs: ANGULAR_GUIDES_OUTPUTS,
 })
-export class NgxGuidesComponent extends NgxGuidesInterface implements Required<GuidesOptions>, NgxGuidesEvents, AfterViewInit, OnChanges, OnDestroy {
-  @ViewChild('guidesRef', { static: false }) private guidesRef: ElementRef;
-  @Input() public className: string;
-  @Input() public type: 'horizontal' | 'vertical';
-  @Input() public width: number;
-  @Input() public height: number;
-  @Input() public unit: number;
-  @Input() public zoom: number;
-  @Input() public direction: GuidesOptions['direction'];
-  @Input() public snapThreshold: GuidesOptions['snapThreshold'];
-  @Input() public snaps: GuidesOptions['snaps'];
-  @Input() public style: IObject<any> = { width: '100%', height: '100%' };
-  @Input() public backgroundColor: string;
-  @Input() public lineColor: string;
-  @Input() public textColor: string;
-  @Input() public setGuides: (guides: number[]) => any;
-  @Input() public rulerStyle: GuidesOptions['rulerStyle'];
-  @Input() public cspNonce: GuidesOptions['cspNonce'];
-  @Input() public displayDragPos: GuidesOptions['displayDragPos'];
-  @Input() public dragPosFormat: GuidesOptions['dragPosFormat'];
-  @Input() public textFormat: GuidesOptions['textFormat'];
-  @Input() public showGuides: GuidesOptions['showGuides'];
-  @Input() public defaultGuides: GuidesOptions['defaultGuides'];
-  @Input() public digit: number;
-  @Input() public textAlign: 'left' | 'center' | 'right';
-  @Input() public mainLineSize: string | number;
-  @Input() public longLineSize: string | number;
-  @Input() public shortLineSize: string | number;
-  @Input() public textOffset: number[];
-  @Input() public negativeRuler: boolean;
-  @Input() public scrollPos: number;
-  @Input() public lockGuides: boolean | ('add' | 'change' | 'remove')[];
-  @Input() public guideStyle: Record<string, any>;
-  @Input() public dragGuideStyle: Record<string, any>;
-  @Input() public portalContainer: HTMLElement;
-  @Input() public font: string;
-  @Input() public segment: number;
-  @Input() displayGuidePos: GuideOptions['displayGuidePos'];
-  @Input() guidePosFormat: GuideOptions['guidePosFormat'];
-  @Input() guidePosStyle: GuideOptions['guidePosStyle'];
-  @Input() range: GuideOptions['range'];
-
-  @Output() public changeGuides: NgxGuidesEvents['changeGuides'];
-  @Output() public dragStart: NgxGuidesEvents['dragStart'];
-  // tslint:disable-next-line: no-output-native
-  @Output() public drag: NgxGuidesEvents['drag'];
-  @Output() public dragEnd: NgxGuidesEvents['dragEnd'];
-  @Output() public clickRuler: NgxGuidesEvents['clickRuler'];
+export class NgxGuidesComponent extends NgxGuidesInterface implements AfterViewInit, OnChanges, OnDestroy {
+  @ViewChild('guidesRef', { static: false }) private guidesRef!: ElementRef;
   constructor() {
     super();
     EVENTS.forEach(name => {
       (this as any)[name] = new EventEmitter();
     });
   }
-
-
-
-
   ngOnChanges(changes: SimpleChanges): void {
     const guides = this.guides;
 
@@ -88,7 +39,7 @@ export class NgxGuidesComponent extends NgxGuidesInterface implements Required<G
       if (name === 'style') {
         this.setStyle();
       } else {
-        guides[name] = currentValue;
+        (guides as any)[name] = currentValue;
       }
     }
   }
@@ -111,7 +62,7 @@ export class NgxGuidesComponent extends NgxGuidesInterface implements Required<G
 
     EVENTS.forEach(name => {
       guides.on(name as any, e => {
-        this[name].emit(e as any);
+        (this as any)[name].emit(e as any);
       });
     });
   }

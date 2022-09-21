@@ -1,0 +1,32 @@
+{
+    "npmClient": "yarn",
+    "useWorkspaces": true,
+    "packages": [
+        "packages/*",
+        "packages/ngx-guides/projects/ngx-guides"
+    ],
+    "version": "independent",
+    "lernaHelperOptions": {
+        "deployFileMap": [
+            {
+                "basePath": "packages/guides/dist",
+                "dists": [
+                    "demo/release/{{version}}/dist",
+                    "demo/release/latest/dist"
+                ]
+            },
+            {
+                "basePath": "doc",
+                "dists": [
+                    "demo/release/{{version}}/doc",
+                    "demo/release/latest/doc"
+                ]
+            }
+        ],
+        "beforeReleaseScripts": [
+            "npm run packages:build",
+            "npm run doc",
+            "npm run deploy"
+        ]
+    }
+}

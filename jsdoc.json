@@ -7,11 +7,11 @@
     },
     "source": {
         "include": [
-            "./src",
+            "packages/guides/src",
             "README.md",
             "packages/react-guides/src/react-guides",
             "node_modules/@scena/event-emitter/src",
-            "packages/react-guides/node_modules/@scena/react-ruler/src/react-ruler"
+            "node_modules/@scena/react-ruler/src/react-ruler"
         ],
         "includePattern": "(.+\\.js(doc|x)?|.+\\.ts(doc|x)?)$",
         "excludePattern": "(^|\\/|\\\\)_"

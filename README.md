@@ -83,11 +83,13 @@ The default unit is px, and a line is drawn every 50px. If you want to use a dif
 
 See: https://www.w3schools.com/cssref/css_units.asp
 
-## ⚙️ Developments
-### `npm run demo:start`
 
-Runs the app in the development mode.<br>
-Open `demo/index.html` file.
+## ⚙️ Developments
+The `guides` repo is managed as a [monorepo](https://github.com/lerna/lerna) with `yarn`.
+
+```sh
+yarn config set registry https://registry.npmjs.org/
+```
 
 
 ## ⭐️ Show Your Support
