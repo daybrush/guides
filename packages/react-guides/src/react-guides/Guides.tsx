@@ -373,13 +373,18 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
 
             guides = [...guides];
 
-            if (isDouble || guidePos < this.scrollPos) {
+            const guideIndex = guides.indexOf(guidePos);
+            if (
+                isDouble
+                || guidePos < this.scrollPos
+                || (guideIndex > -1 && guideIndex !== index)
+            ) {
                 if (lockGuides && (lockGuides === true || lockGuides.indexOf("remove") > -1)) {
                     return;
                 }
                 guides.splice(index, 1);
                 isRemove = true;
-            } else if (guides.indexOf(guidePos) > -1) {
+            } else if (guideIndex > -1) {
                 return;
             } else {
                 if (lockGuides && (lockGuides === true || lockGuides.indexOf("change") > -1)) {
