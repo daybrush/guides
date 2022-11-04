@@ -239,11 +239,27 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         });
     }
     /**
+     * Get Guides DOM Element
+     * @memberof Guides
+     * @instance
+     */
+    public getElement() {
+        return this.manager.getElement();
+    }
+    /**
+     * Get Ruler DOM Element
+     * @memberof Guides
+     * @instance
+     */
+    public getRulerElement() {
+        return this.ruler.canvasElement;
+    }
+    /**
      * Scroll the position of the ruler.
      * @memberof Guides
      * @instance
      */
-      public scroll(pos: number, nextZoom = this._zoom) {
+    public scroll(pos: number, nextZoom = this._zoom) {
         this._zoom = nextZoom;
         this.ruler.scroll(pos, nextZoom);
     }
@@ -329,6 +345,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                 });
             }
             if (guidePos >= this.scrollPos && guides.indexOf(guidePos) < 0) {
+
                 this.setState({
                     guides: [...guides, guidePos],
                 }, () => {
@@ -342,6 +359,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                         guides: this.state.guides,
                         distX,
                         distY,
+                        index: guides.length,
                         isAdd: true,
                         isRemove: false,
                         isChange: false,
@@ -379,6 +397,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                     distY,
                     guides: nextGuides,
                     isAdd: false,
+                    index,
                     isChange,
                     isRemove,
                 });

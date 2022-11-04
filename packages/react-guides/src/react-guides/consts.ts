@@ -131,6 +131,8 @@ export const METHODS = [
     "scroll",
     "scrollGuides",
     "resize",
+    "getElement",
+    "getRulerElement",
     "forceUpdate",
 ] as const;
 

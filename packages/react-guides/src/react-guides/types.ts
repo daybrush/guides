@@ -83,6 +83,7 @@ export interface OnChangeGuides {
     isAdd: boolean;
     isRemove: boolean;
     isChange: boolean;
+    index: number;
     distX: number;
     distY: number;
 }
