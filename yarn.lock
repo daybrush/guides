@@ -3019,10 +3019,10 @@
   dependencies:
     "@daybrush/utils" "^1.4.0"
 
-"@scena/react-ruler@^0.12.1", "@scena/react-ruler@~0.12.1":
-  version "0.12.1"
-  resolved "https://registry.npmjs.org/@scena/react-ruler/-/react-ruler-0.12.1.tgz#5f75de3001b47c1fc73fedbbe41014ca7ec0d544"
-  integrity sha512-e7JFwEELbYx9Q5zVQsq+htJUkPLioANl6IBEq4+mdLyy/WaP4992JbQVJJ2uajXxjKKQ2e0CAhSDdzHiPEg2Uw==
+"@scena/react-ruler@^0.12.2", "@scena/react-ruler@~0.12.2":
+  version "0.12.2"
+  resolved "https://registry.npmjs.org/@scena/react-ruler/-/react-ruler-0.12.2.tgz#4c0d8ce57b9865778195a44f8612489cee446ad9"
+  integrity sha512-5la/o0Qk5FoGczumcfCBHKjdTXBo5eLxlE/ayYgudIdkKFRw7eC4hGtZ2SsaM+X+urNJhCplwPY1jgJkk+PwAg==
   dependencies:
     "@daybrush/utils" "^1.7.1"
     framework-utils "^1.1.0"
@@ -15194,12 +15194,12 @@ preact-render-to-string@^3.8.2:
   dependencies:
     pretty-format "^3.5.1"
 
-preact-ruler@^0.12.1:
-  version "0.12.1"
-  resolved "https://registry.npmjs.org/preact-ruler/-/preact-ruler-0.12.1.tgz#ea0cd41c70f3707c641b0d125d128d127fb7c577"
-  integrity sha512-pUurox4mlT12Kf90lvVbB3/hRZAJgMWhKsfFrQDMhonWeiMtP7ZsjJi/J47HVh+ywxboxQ4auxNRQoFtNuAn4w==
+preact-ruler@^0.12.2:
+  version "0.12.2"
+  resolved "https://registry.npmjs.org/preact-ruler/-/preact-ruler-0.12.2.tgz#80061791c566efbbc0435ec3f4542769c3683dd7"
+  integrity sha512-SKt7JAk5zj2YJJAeEWINM7w6DoJfbix+nJoTTYRk9rELK/XH1sBkLteI+k6RayAnYXQxdWVDGmdMCkS/HEjBYA==
   dependencies:
-    "@scena/react-ruler" "~0.12.1"
+    "@scena/react-ruler" "~0.12.2"
 
 preact-transition-group@^1.1.1:
   version "1.1.1"
@@ -15688,12 +15688,12 @@ react-compat-css-styled@^1.0.6, react-compat-css-styled@^1.0.8:
     framework-utils "^1.1.0"
     react-css-styled "~1.0.4"
 
-react-compat-ruler@^0.11.1:
-  version "0.11.1"
-  resolved "https://registry.npmjs.org/react-compat-ruler/-/react-compat-ruler-0.11.1.tgz#1ad9ffe5e5f89a501e63b7865ab043578f63cf40"
-  integrity sha512-0bipmjdM0ru+VU03ln1Bwf2tQK/WFZXOmvQ2/L84XtsVrkGGW7VnKXf7TlzOe/IQILJfM2U3BUKq5gHrx67lrQ==
+react-compat-ruler@^0.11.2:
+  version "0.11.2"
+  resolved "https://registry.npmjs.org/react-compat-ruler/-/react-compat-ruler-0.11.2.tgz#7ef356c7be0b1fdc6afa2b75e84b824832ec416a"
+  integrity sha512-lrxrqmjNzEEH5MF50DxDJXgNfgtrY0Vz2X1D4NaSYuQMgg6UUXs9qekDF3ZY6b/nKf4zPVLgaWytCdOeH4nPdQ==
   dependencies:
-    "@scena/react-ruler" "~0.12.1"
+    "@scena/react-ruler" "~0.12.2"
 
 react-css-styled@^1.0.2, react-css-styled@^1.0.3, react-css-styled@~1.0.4:
   version "1.0.4"

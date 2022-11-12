@@ -122,6 +122,7 @@ export const PROPERTIES: Array<keyof GuidesOptions> = [
     'dragPosFormat',
     "defaultGuides",
     "showGuides",
+    "scrollOptions",
     ...RULER_PROPERTIES,
 ];
 
@@ -138,6 +139,7 @@ export const METHODS = [
 
 export const EVENTS = [
     "changeGuides",
+    "changeScroll",
     "dragStart",
     "drag",
     "dragEnd",

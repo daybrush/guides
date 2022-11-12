@@ -5,6 +5,7 @@ import {
     OnDrag as OnGestoDrag,
     OnDragEnd as OnGestoDragEnd,
 } from "gesto";
+import { DragScrollOptions } from "@scena/dragscroll";
 
 
 export interface GuidesState {
@@ -15,43 +16,92 @@ export interface GuidesState {
  * @typedef
  * @memberof Guides
  * @extends Ruler.RulerProps
- * @property - guides' class name (default: "")
- * @property - ruler's css style(default: width 100%, height: 100%)
- * @property - Interval to snap (default: 5)
- * @property - Positions to snap (default: [])
- * @property - Whether to show the moving pos when dragging (default: false)
- * @property - csp nonce
- * @property - Format of drag pos (default: v => v)
- * @property - default guidelines (default: [])
- * @property - Whether to show guidelines (default: true)
- * @property - Whether to lock add/remove/change functions via drag/click of guides (default: false)
- * @property - pos digit of guidelines (default: 0)
- * @property - CSS style objects for guide elements (default: {})
- * @property - CSS style objects for drag guide element (default: {})
- * @property - Whether to show the guide pos text (default: false)
- * @property - Format of displayed guide pos (default: dragPosFormat)
- * @property - CSS style objects for displayed guide element (default: {})
  */
 export interface GuidesOptions extends RulerProps {
+    /**
+     * guides' class name
+     * @default ""
+     */
     className?: string;
+    /**
+     * ruler's css style
+     * @default "width 100%, height: 100%"
+     */
     rulerStyle?: IObject<any>;
+    /**
+     * Interval to snap
+     * @default 5
+     */
     snapThreshold?: number;
+    /**
+     * Positions to snap
+     * @default []
+     */
     snaps?: number[];
+    /**
+     * Whether to show the moving pos when dragging
+     * @default false
+     */
     displayDragPos?: boolean;
+    /**
+     * csp nonce
+     */
     cspNonce?: string;
+    /**
+     * Format of drag pos
+     * @default self
+     */
     dragPosFormat?: (value: number) => string | number;
+    /**
+     * default guidelines
+     * @default []
+     */
     defaultGuides?: number[];
+    /**
+     * Whether to show guidelines
+     * @default true
+     */
     showGuides?: boolean;
+    /**
+     * Whether to lock add/remove/change functions via drag/click of guides
+     * @default false
+     */
     lockGuides?: boolean | Array<"add" | "change" | "remove">;
     /**
-     * pos digit of guidelines (default: 0)
+     * pos digit of guidelines
+     * @default 0
      */
     digit?: number;
+    /**
+     * CSS style objects for guide elements
+     * @default "{}"
+     */
     guideStyle?: Record<string, any>;
+    /**
+     * CSS style objects for drag guide element
+     * @default "{}"
+     */
     dragGuideStyle?: Record<string, any>;
+    /**
+     * Whether to show the guide pos text
+     * @default false
+     */
     displayGuidePos?: boolean;
+    /**
+     * Format of displayed guide pos
+     * @default dragPosFormat
+     */
     guidePosFormat?: (value: number) => string | number;
+    /**
+     * CSS style objects for displayed guide element
+     * @default: "{}"
+     */
     guidePosStyle?: IObject<any>;
+    /**
+     * Set the scroll options, time, etc. to automatically scroll by dragging.
+     * @default null
+     */
+    scrollOptions?: DragScrollOptions | null;
 }
 
 /**
@@ -69,6 +119,7 @@ export interface GuideOptions extends GuidesOptions {
  */
 export interface GuidesProps extends GuidesOptions {
     onChangeGuides?: (e: OnChangeGuides) => any;
+    onChangeScroll?: (e: OnChangeScroll) => any;
     onDragStart?: (e: OnDragStart) => any;
     onDrag?: (e: OnDrag) => any;
     onDragEnd?: (e: OnDragEnd) => any;
@@ -87,6 +138,15 @@ export interface OnChangeGuides {
     distX: number;
     distY: number;
 }
+/**
+ * @typedef
+ * @memberof Guides
+ */
+export interface OnChangeScroll {
+    container: HTMLElement | SVGElement;
+    direction: number[];
+}
+
 /**
  * @typedef
  * @memberof Guides
@@ -137,6 +197,7 @@ export interface GuidesInterface {
  */
 export interface GuidesEvents {
     changeGuides: OnChangeGuides;
+    changeScroll: OnChangeScroll;
     dragStart: OnDragStart;
     drag: OnDrag;
     dragEnd: OnDragEnd;

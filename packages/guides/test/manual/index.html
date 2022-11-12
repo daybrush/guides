@@ -1,0 +1,380 @@
+<meta charset="utf-8">
+<meta name="viewport"
+    content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<style>
+    html,
+    body,
+    #root,
+    .app {
+        position: relative;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        color: #333;
+        background: #fdfdfd;
+    }
+
+    .app {
+        transform-style: preserve-3d;
+    }
+
+    .viewer {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    .viewport {
+        width: 600px;
+        height: 800px;
+        /* height: 600px; */
+        border: 1px solid #eee;
+        box-sizing: border-box;
+    }
+
+    .reset {
+        position: absolute !important;
+        background: #333;
+        width: 30px;
+        height: 30px;
+        z-index: 1;
+        border-right: 1px solid #444;
+        border-bottom: 1px solid #444;
+        box-sizing: border-box;
+        cursor: pointer;
+    }
+
+    .guides {
+        position: absolute !important;
+        top: 0;
+        left: 0;
+        transform: translateZ(1px);
+    }
+
+    .guides.horizontal {
+        left: 30px;
+        width: calc(100% - 30px);
+        height: 30px !important;
+    }
+
+    .guides.vertical {
+        top: 30px;
+        height: calc(100% - 30px);
+        width: 30px !important;
+    }
+
+    /*
+.scena-vertical .scena-guide {
+    height: calc(100% + 30px)!important;
+    top: -30px;
+}
+.scena-horizontal .scena-guide {
+    width: calc(100% + 30px)!important;
+    top: -30px;
+} */
+    .viewer {
+        position: absolute !important;
+        left: 30px;
+        top: 30px;
+        width: calc(100% - 30px);
+        height: calc(100% - 30px);
+    }
+
+    .viewport {
+        text-align: center;
+    }
+
+    .viewport p {
+        padding: 0;
+        margin: 0;
+    }
+
+    .buttons {
+        padding: 5px;
+    }
+
+    .button {
+        display: inline-block;
+        padding: 10px 20px;
+        border: 2px solid #333;
+        color: #333;
+        font-weight: bold;
+        text-decoration: none;
+        font-size: 14px;
+        letter-spacing: 1px;
+        margin: 2px;
+    }
+
+    .viewport p.description {
+        text-align: left;
+        padding: 5px 20px;
+        box-sizing: border-box;
+    }
+
+    .component {
+        display: inline-block;
+        padding: 5px;
+        margin-bottom: 10px;
+    }
+
+    .component p {
+        padding: 0;
+        margin: 0;
+    }
+
+    .component .logo {
+        position: relative;
+        width: 150px;
+        height: 150px;
+    }
+
+    .component img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        height: auto;
+        max-height: 100%;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+    }
+
+    .component a {
+        color: black;
+        font-weight: bold;
+    }
+</style>
+<div class="app">
+    <div class="reset"></div>
+    <div class="guides horizontal"></div>
+    <div class="guides vertical"></div>
+    <div class="viewer">
+        <div class="viewport">
+            <p class="logo"><img src="https://daybrush.com/infinite-viewer/images/logo.png" data-moveable /></p>
+            <h2 data-moveable>Infinite Viewer</h2>
+            <p class="description" data-moveable>Infinite Viewer is Document Viewer Component with infinite scrolling.</p>
+            <select data-moveable>
+                <option>A</option>
+                <option>B</option>
+            </select>
+            <div class="buttons">
+                <a href="https://github.com/daybrush/infinite-viewer" class="button">Download</a>
+                <a href="https://daybrush.com/infinite-viewer/release/latest/doc" class="button">API</a>
+            </div>
+            <p class="description" data-moveable>&nbsp;This component can scroll up and down, left and right in the
+                negative direction and in the positive direction. &nbsp;It can also be used in combination with
+                moveable, selecto, guides.</p>
+            <div class="component" data-moveable>
+                <p class="logo"><img src="https://daybrush.com/moveable/images/256x256.png" alt="Logo" /></p>
+                <p><a href="https://github.com/daybrush/moveable" target="_blank">Moveable</a></p>
+            </div>
+            <div class="component" data-moveable>
+                <p class="logo"><img src="https://daybrush.com/selecto/images/256x256.png" alt="Logo" style="padding: 10px;" /></p>
+                <p><a href="https://github.com/daybrush/selecto" target="_blank">Selecto</a></p>
+            </div>
+            <div class="component" data-moveable>
+                <p class="logo"><img src="https://daybrush.com/guides/images/guides.png" alt="Logo" /></p>
+                <p><a href="https://github.com/daybrush/guides" target="_blank">Guides</a></p>
+            </div>
+            <div class="component" data-moveable>
+                <p class="logo"><img src="https://daybrush.com/scenejs/images/clapperboard.png" alt="Logo" /></p>
+                <p><a href="https://github.com/daybrush/scenejs" target="_blank">Scene.js</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <script src="../dist/infinite-viewer.js"></script> -->√
+<script src="https://daybrush.com/infinite-viewer/release/latest/dist/infinite-viewer.js"></script>
+<script src="https://daybrush.com/keycon/release/latest/dist/keycon.js"></script>
+<!-- <script src="../../selecto/dist/selecto.js"></script> -->
+<script src="https://daybrush.com/selecto/release/latest/dist/selecto.js"></script>
+<!-- <script src="https://daybrush.com/guides/release/latest/dist/guides.js"></script> -->
+<script src ="../../dist/guides.js"></script>
+<!-- <script src="../../../../moveable/packages/moveable/dist/moveable.js"></script> -->
+<script src="https://daybrush.com/moveable/release/latest/dist/moveable.js"></script>
+<script src="https://daybrush.com/moveable-helper/release/latest/dist/moveable-helper.js"></script>
+<script>
+    let targets = [];
+    const moveable = new Moveable(document.querySelector(".viewport"), {
+        target: [],
+        draggable: true,
+        resizable: true,
+        rotatable: true,
+        snappable: true,
+        snapCenter: true,
+    });
+    const helper = MoveableHelper.create();
+    moveable
+        .on("dragStart", helper.onDragStart)
+        .on("drag", helper.onDrag)
+        .on("dragGroupStart", helper.onDragGroupStart)
+        .on("dragGroup", helper.onDragGroup)
+        .on("scaleStart", helper.onScaleStart)
+        .on("scale", helper.onScale)
+        .on("scaleGroupStart", helper.onScaleGroupStart)
+        .on("scaleGroup", helper.onScaleGroup)
+        .on("rotateStart", helper.onRotateStart)
+        .on("rotate", helper.onRotate)
+        .on("rotateGroupStart", helper.onRotateGroupStart)
+        .on("rotateGroup", helper.onRotateGroup)
+        .on("snap", e => {
+            // console.log(e);
+        });
+
+
+    const horizontalGuides = new Guides(document.querySelector(".guides.horizontal"), {
+        snapThreshold: 5,
+        snaps: [0, 300, 600],
+        displayDragPos: true,
+        scrollOptions: {
+            container: () => viewer.getContainer(),
+            getScrollPosition: () => {
+                return [
+                    viewer.getScrollLeft(),
+                    viewer.getScrollTop(),
+                ];
+            },
+            threshold: 200,
+            throttleTime: 30,
+        },
+        dragPosFormat: v => `${v}px`,
+    }).on("changeGuides", ({ guides }) => {
+        moveable.horizontalGuidelines = guides;
+    }).on("changeScroll", ({ direction }) => {
+        viewer.scrollBy(direction[0] * 10, direction[1] * 10);
+    });
+    const verticalGuides = new Guides(document.querySelector(".guides.vertical"), {
+        type: "vertical",
+        snapThreshold: 5,
+        snaps: [0, 200, 400],
+        displayDragPos: true,
+        dragPosFormat: v => `${v}px`,
+        scrollOptions: {
+            container: () => viewer.getContainer(),
+            getScrollPosition: () => {
+                return [
+                    viewer.getScrollLeft(),
+                    viewer.getScrollTop(),
+                ];
+            },
+            threshold: 200,
+            throttleTime: 30,
+        },
+    }).on("changeGuides", ({ guides }) => {
+        moveable.verticalGuidelines = guides;
+    }).on("changeScroll", ({ direction }) => {
+        viewer.scrollBy(direction[0] * 10, direction[1] * 10);
+    });
+
+    const viewer = new InfiniteViewer(
+        document.querySelector(".viewer"),
+        document.querySelector(".viewport"),
+        {
+            useTransform: true,
+            usePinch: true,
+            useResizeObserver: true,
+            pinchThreshold: 50,
+            // rangeX: [0, 0],
+            // rangeY: [0, 0],
+            // rangeOffsetX: [-200, 200],
+            // rangeOffsetY: [-200, 200],
+            useWheelScroll: true,
+            zoomRange: [0.1, 10],
+            maxPinchWheel: 10,
+        }
+    ).on("dragStart", e => {
+        const target = e.inputEvent.target;
+        if (
+            target.nodeName === "A"
+            || moveable.isMoveableElement(target)
+            || targets.some(t => t === target || t.contains(target))
+        ) {
+            e.stop();
+        }
+    }).on("dragEnd", e => {
+        if (!e.isDrag) {
+            selecto.clickTarget(e.inputEvent);
+        }
+    }).on("abortPinch", e => {
+        // console.log("abort", e.inputEvent);
+        selecto.triggerDragStart(e.inputEvent);
+    }).on("scroll", e => {
+        // console.log("Change SCROLL", e.scrollLeft);
+        const zoom = viewer.zoom;
+        horizontalGuides.scroll(e.scrollLeft, zoom);
+        horizontalGuides.scrollGuides(e.scrollTop, zoom);
+
+        verticalGuides.scroll(e.scrollTop, zoom);
+        verticalGuides.scrollGuides(e.scrollLeft, zoom);
+    }).on("pinch", e => {
+        // console.log(e);
+        document.querySelector(".description").innerHTML = e.inputEvent.type;
+        const zoom = Math.max(0.1, e.zoom);
+
+        verticalGuides.zoom = zoom;
+        horizontalGuides.zoom = zoom;
+        viewer.zoom = zoom;
+    })
+
+    const selecto = new Selecto({
+        container: document.querySelector(".app"),
+        dragContainer: ".viewer",
+        hitRate: 0,
+
+        selectByClick: true,
+        selectFromInside: false,
+
+        selectableTargets: ["[data-moveable]"],
+        toggleContinueSelect: ["shift"],
+        scrollOptions: {
+            container: viewer.getContainer(),
+            threshold: 30,
+            throttleTime: 30,
+            getScrollPosition: ({ direction }) => {
+                return [
+                    viewer.getScrollLeft(),
+                    viewer.getScrollTop(),
+                ];
+            }
+        }
+    }).on("dragStart", e => {
+        const inputEvent = e.inputEvent;
+        const target = inputEvent.target;
+        if (
+            target.nodeName === "A"
+            || (inputEvent.type === "touchstart" && e.isTrusted)
+            || moveable.isMoveableElement(target)
+            || targets.some(t => t === target || t.contains(target))
+        ) {
+            console.log("?", inputEvent.type);
+            e.stop();
+        }
+    }).on("scroll", ({ direction }) => {
+        viewer.scrollBy(direction[0] * 10, direction[1] * 10);
+    }).on("selectEnd", e => {
+        targets = e.selected;
+        moveable.target = targets;
+
+        if (e.isDragStart) {
+            e.inputEvent.preventDefault();
+
+            setTimeout(() => {
+                moveable.dragStart(e.inputEvent);
+            });
+        }
+    });
+
+    requestAnimationFrame(() => {
+        viewer.scrollCenter();
+    });
+
+    window.addEventListener("resize", () => {
+        horizontalGuides.resize();
+        verticalGuides.resize();
+    });
+
+    document.querySelector(".reset").addEventListener("click", () => {
+        viewer.scrollCenter();
+    });
+</script>

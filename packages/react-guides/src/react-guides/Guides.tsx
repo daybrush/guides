@@ -1,7 +1,8 @@
 import * as React from "react";
 import Ruler, { PROPERTIES as RULER_PROPERTIES, RulerProps } from "@scena/react-ruler";
 import { ref, refs } from "framework-utils";
-import Gesto, { OnDragEnd } from "gesto";
+import DragScroll from "@scena/dragscroll";
+import Gesto, { OnDrag, OnDragEnd, OnDragStart } from "gesto";
 import styled, { StyledElement } from "react-css-styled";
 import { GUIDES, GUIDE, DRAGGING, ADDER, DISPLAY_DRAG, GUIDES_CSS } from "./consts";
 import { prefix } from "./utils";
@@ -22,6 +23,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         digit: 0,
         onClickRuler: () => { },
         onChangeGuides: () => { },
+        onChangeScroll: () => { },
         onDragStart: () => { },
         onDrag: () => { },
         onDragEnd: () => { },
@@ -188,7 +190,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                 return false;
             }
             this.onDragStart(e);
-        }).on("drag", this.onDrag).on("dragEnd", this.onDragEnd);
+        }).on("drag", this._onDrag).on("dragEnd", this.onDragEnd);
         this.setState({ guides: this.props.defaultGuides || [] }); // pass array of guides on mount data to create gridlines or something like that in ui
     }
     public componentWillUnmount() {
@@ -289,8 +291,11 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         });
         inputEvent.stopPropagation();
         inputEvent.preventDefault();
+
+
+        this._startDragScroll(e);
     }
-    private onDrag = (e: any) => {
+    private _onDrag = (e: any) => {
         if (this._isFirstMove) {
             this._isFirstMove = false;
             addClass(e.datas.target, DRAGGING);
@@ -307,6 +312,9 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             ...e,
             dragElement: e.datas.target,
         });
+
+
+        this._dragScroll(e);
         return nextPos;
     }
     private onDragEnd = (e: OnDragEnd) => {
@@ -331,6 +339,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             ...e,
             dragElement: datas.target,
         });
+
+        this._endDragScroll(e);
         if (datas.fromRuler) {
             if (this._isFirstMove) {
                 /**
@@ -455,5 +465,45 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     }
     private getTranslateName() {
         return this.props.type === "horizontal" ? "translateY" : "translateX";
+    }
+
+    private _startDragScroll(e: OnDragStart) {
+        const scrollOptions = this.props.scrollOptions;
+
+        if (!scrollOptions) {
+            return;
+        }
+        const datas = e.datas;
+        const dragScroll = new DragScroll();
+
+        datas.dragScroll = dragScroll;
+        dragScroll.on("scroll", ({ container, direction }) => {
+            /**
+             * If scroll can be triggered through drag, the `changeScroll` event is fired.
+             * @memberof Guides
+             * @event changeScroll
+             * @param {OnChangeScroll} - Parameters for the `changeScroll` event
+             */
+            this.props.onChangeScroll?.({ container, direction });
+        }).on("move", ({ offsetX, offsetY, inputEvent }) => {
+            this.gesto.scrollBy(offsetX, offsetY, inputEvent.inputEvent, true);
+        });
+        dragScroll.dragStart(e, {
+            container: scrollOptions.container,
+        });
+    }
+    private _dragScroll(e: OnDrag) {
+        const scrollOptions = this.props.scrollOptions;
+
+        if (!scrollOptions) {
+            return;
+        }
+        const dragScroll  = e.datas.dragScroll as DragScroll;
+
+        dragScroll.drag(e, scrollOptions);
+    }
+    private _endDragScroll(e: OnDragEnd) {
+        e.datas.dragScroll?.dragEnd();
+        e.datas.dragScroll = null;
     }
 }

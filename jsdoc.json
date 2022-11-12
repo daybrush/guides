@@ -25,7 +25,8 @@
         ]
     },
     "linkMap": {
-        "IObject": "http://daybrush.com/utils/release/latest/doc/global.html#ObjectInterface"
+        "IObject": "http://daybrush.com/utils/release/latest/doc/global.html#ObjectInterface",
+        "DragScrollOptions": "https://daybrush.com/dragscroll/release/latest/doc/global.html#DragScrollOptions"
     },
     "docdash": {
         "menu": {

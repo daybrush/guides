@@ -54,7 +54,7 @@
   "dependencies": {
     "@daybrush/utils": "^1.4.0",
     "@scena/dragscroll": "^1.2.2",
-    "@scena/react-ruler": "^0.12.1",
+    "@scena/react-ruler": "^0.12.2",
     "css-to-mat": "^1.0.3",
     "framework-utils": "^1.1.0",
     "gesto": "^1.13.4",
