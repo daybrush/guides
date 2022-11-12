@@ -2997,10 +2997,10 @@
     estree-walker "^1.0.1"
     picomatch "^2.2.2"
 
-"@scena/dragscroll@^1.2.0":
-  version "1.2.1"
-  resolved "https://registry.npmjs.org/@scena/dragscroll/-/dragscroll-1.2.1.tgz#123b9dca1b41e5fce695ff6c9556c909df42df5c"
-  integrity sha512-bVJGC9ZpShoQB1yTRXYRhkAzC6KAlvlRPEiPb4tz15lda5F5va1wX1oeZpLTxmmHkf0x/AeVI1eolWihkILS4Q==
+"@scena/dragscroll@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.npmjs.org/@scena/dragscroll/-/dragscroll-1.2.2.tgz#bedbbd6cad57e987f83d686cd2eda9aadd9f7bc2"
+  integrity sha512-Z7J4J6IFbpFbHVZC554gNbwgDCD37r0j736bHL4cg+dBYFOLFXNB3QLA2C7E4u6yT0OqW+ErUr8fKb0pSH44Rw==
   dependencies:
     "@daybrush/utils" "1.6.0"
     "@scena/event-emitter" "^1.0.2"
@@ -3019,10 +3019,10 @@
   dependencies:
     "@daybrush/utils" "^1.4.0"
 
-"@scena/react-ruler@^0.11.0", "@scena/react-ruler@~0.11.0":
-  version "0.11.0"
-  resolved "https://registry.npmjs.org/@scena/react-ruler/-/react-ruler-0.11.0.tgz#ff74a2ac3bb9f5656f6f919162037c7977a4ebf1"
-  integrity sha512-a9foyOTs7xp/IHi7gHLiSziWi1X1VKxMlNq/EkE2a9JvQWiDzDi/7S/N0t3C0c8yE3zNcJ++9e3eqcKbI+/P9g==
+"@scena/react-ruler@^0.12.1", "@scena/react-ruler@~0.12.1":
+  version "0.12.1"
+  resolved "https://registry.npmjs.org/@scena/react-ruler/-/react-ruler-0.12.1.tgz#5f75de3001b47c1fc73fedbbe41014ca7ec0d544"
+  integrity sha512-e7JFwEELbYx9Q5zVQsq+htJUkPLioANl6IBEq4+mdLyy/WaP4992JbQVJJ2uajXxjKKQ2e0CAhSDdzHiPEg2Uw==
   dependencies:
     "@daybrush/utils" "^1.7.1"
     framework-utils "^1.1.0"
@@ -9021,10 +9021,10 @@ gensync@^1.0.0-beta.1, gensync@^1.0.0-beta.2:
   resolved "https://registry.npmjs.org/gensync/-/gensync-1.0.0-beta.2.tgz"
   integrity sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==
 
-gesto@^1.0.0, gesto@^1.12.2, gesto@^1.5.1:
-  version "1.13.2"
-  resolved "https://registry.npmjs.org/gesto/-/gesto-1.13.2.tgz#fb17cd67d875cbab226447096cfcf9e542e91df7"
-  integrity sha512-iNOWm5V8HoL0uqPZxvAsZyd1pcCMqji4HrgQhEQBtCz9POGVcU9kvBObVaU+u7FkGGwy1DcjTFhDY4/CKpmXmQ==
+gesto@^1.13.4:
+  version "1.13.4"
+  resolved "https://registry.npmjs.org/gesto/-/gesto-1.13.4.tgz#5f53608dfac589e21acd2b905f51fb259f15a77f"
+  integrity sha512-TkXGgv8nC/IIjOO2dMrgCNovSnuRfPTJybmtwponzGihCje8QgLEdMf+h/RERu6O+wq8FZTSJ6ihIO9ytt4/Qg==
   dependencies:
     "@daybrush/utils" "^1.7.1"
     "@scena/event-emitter" "^1.0.2"
@@ -15194,12 +15194,12 @@ preact-render-to-string@^3.8.2:
   dependencies:
     pretty-format "^3.5.1"
 
-preact-ruler@^0.11.0:
-  version "0.11.0"
-  resolved "https://registry.npmjs.org/preact-ruler/-/preact-ruler-0.11.0.tgz#0b11acd757235d83d2fe64a9941e9adf1c14f0d8"
-  integrity sha512-2676TUy42ZEAq0S3XfycxQPVS6kN91dGRTZou+PvCgw2f2dHXteEby87kBuI00yQUe2I2qLH6FuyoRkKdl9Q6w==
+preact-ruler@^0.12.1:
+  version "0.12.1"
+  resolved "https://registry.npmjs.org/preact-ruler/-/preact-ruler-0.12.1.tgz#ea0cd41c70f3707c641b0d125d128d127fb7c577"
+  integrity sha512-pUurox4mlT12Kf90lvVbB3/hRZAJgMWhKsfFrQDMhonWeiMtP7ZsjJi/J47HVh+ywxboxQ4auxNRQoFtNuAn4w==
   dependencies:
-    "@scena/react-ruler" "~0.11.0"
+    "@scena/react-ruler" "~0.12.1"
 
 preact-transition-group@^1.1.1:
   version "1.1.1"
@@ -15688,12 +15688,12 @@ react-compat-css-styled@^1.0.6, react-compat-css-styled@^1.0.8:
     framework-utils "^1.1.0"
     react-css-styled "~1.0.4"
 
-react-compat-ruler@^0.10.0:
-  version "0.10.0"
-  resolved "https://registry.npmjs.org/react-compat-ruler/-/react-compat-ruler-0.10.0.tgz#206592bd362b2366e88e56984837a7ebad92ed0f"
-  integrity sha512-JySgXMY91T2QzJcVmneXvMupMkvlK2Eiry/GWVIlu6xexxWmceiz0cQBYxgP3CBMx6ArIEj2VBa840aS+RZGsg==
+react-compat-ruler@^0.11.1:
+  version "0.11.1"
+  resolved "https://registry.npmjs.org/react-compat-ruler/-/react-compat-ruler-0.11.1.tgz#1ad9ffe5e5f89a501e63b7865ab043578f63cf40"
+  integrity sha512-0bipmjdM0ru+VU03ln1Bwf2tQK/WFZXOmvQ2/L84XtsVrkGGW7VnKXf7TlzOe/IQILJfM2U3BUKq5gHrx67lrQ==
   dependencies:
-    "@scena/react-ruler" "~0.11.0"
+    "@scena/react-ruler" "~0.12.1"
 
 react-css-styled@^1.0.2, react-css-styled@^1.0.3, react-css-styled@~1.0.4:
   version "1.0.4"

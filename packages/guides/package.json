@@ -39,7 +39,7 @@
         "@types/react": "^16.9.17",
         "@types/react-dom": "^16.9.4",
         "daybrush-jsdoc-template": "^1.6.0",
-        "gesto": "^1.0.0",
+        "gesto": "^1.13.4",
         "gh-pages": "^2.0.1",
         "keycon": "^1.1.0",
         "print-sizes": "^0.2.0",
