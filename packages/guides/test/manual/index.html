@@ -222,49 +222,40 @@
             // console.log(e);
         });
 
-
+    const scrollOptions = {
+        container: () => viewer.getContainer(),
+        getScrollPosition: () => {
+            return [
+                viewer.getScrollLeft(),
+                viewer.getScrollTop(),
+            ];
+        },
+        threshold: 200,
+        throttleTime: 30,
+    };
     const horizontalGuides = new Guides(document.querySelector(".guides.horizontal"), {
         snapThreshold: 5,
         snaps: [0, 300, 600],
         displayDragPos: true,
-        scrollOptions: {
-            container: () => viewer.getContainer(),
-            getScrollPosition: () => {
-                return [
-                    viewer.getScrollLeft(),
-                    viewer.getScrollTop(),
-                ];
-            },
-            threshold: 200,
-            throttleTime: 30,
-        },
+        scrollOptions,
         dragPosFormat: v => `${v}px`,
     }).on("changeGuides", ({ guides }) => {
         moveable.horizontalGuidelines = guides;
-    }).on("changeScroll", ({ direction }) => {
-        viewer.scrollBy(direction[0] * 10, direction[1] * 10);
+    }).on("requestScroll", ({ direction }) => {
+        viewer.scrollBy(0, direction[1] * 10);
     });
+
     const verticalGuides = new Guides(document.querySelector(".guides.vertical"), {
         type: "vertical",
         snapThreshold: 5,
         snaps: [0, 200, 400],
         displayDragPos: true,
         dragPosFormat: v => `${v}px`,
-        scrollOptions: {
-            container: () => viewer.getContainer(),
-            getScrollPosition: () => {
-                return [
-                    viewer.getScrollLeft(),
-                    viewer.getScrollTop(),
-                ];
-            },
-            threshold: 200,
-            throttleTime: 30,
-        },
+        scrollOptions,
     }).on("changeGuides", ({ guides }) => {
         moveable.verticalGuidelines = guides;
-    }).on("changeScroll", ({ direction }) => {
-        viewer.scrollBy(direction[0] * 10, direction[1] * 10);
+    }).on("requestScroll", ({ direction }) => {
+        viewer.scrollBy(direction[0] * 10, 0);
     });
 
     const viewer = new InfiniteViewer(

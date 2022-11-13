@@ -119,7 +119,7 @@ export interface GuideOptions extends GuidesOptions {
  */
 export interface GuidesProps extends GuidesOptions {
     onChangeGuides?: (e: OnChangeGuides) => any;
-    onChangeScroll?: (e: OnChangeScroll) => any;
+    onRequestScroll?: (e: OnRequestScroll) => any;
     onDragStart?: (e: OnDragStart) => any;
     onDrag?: (e: OnDrag) => any;
     onDragEnd?: (e: OnDragEnd) => any;
@@ -142,7 +142,7 @@ export interface OnChangeGuides {
  * @typedef
  * @memberof Guides
  */
-export interface OnChangeScroll {
+export interface OnRequestScroll {
     container: HTMLElement | SVGElement;
     direction: number[];
 }
@@ -197,7 +197,7 @@ export interface GuidesInterface {
  */
 export interface GuidesEvents {
     changeGuides: OnChangeGuides;
-    changeScroll: OnChangeScroll;
+    requestScroll: OnRequestScroll;
     dragStart: OnDragStart;
     drag: OnDrag;
     dragEnd: OnDragEnd;

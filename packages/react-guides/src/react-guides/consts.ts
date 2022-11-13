@@ -139,7 +139,7 @@ export const METHODS = [
 
 export const EVENTS = [
     "changeGuides",
-    "changeScroll",
+    "requestScroll",
     "dragStart",
     "drag",
     "dragEnd",

@@ -2997,10 +2997,10 @@
     estree-walker "^1.0.1"
     picomatch "^2.2.2"
 
-"@scena/dragscroll@^1.2.2":
-  version "1.2.2"
-  resolved "https://registry.npmjs.org/@scena/dragscroll/-/dragscroll-1.2.2.tgz#bedbbd6cad57e987f83d686cd2eda9aadd9f7bc2"
-  integrity sha512-Z7J4J6IFbpFbHVZC554gNbwgDCD37r0j736bHL4cg+dBYFOLFXNB3QLA2C7E4u6yT0OqW+ErUr8fKb0pSH44Rw==
+"@scena/dragscroll@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.npmjs.org/@scena/dragscroll/-/dragscroll-1.3.0.tgz#3a9f30a4153eeb2d25df22004ddf602db6d55583"
+  integrity sha512-UlK/g9IX8fJ8+YczqfUT7WDjx/5KKQMU2/uZLYLXV8FWuzWS2WWpt2u1G6KCIF65380oCnCYOs7nOrYpedsOaQ==
   dependencies:
     "@daybrush/utils" "1.6.0"
     "@scena/event-emitter" "^1.0.2"

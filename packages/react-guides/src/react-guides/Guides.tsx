@@ -23,7 +23,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         digit: 0,
         onClickRuler: () => { },
         onChangeGuides: () => { },
-        onChangeScroll: () => { },
+        onRequestScroll: () => { },
         onDragStart: () => { },
         onDrag: () => { },
         onDragEnd: () => { },
@@ -479,12 +479,12 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         datas.dragScroll = dragScroll;
         dragScroll.on("scroll", ({ container, direction }) => {
             /**
-             * If scroll can be triggered through drag, the `changeScroll` event is fired.
+             * If scroll can be triggered through drag, the `requestScroll` event is fired.
              * @memberof Guides
-             * @event changeScroll
-             * @param {OnChangeScroll} - Parameters for the `changeScroll` event
+             * @event requestScroll
+             * @param {OnRequestScroll} - Parameters for the `requestScroll` event
              */
-            this.props.onChangeScroll?.({ container, direction });
+            this.props.onRequestScroll?.({ container, direction });
         }).on("move", ({ offsetX, offsetY, inputEvent }) => {
             this.gesto.scrollBy(offsetX, offsetY, inputEvent.inputEvent, true);
         });
