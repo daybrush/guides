@@ -26,6 +26,12 @@
     "bugs": {
         "url": "https://github.com/daybrush/guides/issues"
     },
+    "files": [
+        "./*",
+        "src/*",
+        "dist/*",
+        "README.md"
+    ],
     "homepage": "https://daybrush.com/guides",
     "scripts": {
         "serve": "vue-cli-service serve",

@@ -24,7 +24,9 @@
     },
     "files": [
         "./*",
-        "dist/*"
+        "src/*",
+        "dist/*",
+        "README.md"
     ],
     "author": "Daybrush",
     "license": "MIT",

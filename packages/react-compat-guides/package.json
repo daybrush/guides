@@ -32,6 +32,12 @@
         "url": "https://github.com/daybrush/guides/issues"
     },
     "homepage": "https://daybrush.com/guides",
+    "files": [
+        "./*",
+        "src/*",
+        "dist/*",
+        "README.md"
+    ],
     "devDependencies": {
         "@daybrush/builder": "^0.1.0",
         "@scenejs/effects": "^1.0.1",

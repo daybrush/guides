@@ -31,6 +31,12 @@
     "bugs": {
         "url": "https://github.com/daybrush/guides/issues"
     },
+    "files": [
+        "./*",
+        "src/*",
+        "dist/*",
+        "README.md"
+    ],
     "homepage": "https://daybrush.com/guides",
     "devDependencies": {
         "@daybrush/builder": "^0.1.0",

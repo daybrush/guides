@@ -17,6 +17,12 @@
         "url": "https://github.com/daybrush/guides/issues"
     },
     "homepage": "https://daybrush.com/guides",
+    "files": [
+        "./*",
+        "src/*",
+        "dist/*",
+        "README.md"
+    ],
     "devDependencies": {
         "@daybrush/builder": "^0.1.2",
         "@pyoner/svelte-ts-preprocess": "^1.2.1",
