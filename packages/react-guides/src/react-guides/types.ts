@@ -189,6 +189,8 @@ export interface GuidesInterface {
     scrollGuides(pos: number): void;
     loadGuides(guides: number[]): void;
     resize(): void;
+    getElement(): HTMLElement;
+    getRulerElement(): HTMLCanvasElement;
 }
 
 /**
