@@ -3,13 +3,12 @@ import { prefixCSS } from "framework-utils";
 import { GuidesOptions } from "./types";
 import { PROPERTIES as RULER_PROPERTIES } from "@scena/react-ruler";
 
-export const RULER = prefix("ruler");
 export const ADDER = prefix("guide", "adder");
 export const GUIDES = prefix("guides");
 export const GUIDE = prefix("guide");
 export const DRAGGING = prefix("dragging");
 export const DISPLAY_DRAG = prefix("display-drag");
-export const GUIDES_CSS = prefixCSS("scena-", `
+export const GUIDES_CSS = prefixCSS("scena-guides-", `
 {
     position: relative;
     width: 100%;
