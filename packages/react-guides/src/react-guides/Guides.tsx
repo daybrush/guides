@@ -289,6 +289,10 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             ...e,
             dragElement: datas.target,
         });
+
+        if (!this.gesto.isFlag()) {
+            return;
+        }
         inputEvent.stopPropagation();
         inputEvent.preventDefault();
 
@@ -313,6 +317,10 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             dragElement: e.datas.target,
         });
 
+        if (!this.gesto.isFlag()) {
+            this._endDragScroll(e);
+            return;
+        }
 
         this._dragScroll(e);
         return nextPos;
