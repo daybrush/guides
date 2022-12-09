@@ -122,6 +122,7 @@ export const PROPERTIES: Array<keyof GuidesOptions> = [
     "defaultGuides",
     "showGuides",
     "scrollOptions",
+    "guideStyle",
     ...RULER_PROPERTIES,
 ];
 
