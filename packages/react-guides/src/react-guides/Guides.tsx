@@ -51,6 +51,10 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     private _isFirstMove = false;
     private _zoom = 0;
 
+    constructor(props: GuidesProps) {
+        super(props);
+        this.state.guides = props.defaultGuides || [];
+    }
     public render() {
         const {
             className,
@@ -191,15 +195,16 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             }
             this.onDragStart(e);
         }).on("drag", this._onDrag).on("dragEnd", this.onDragEnd);
-        this.setState({ guides: this.props.defaultGuides || [] }); // pass array of guides on mount data to create gridlines or something like that in ui
     }
     public componentWillUnmount() {
         this.gesto.unset();
     }
     public componentDidUpdate(prevProps: any) {
-        if (prevProps.defaultGuides !== this.props.defaultGuides) {
+        const nextGuides = this.props.defaultGuides;
+
+        if (prevProps.defaultGuides !== nextGuides) {
             // to dynamically update guides from code rather than dragging guidelines
-            this.setState({ guides: this.props.defaultGuides || [] });
+            this.setState({ guides: nextGuides || [] });
         }
     }
     /**
