@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.0](https://github.com/daybrush/guides/compare/vue3-guides@0.3.0...vue3-guides@0.4.0) (2023-01-20)
+
+
+### :bug: Bug Fix
+
+* fix files field #67 ([28bf5b3](https://github.com/daybrush/guides/commit/28bf5b3bd97cebd94eaf2195f0e99750f14e7ecb))
+
+
+### :mega: Other
+
+* publish packages ([095e7c6](https://github.com/daybrush/guides/commit/095e7c670d3bd0bdc168e2f3c11b5dbb8074b26b))
+* publish packages ([1daa6ea](https://github.com/daybrush/guides/commit/1daa6ea441f6c96b8f354953605cd6ac89117878))
+* publish packages ([e143c21](https://github.com/daybrush/guides/commit/e143c2175309bf480ef17731321f6728b8d6bcc2))
+* publish packages ([ce2037a](https://github.com/daybrush/guides/commit/ce2037a18f5f6bbcd750e1fd72cbfc60e3f2c217))
+* publish packages ([0abcba2](https://github.com/daybrush/guides/commit/0abcba24e8b83ea51cf369124e8c2d85fee1ef7e))
+
+
+
 ## [0.3.0](https://github.com/daybrush/guides/compare/vue3-guides@0.2.0...vue3-guides@0.3.0) (2022-11-13)
 
 

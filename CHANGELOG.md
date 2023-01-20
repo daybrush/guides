@@ -3,6 +3,48 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.21.0](https://github.com/daybrush/guides/compare/0.20.0...0.21.0) (2023-01-20)
+### :sparkles: Packages
+* `@scena/guides` 0.21.0
+* `preact-guides` 0.20.0
+* `react-compat-guides` 0.18.0
+* `@scena/react-guides` 0.20.0
+* `svelte-guides` 0.20.0
+* `vue-guides` 0.20.0
+* `vue3-guides` 0.4.0
+* `ngx-guides` 0.20.0
+
+
+### :rocket: New Features
+
+* `react-compat-guides`, `@scena/react-guides`
+    * add getGuideScrollPos, getRulerScrollPos ([9687c89](https://github.com/daybrush/guides/commit/9687c89598ab9136c6d26cb06ebba2ca45dc26ae))
+
+
+### :bug: Bug Fix
+
+* `vue3-guides`, `vue-guides`, `svelte-guides`, `react-compat-guides`, `preact-guides`, `@scena/react-guides`, `@scena/guides`
+    * fix files field #67 ([28bf5b3](https://github.com/daybrush/guides/commit/28bf5b3bd97cebd94eaf2195f0e99750f14e7ecb))
+* `ngx-guides`, `@scena/react-guides`
+    * fix missing guideStyle prop #69 ([1520b89](https://github.com/daybrush/guides/commit/1520b896c29a2f11d96d55d2dbf51c0c06d9a113))
+* `@scena/react-guides`
+    * fix base class names ([25e00d0](https://github.com/daybrush/guides/commit/25e00d08a9e1410134ba6b352ae722af57f5ff38))
+    * fix dragScroll #68 ([62f7871](https://github.com/daybrush/guides/commit/62f787157fff4a3ea95c2a840fcb94a6f03ad6bb))
+    * fix first defaultGuides prop ([b07ea2e](https://github.com/daybrush/guides/commit/b07ea2ee9a2f5485a2468323a1e23cfda788163b))
+    * fix types #63 ([ee8706f](https://github.com/daybrush/guides/commit/ee8706f2598045e7693bcb4119a2754c1cb81701))
+
+
+### :mega: Other
+
+* All
+    * publish packages ([095e7c6](https://github.com/daybrush/guides/commit/095e7c670d3bd0bdc168e2f3c11b5dbb8074b26b))
+    * publish packages ([1daa6ea](https://github.com/daybrush/guides/commit/1daa6ea441f6c96b8f354953605cd6ac89117878))
+    * publish packages ([e143c21](https://github.com/daybrush/guides/commit/e143c2175309bf480ef17731321f6728b8d6bcc2))
+    * publish packages ([ce2037a](https://github.com/daybrush/guides/commit/ce2037a18f5f6bbcd750e1fd72cbfc60e3f2c217))
+    * publish packages ([0abcba2](https://github.com/daybrush/guides/commit/0abcba24e8b83ea51cf369124e8c2d85fee1ef7e))
+
+
+
 ## [0.20.0](https://github.com/daybrush/guides/compare/0.19.0...0.20.0) (2022-11-13)
 ### :sparkles: Packages
 * `@scena/guides` 0.20.0
