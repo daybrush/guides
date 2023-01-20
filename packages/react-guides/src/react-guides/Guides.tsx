@@ -50,6 +50,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     private guideElements: HTMLElement[] = [];
     private _isFirstMove = false;
     private _zoom = 0;
+    private _observer: ResizeObserver | null = null;
 
     constructor(props: GuidesProps) {
         super(props);
@@ -72,7 +73,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         const rulerProps: RulerProps = {};
 
         RULER_PROPERTIES.forEach(name => {
-            if (name === "style" || name === "portalContainer") {
+            if (name === "style" || name === "portalContainer" || name === "useResizeObserver") {
                 return;
             }
             (rulerProps as any)[name] = props[name];
@@ -195,9 +196,17 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             }
             this.onDragStart(e);
         }).on("drag", this._onDrag).on("dragEnd", this.onDragEnd);
+
+        if (this.props.useResizeObserver) {
+            this._observer = new ResizeObserver(this._onCheck);
+            this._observer.observe(this.guidesElement, {
+                box: "border-box",
+            });
+        }
     }
     public componentWillUnmount() {
         this.gesto.unset();
+        this._observer?.disconnect();
     }
     public componentDidUpdate(prevProps: any) {
         const nextGuides = this.props.defaultGuides;
@@ -260,6 +269,18 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
      */
     public getRulerElement() {
         return this.ruler.canvasElement;
+    }
+    /**
+     * Scroll position of guides (horizontal: y, vertical: x)
+     */
+    public getGuideScrollPos() {
+        return this.scrollPos;
+    }
+    /**
+     * Scroll position of the ruler (horizontal: x, vertical: y)
+     */
+    public getRulerScrollPos() {
+        return this.ruler.getScrollPos();
     }
     /**
      * Scroll the position of the ruler.
@@ -518,5 +539,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     private _endDragScroll(e: OnDragEnd) {
         e.datas.dragScroll?.dragEnd();
         e.datas.dragScroll = null;
+    }
+    private _onCheck = () => {
+        this.resize();
     }
 }

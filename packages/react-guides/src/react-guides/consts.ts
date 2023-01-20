@@ -135,6 +135,8 @@ export const METHODS = [
     "getElement",
     "getRulerElement",
     "forceUpdate",
+    "getRulerScrollPos",
+    "getGuideScrollPos",
 ] as const;
 
 export const EVENTS = [

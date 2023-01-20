@@ -32,6 +32,8 @@ $ npm i @scena/react-guides
 ```
 
 ## 🚀 How to use
+* [React Codesandbox Demo](https://codesandbox.io/s/react-guides-dpwyqr)
+
 ```tsx
 import * as React from "react";
 import Guides from "@scena/react-guides";
