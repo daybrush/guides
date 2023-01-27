@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.20.1](https://github.com/daybrush/guides/compare/svelte-guides@0.20.0...svelte-guides@0.20.1) (2023-01-27)
+
+
+### :mega: Other
+
+* publish packages ([628b944](https://github.com/daybrush/guides/commit/628b9444bb9e6f5546c7a5edd55a090126f52dd5))
+
+
+
 ## [0.20.0](https://github.com/daybrush/guides/compare/svelte-guides@0.19.0...svelte-guides@0.20.0) (2023-01-20)
 
 
