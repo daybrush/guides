@@ -111,6 +111,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             guideStyle,
             displayGuidePos,
             guidePosStyle = {},
+            guidesOffset,
         } = props as Required<GuidesProps>;
 
         const zoom = this._zoom;
@@ -121,6 +122,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         this.guideElements = [];
         if (showGuides) {
             return guides.map((pos, i) => {
+                const guidePos = pos + (guidesOffset || 0);
+
                 return (<div className={prefix("guide", type)}
                     ref={refs(this, "guideElements", i)}
                     key={i}
@@ -128,7 +131,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                     data-pos={pos}
                     style={{
                         ...guideStyle,
-                        transform: `${translateName}(${pos * zoom}px) translateZ(0px)`,
+                        transform: `${translateName}(${guidePos * zoom}px) translateZ(0px)`,
                     }}>
                         {displayGuidePos && <div className={prefix("guide-pos")} style={guidePosStyle || {}}>
                             {guidePosFormat!(pos)}
@@ -247,11 +250,12 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         guidesElement.style.transform = `${this.getTranslateName()}(${-pos * nextZoom}px)`;
 
         const guides = this.state.guides;
+        const guidesOffset = this.props.guidesOffset || 0;
         this.guideElements.forEach((el, i) => {
             if (!el) {
                 return;
             }
-            el.style.display = -pos + guides[i] < 0 ? "none" : "block";
+            el.style.display = -pos + guides[i] + guidesOffset < 0 ? "none" : "block";
         });
     }
     /**
@@ -355,9 +359,10 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         const { datas, isDouble, distX, distY } = e;
         const pos = this.movePos(e);
         let guides = this.state.guides;
-        const { onChangeGuides, displayDragPos, digit, lockGuides } = this.props;
+        const { onChangeGuides, displayDragPos, digit, lockGuides, guidesOffset } = this.props;
         const zoom = this._zoom;
         const guidePos = parseFloat((pos / zoom!).toFixed(digit || 0));
+        const baseScrollPos = this.scrollPos - (guidesOffset || 0);
 
         if (displayDragPos) {
             this.displayElement.style.cssText += `display: none;`;
@@ -388,7 +393,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                     pos: 0,
                 });
             }
-            if (guidePos >= this.scrollPos && guides.indexOf(guidePos) < 0) {
+            if (guidePos >= baseScrollPos && guides.indexOf(guidePos) < 0) {
                 this.setState({
                     guides: [...guides, guidePos],
                 }, () => {
@@ -419,7 +424,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             const guideIndex = guides.indexOf(guidePos);
             if (
                 isDouble
-                || guidePos < this.scrollPos
+                || guidePos < baseScrollPos
                 || (guideIndex > -1 && guideIndex !== index)
             ) {
                 if (lockGuides && (lockGuides === true || lockGuides.indexOf("remove") > -1)) {
@@ -460,6 +465,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             displayDragPos,
             digit,
         } = props;
+        const guidesOffset = props.guidesOffset || 0;
         const zoom = this._zoom;
         const dragPosFormat = props.dragPosFormat || (v => v);
         const isHorizontal = type === "horizontal";
@@ -467,7 +473,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         const offsetPos = datas.offsetPos;
         const offsetX = matrixPos[0] + offsetPos[0];
         const offsetY = matrixPos[1] + offsetPos[1];
-        let nextPos = Math.round(isHorizontal ? offsetY : offsetX);
+        const guidesZoomOffset = guidesOffset * zoom;
+        let nextPos = Math.round(isHorizontal ? offsetY : offsetX) - guidesOffset;
         let guidePos = parseFloat((nextPos / zoom!).toFixed(digit || 0));
         const guideSnaps = snaps!.slice().sort((a, b) => {
             return Math.abs(guidePos - a) - Math.abs(guidePos - b);
@@ -480,8 +487,9 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         if (!datas.fromRuler || !this._isFirstMove) {
             if (displayDragPos) {
                 const displayPos = type === "horizontal"
-                    ? [offsetX, nextPos]
-                    : [nextPos, offsetY];
+                    ? [offsetX, nextPos + guidesZoomOffset]
+                    : [nextPos + guidesZoomOffset, offsetY];
+
                 this.displayElement.style.cssText += `display: block;`
                     + `transform: translate(-50%, -50%) `
                     + `translate(${displayPos.map(v => `${v}px`).join(", ")})`;
@@ -489,10 +497,12 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             }
             const target = datas.target;
 
+
             target.setAttribute("data-pos", guidePos);
-            target.style.transform = `${this.getTranslateName()}(${nextPos}px)`;
+            target.style.transform = `${this.getTranslateName()}(${nextPos + guidesOffset * zoom}px)`;
         }
 
+        console.log(nextPos);
         return nextPos;
 
     }

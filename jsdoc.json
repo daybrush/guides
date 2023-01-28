@@ -29,6 +29,7 @@
         "DragScrollOptions": "https://daybrush.com/dragscroll/release/latest/doc/global.html#DragScrollOptions"
     },
     "docdash": {
+        "repo": "daybrush/guides",
         "menu": {
             "Github repo": {
                 "href": "https://github.com/daybrush/guides",

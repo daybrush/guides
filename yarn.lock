@@ -1697,10 +1697,33 @@
     taffydb "2.6.2"
     underscore "~1.8.3"
 
-"@daybrush/jsdoc@^0.4.0", "@daybrush/jsdoc@^0.4.3":
+"@daybrush/jsdoc@^0.4.0":
   version "0.4.3"
   resolved "https://registry.npmjs.org/@daybrush/jsdoc/-/jsdoc-0.4.3.tgz#9073899e099e5faa5a7e8d34dcd22766b84e1681"
   integrity sha512-0ZbqoitrE060eNOFQzW+TdzNqQSTQnWYHMqwLhrsFpPZy8GzorTdZwNll9XxKcDFoTR0sphcv1OKh9odHfLuvw==
+  dependencies:
+    "@babel/parser" "^7.2.3"
+    "@babel/types" "^7.2.2"
+    "@daybrush/utils" "^1.6.0"
+    ast-parser "^0.2.0"
+    bluebird "~3.5.0"
+    catharsis "~0.8.9"
+    escape-string-regexp "~1.0.5"
+    js2xmlparser "~3.0.0"
+    klaw "~2.0.0"
+    markdown-it "~8.3.1"
+    markdown-it-named-headers "~0.0.4"
+    marked "~0.3.6"
+    mkdirp "~0.5.1"
+    requizzle "~0.2.1"
+    strip-json-comments "~2.0.1"
+    taffydb "2.6.2"
+    underscore "~1.8.3"
+
+"@daybrush/jsdoc@^0.4.7":
+  version "0.4.7"
+  resolved "https://registry.npmjs.org/@daybrush/jsdoc/-/jsdoc-0.4.7.tgz#aefb53d1f15eeafbdb15b002bdb5b1ebcb2b255c"
+  integrity sha512-iR8P5Hdvcg4TvwRvS3XKlxF+4FlF5DSP7HnZoj4+01QEaFRID4HbBAEKu4t5CvGm6h9wypE4R+aVxfoin4IW1Q==
   dependencies:
     "@babel/parser" "^7.2.3"
     "@babel/types" "^7.2.2"
@@ -6976,7 +6999,15 @@ dateformat@^3.0.0:
   resolved "https://registry.npmjs.org/dateformat/-/dateformat-3.0.3.tgz#a6e37499a4d9a9cf85ef5872044d62901c9889ae"
   integrity sha512-jyCETtSl3VMZMWeRo7iY1FL19ges1t55hMo5yaam4Jrsm5EPL89UQkoQRyiI+Yf4k8r2ZpdngkV8hr1lIdjb3Q==
 
-daybrush-jsdoc-template@^1.6.0, daybrush-jsdoc-template@^1.7.0:
+daybrush-jsdoc-template@^1.10.0:
+  version "1.10.0"
+  resolved "https://registry.npmjs.org/daybrush-jsdoc-template/-/daybrush-jsdoc-template-1.10.0.tgz#6fc0f2f90c689b1eaaf0d2d74e67062a5a593c25"
+  integrity sha512-9bj+MGARB1Spqn2WQYpnK6f5KOBFLcJLunUrGqjLKkwi9X2WrWCqPfjIATahwSA/I7I0+XNjavlYgegyc1y47g==
+  dependencies:
+    "@daybrush/jsdoc" "^0.4.0"
+    "@daybrush/utils" "^1.6.0"
+
+daybrush-jsdoc-template@^1.6.0:
   version "1.7.0"
   resolved "https://registry.npmjs.org/daybrush-jsdoc-template/-/daybrush-jsdoc-template-1.7.0.tgz#49a83e5a013e649fd4d09e52521e6193de2dcd7a"
   integrity sha512-+R+37tg0etaaWqMP+z5mGMdt7432riKh1jMo2SYZnUMhk0KMEmoXUC4JzwF1sKQtmWojLBQZ7Z2zfbsVA2tBjQ==

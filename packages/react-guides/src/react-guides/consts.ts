@@ -123,6 +123,7 @@ export const PROPERTIES: Array<keyof GuidesOptions> = [
     "showGuides",
     "scrollOptions",
     "guideStyle",
+    "guidesOffset",
     ...RULER_PROPERTIES,
 ];
 

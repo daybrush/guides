@@ -68,8 +68,8 @@ export default class App extends Component<{}> {
             <div className="ruler horizontal" style={{ }}>
                 <Guides ref={ref(this, "guides1")}
                     type="horizontal"
-                    zoom={37.7}
-                    unit={1}
+                    zoom={1}
+                    unit={50}
                     lockGuides={this.state.lockGuides}
                     snapThreshold={5}
                     textFormat={v => `${v}px`}
@@ -80,6 +80,7 @@ export default class App extends Component<{}> {
                     dragPosFormat={v => `${v}cm`}
                     displayDragPos={true}
                     displayGuidePos={true}
+                    guidesOffset={50}
                     onChangeGuides={({ guides }) => {
                         console.log("horizontal", guides);
                     }}
@@ -101,8 +102,8 @@ export default class App extends Component<{}> {
                 <Guides ref={ref(this, "guides2")}
                     type="vertical"
                     lockGuides={this.state.lockGuides}
-                    zoom={this.state.zoom}
-                    unit={this.state.unit}
+                    zoom={1}
+                    unit={50}
                     snaps={[100, 200, 400]}
                     rulerStyle={{ top: "30px", height: "calc(100% - 30px)", width: "100%" }}
                     displayDragPos={true}

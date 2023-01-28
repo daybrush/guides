@@ -102,6 +102,12 @@ export interface GuidesOptions extends RulerProps {
      * @default null
      */
     scrollOptions?: DragScrollOptions | null;
+    /**
+     * Numerical value of how far away from the guideline position
+     * @since 0.22.0
+     * @default 0
+     */
+    guidesOffset?: number;
 }
 
 /**
