@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.19.0](https://github.com/daybrush/guides/blob/master/packages/react-compat-guides/compare/react-compat-guides@0.18.1...react-compat-guides@0.19.0) (2023-01-28)
+
+
+### :mega: Other
+
+* publish packages ([9473e84](https://github.com/daybrush/guides/blob/master/packages/react-compat-guides/commit/9473e8464fbd4c374ac6251ff995586afd163719))
+
+
+
 ## [0.18.1](https://github.com/daybrush/guides/blob/master/packages/react-compat-guides/compare/react-compat-guides@0.18.0...react-compat-guides@0.18.1) (2023-01-27)
 
 

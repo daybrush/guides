@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.21.0](https://github.com/daybrush/guides/blob/master/packages/react-guides/compare/@scena/react-guides@0.20.1...@scena/react-guides@0.21.0) (2023-01-28)
+
+
+### :rocket: New Features
+
+* add guidesOffset prop #49 ([6335663](https://github.com/daybrush/guides/blob/master/packages/react-guides/commit/6335663a713bf0d9e312757e9e082f62d79cd9e7))
+
+
+### :bug: Bug Fix
+
+* fix remove index #9 ([54907a3](https://github.com/daybrush/guides/blob/master/packages/react-guides/commit/54907a38e036973c2dbe07266bfc3bdf633676c6))
+
+
+### :mega: Other
+
+* publish packages ([9473e84](https://github.com/daybrush/guides/blob/master/packages/react-guides/commit/9473e8464fbd4c374ac6251ff995586afd163719))
+
+
+
 ## [0.20.1](https://github.com/daybrush/guides/blob/master/packages/react-guides/compare/@scena/react-guides@0.20.0...@scena/react-guides@0.20.1) (2023-01-27)
 
 
