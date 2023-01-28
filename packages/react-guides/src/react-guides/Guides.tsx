@@ -389,7 +389,6 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                 });
             }
             if (guidePos >= this.scrollPos && guides.indexOf(guidePos) < 0) {
-
                 this.setState({
                     guides: [...guides, guidePos],
                 }, () => {
@@ -411,7 +410,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                 });
             }
         } else {
-            const index = datas.target.getAttribute("data-index");
+            const index = parseFloat(datas.target.getAttribute("data-index"));
             let isRemove = false;
             let isChange = false;
 

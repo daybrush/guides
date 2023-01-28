@@ -77,16 +77,13 @@
             type: "horizontal",
             displayDragPos: true,
             rulerStyle: { left: "30px", width: "calc(100% - 30px)", height: "100%" },
+            useResizeObserver: true,
         });
         const guides2 = new Guides(document.querySelector(".ruler.vertical"), {
             type: "vertical",
             displayDragPos: true,
             rulerStyle: { top: "30px", height: "calc(100% - 30px)", width: "100%" },
-        });
-
-        window.addEventListener("resize", () => {
-            guides1.resize();
-            guides2.resize();
+            useResizeObserver: true,
         });
 
         let scrollX = 0;
