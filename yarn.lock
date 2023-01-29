@@ -3042,19 +3042,6 @@
   dependencies:
     "@daybrush/utils" "^1.4.0"
 
-"@scena/react-guides@~0.21.0":
-  version "0.21.0"
-  resolved "https://registry.npmjs.org/@scena/react-guides/-/react-guides-0.21.0.tgz#a9659ad1ee1af7fced844b0d80ea00ed8a0ee742"
-  integrity sha512-WZiuNllfmArWIaXKCoz+ZxCi6XjWTZZvWFRST6EPvvFX4op47zteIVqZBSgyWw/DgafE4THPOjrC5l7fNsdrRQ==
-  dependencies:
-    "@daybrush/utils" "^1.4.0"
-    "@scena/dragscroll" "^1.3.0"
-    "@scena/react-ruler" "^0.14.2"
-    css-to-mat "^1.0.3"
-    framework-utils "^1.1.0"
-    gesto "^1.13.4"
-    react-css-styled "^1.0.2"
-
 "@scena/react-ruler@^0.14.2", "@scena/react-ruler@~0.14.2":
   version "0.14.2"
   resolved "https://registry.npmjs.org/@scena/react-ruler/-/react-ruler-0.14.2.tgz#dccfd1cb68c820aef75f839259d63303803aee8f"
