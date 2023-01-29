@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.22.1](https://github.com/daybrush/guides/blob/master/packages/react-guides/compare/@scena/react-guides@0.22.0...@scena/react-guides@0.22.1) (2023-01-29)
+
+
+### :bug: Bug Fix
+
+* remove console.log ([c1c55b7](https://github.com/daybrush/guides/blob/master/packages/react-guides/commit/c1c55b7965edb34a1ad83f9b03886ba5a52a4c92))
+
+
+### :mega: Other
+
+* publish packages ([ab753c1](https://github.com/daybrush/guides/blob/master/packages/react-guides/commit/ab753c1c820463c1c0b7805d428c803c5eacc1e3))
+
+
+
 ## [0.22.0](https://github.com/daybrush/guides/blob/master/packages/react-guides/compare/@scena/react-guides@0.21.0...@scena/react-guides@0.22.0) (2023-01-29)
 
 
