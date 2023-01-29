@@ -124,6 +124,7 @@ export const PROPERTIES: Array<keyof GuidesOptions> = [
     "scrollOptions",
     "guideStyle",
     "guidesOffset",
+    "digit",
     ...RULER_PROPERTIES,
 ];
 
