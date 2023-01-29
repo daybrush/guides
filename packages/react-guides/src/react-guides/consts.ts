@@ -138,6 +138,7 @@ export const METHODS = [
     "forceUpdate",
     "getRulerScrollPos",
     "getGuideScrollPos",
+    "zoomTo",
 ] as const;
 
 export const EVENTS = [

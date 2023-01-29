@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./demo/App";
+// import App from "./demo/App";
+import App from "./demo/InfiniteViewer";
 import * as serviceWorker from "./demo/serviceWorker";
 
 ReactDOM.render(<App />, document.getElementById("root"));

@@ -49,7 +49,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     private gesto!: Gesto;
     private guideElements: HTMLElement[] = [];
     private _isFirstMove = false;
-    private _zoom = 0;
+    private _zoom = 1;
     private _observer: ResizeObserver | null = null;
 
     constructor(props: GuidesProps) {
@@ -244,10 +244,11 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
      */
     public scrollGuides(pos: number, nextZoom = this._zoom) {
         this._zoom = nextZoom;
+        const translateName = this.getTranslateName();
         const guidesElement = this.guidesElement;
 
         this.scrollPos = pos;
-        guidesElement.style.transform = `${this.getTranslateName()}(${-pos * nextZoom}px)`;
+        guidesElement.style.transform = `${translateName}(${-pos * nextZoom}px)`;
 
         const guides = this.state.guides;
         const guidesOffset = this.props.guidesOffset || 0;
@@ -255,8 +256,21 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             if (!el) {
                 return;
             }
-            el.style.display = -pos + guides[i] + guidesOffset < 0 ? "none" : "block";
+            const guidePos = guides[i] + (guidesOffset || 0);
+
+            el.style.transform = `${translateName}(${guidePos * nextZoom}px) translateZ(0px)`;
+            el.style.display = -pos +guidePos < 0 ? "none" : "block";
         });
+    }
+    /**
+     * Set to the next zoom.
+     * @memberof Guides
+     * @since 0.22.0
+     * @param nextZoom - next zoom
+     */
+    public zoomTo(nextZoom: number) {
+        this.scroll(this.getRulerScrollPos(), nextZoom);
+        this.scrollGuides(this.getGuideScrollPos(), nextZoom);
     }
     /**
      * Get Guides DOM Element
@@ -292,6 +306,9 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
      * @instance
      */
     public scroll(pos: number, nextZoom = this._zoom) {
+        if (this.props.type === "horizontal") {
+            console.log(pos, nextZoom);
+        }
         this._zoom = nextZoom;
         this.ruler.scroll(pos, nextZoom);
     }
@@ -502,9 +519,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             target.style.transform = `${this.getTranslateName()}(${nextPos + guidesOffset * zoom}px)`;
         }
 
-        console.log(nextPos);
         return nextPos;
-
     }
     private getTranslateName() {
         return this.props.type === "horizontal" ? "translateY" : "translateX";

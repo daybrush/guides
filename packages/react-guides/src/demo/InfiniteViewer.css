@@ -1,0 +1,35 @@
+html,
+body,
+.App,
+#root {
+  padding: 0;
+  margin: 0;
+  position: relative;
+  height: 100%;
+}
+.guides.horizontal {
+  position: absolute;
+  height: 30px;
+  left: 30px;
+  width: calc(100% - 30px);
+}
+.guides.vertical {
+  position: absolute;
+  width: 30px;
+  top: 30px;
+  height: calc(100% - 30px);
+}
+.viewer {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  width: calc(100% - 30px);
+  height: calc(100% - 30px);
+}
+
+.viewport {
+  position: relative;
+  border: 2px solid #ccc;
+  width: 400px;
+  height: 600px;
+}
