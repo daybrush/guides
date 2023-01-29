@@ -306,9 +306,6 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
      * @instance
      */
     public scroll(pos: number, nextZoom = this._zoom) {
-        if (this.props.type === "horizontal") {
-            console.log(pos, nextZoom);
-        }
         this._zoom = nextZoom;
         this.ruler.scroll(pos, nextZoom);
     }
