@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.23.0](https://github.com/daybrush/guides/compare/0.22.0...0.23.0) (2023-01-29)
+### :sparkles: Packages
+* `@scena/guides` 0.23.0
+* `preact-guides` 0.22.0
+* `react-compat-guides` 0.20.0
+* `@scena/react-guides` 0.22.0
+* `svelte-guides` 0.22.0
+* `vue-guides` 0.22.0
+* `vue3-guides` 0.6.0
+* `ngx-guides` 0.22.0
+
+
+### :rocket: New Features
+
+* `@scena/react-guides`
+    * add zoomTo prop #62 ([ac19fee](https://github.com/daybrush/guides/commit/ac19fee790aee7a984beec551e1873dba8ef4d9f))
+
+
+### :mega: Other
+
+* All
+    * publish packages ([6f83fa0](https://github.com/daybrush/guides/commit/6f83fa0c75f494aa79fff98f4a57f86ab295b67d))
+
+
+
 ## [0.22.0](https://github.com/daybrush/guides/compare/0.21.1...0.22.0) (2023-01-28)
 ### :sparkles: Packages
 * `@scena/guides` 0.22.0

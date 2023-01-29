@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.22.0](https://github.com/daybrush/guides/blob/master/packages/react-guides/compare/@scena/react-guides@0.21.0...@scena/react-guides@0.22.0) (2023-01-29)
+
+
+### :rocket: New Features
+
+* add zoomTo prop #62 ([ac19fee](https://github.com/daybrush/guides/blob/master/packages/react-guides/commit/ac19fee790aee7a984beec551e1873dba8ef4d9f))
+
+
+### :mega: Other
+
+* publish packages ([6f83fa0](https://github.com/daybrush/guides/blob/master/packages/react-guides/commit/6f83fa0c75f494aa79fff98f4a57f86ab295b67d))
+
+
+
 ## [0.21.0](https://github.com/daybrush/guides/blob/master/packages/react-guides/compare/@scena/react-guides@0.20.1...@scena/react-guides@0.21.0) (2023-01-28)
 
 
