@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.22.3](https://github.com/daybrush/guides/blob/master/packages/react-guides/compare/@scena/react-guides@0.22.2...@scena/react-guides@0.22.3) (2023-02-04)
+
+
+### :bug: Bug Fix
+
+* added missing Guide Options Properties (#73) ([182c6c3](https://github.com/daybrush/guides/blob/master/packages/react-guides/commit/182c6c39f5bf1bba19486b84f7db1f1327fc989d))
+* fix typo ([b58e3a7](https://github.com/daybrush/guides/blob/master/packages/react-guides/commit/b58e3a7c7adab44e7a9228f1dfe783996182c1e6))
+
+
+### :mega: Other
+
+* publish packages ([ae0d147](https://github.com/daybrush/guides/blob/master/packages/react-guides/commit/ae0d14738d83b4f5352463b69f89efe7cc111baf))
+
+
+
 ## [0.22.2](https://github.com/daybrush/guides/blob/master/packages/react-guides/compare/@scena/react-guides@0.22.1...@scena/react-guides@0.22.2) (2023-01-29)
 
 

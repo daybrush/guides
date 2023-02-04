@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.23.3](https://github.com/daybrush/guides/compare/0.23.2...0.23.3) (2023-02-04)
+### :sparkles: Packages
+* `@scena/guides` 0.23.3
+* `preact-guides` 0.22.3
+* `react-compat-guides` 0.20.3
+* `@scena/react-guides` 0.22.3
+* `svelte-guides` 0.22.3
+* `vue-guides` 0.22.3
+* `vue3-guides` 0.6.3
+* `ngx-guides` 0.22.3
+
+
+### :bug: Bug Fix
+
+* `@scena/react-guides`
+    * added missing Guide Options Properties (#73) ([182c6c3](https://github.com/daybrush/guides/commit/182c6c39f5bf1bba19486b84f7db1f1327fc989d))
+    * fix typo ([b58e3a7](https://github.com/daybrush/guides/commit/b58e3a7c7adab44e7a9228f1dfe783996182c1e6))
+
+
+### :mega: Other
+
+* All
+    * publish packages ([ae0d147](https://github.com/daybrush/guides/commit/ae0d14738d83b4f5352463b69f89efe7cc111baf))
+
+
+
 ## [0.23.2](https://github.com/daybrush/guides/compare/0.23.1...0.23.2) (2023-01-29)
 ### :sparkles: Packages
 * `@scena/guides` 0.23.2
