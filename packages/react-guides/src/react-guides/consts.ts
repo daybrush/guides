@@ -125,11 +125,11 @@ export const PROPERTIES: Array<keyof GuidesOptions> = [
     "guideStyle",
     "guidesOffset",
     "digit",
-    "dragGuideStyle"
-    "displayGuidePos"
-    "guidePosFormat"
-    "guidePosStyle"
-    "lockGuides"
+    "dragGuideStyle",
+    "displayGuidePos",
+    "guidePosFormat",
+    "guidePosStyle",
+    "lockGuides",
     ...RULER_PROPERTIES,
 ];
 
