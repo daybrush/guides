@@ -67,6 +67,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             cspNonce,
             dragGuideStyle,
             portalContainer,
+            guidePosStyle = {}
         } = this.props as Required<GuidesProps>;
         const props = this.props;
         const translateName = this.getTranslateName();
@@ -97,8 +98,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                 transform: `${translateName}(${-this.scrollPos * zoom}px)`,
             }}>
                 {displayDragPos && <div className={DISPLAY_DRAG}
-                    ref={ref(this, "displayElement")} style={dragGuideStyle} />}
-                <div className={ADDER} ref={ref(this, "adderElement")} />
+                    ref={ref(this, "displayElement")} style={guidePosStyle || {}}/>}
+                <div className={ADDER} ref={ref(this, "adderElement")} style={dragGuideStyle}/>
                 {this.renderGuides()}
             </div>
         </GuidesElement>;
