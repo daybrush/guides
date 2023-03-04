@@ -1,6 +1,6 @@
 {
     "name": "preact-guides",
-    "version": "0.22.3",
+    "version": "0.23.0",
     "description": "A Preact Guides component that can draw ruler and manage guidelines.",
     "main": "./dist/guides.cjs.js",
     "module": "./dist/guides.esm.js",
@@ -54,7 +54,7 @@
     "dependencies": {
         "@daybrush/utils": "^1.4.0",
         "@scena/dragscroll": "^1.3.0",
-        "@scena/react-guides": "~0.22.3",
+        "@scena/react-guides": "~0.23.0",
         "css-to-mat": "^1.0.3",
         "framework-utils": "^1.1.0",
         "gesto": "^1.13.4",
