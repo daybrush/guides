@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.21.0](https://github.com/daybrush/guides/blob/master/packages/react-compat-guides/compare/react-compat-guides@0.20.3...react-compat-guides@0.21.0) (2023-03-04)
+
+
+### :rocket: New Features
+
+* update ruler ([f59fa59](https://github.com/daybrush/guides/blob/master/packages/react-compat-guides/commit/f59fa5988f3c4dd96925677ca787e4fb55b150f1))
+
+
+### :mega: Other
+
+* publish packages ([1afbe1d](https://github.com/daybrush/guides/blob/master/packages/react-compat-guides/commit/1afbe1d193cf2457dc9f3296b73d38b5859c0ee0))
+
+
+
 ## [0.20.3](https://github.com/daybrush/guides/blob/master/packages/react-compat-guides/compare/react-compat-guides@0.20.2...react-compat-guides@0.20.3) (2023-02-04)
 
 
