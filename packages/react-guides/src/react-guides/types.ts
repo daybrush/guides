@@ -93,7 +93,7 @@ export interface GuidesOptions extends RulerProps {
      */
     guidePosFormat?: (value: number) => string | number;
     /**
-     * CSS style objects for displayed guide element
+     * CSS style objects for displayed guide pos text element
      * @default: "{}"
      */
     guidePosStyle?: IObject<any>;
