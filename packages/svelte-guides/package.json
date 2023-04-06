@@ -21,6 +21,7 @@
         "./*",
         "src/*",
         "dist/*",
+        "declaration/*",
         "README.md"
     ],
     "devDependencies": {

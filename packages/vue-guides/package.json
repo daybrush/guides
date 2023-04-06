@@ -30,6 +30,7 @@
         "./*",
         "src/*",
         "dist/*",
+        "declaration/*",
         "README.md"
     ],
     "homepage": "https://daybrush.com/guides",

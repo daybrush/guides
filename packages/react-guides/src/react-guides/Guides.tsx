@@ -3,7 +3,7 @@ import Ruler, { PROPERTIES as RULER_PROPERTIES, RulerProps } from "@scena/react-
 import { ref, refs } from "framework-utils";
 import DragScroll from "@scena/dragscroll";
 import Gesto, { OnDrag, OnDragEnd, OnDragStart } from "gesto";
-import styled, { StyledElement } from "react-css-styled";
+import { styled } from "react-css-styled";
 import { GUIDES, GUIDE, DRAGGING, ADDER, DISPLAY_DRAG, GUIDES_CSS } from "./consts";
 import { prefix } from "./utils";
 import { hasClass, addClass, removeClass } from "@daybrush/utils";
@@ -42,7 +42,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     public adderElement!: HTMLElement;
     public scrollPos: number = 0;
     public ruler!: Ruler;
-    private manager!: StyledElement<HTMLElement>;
+    private managerRef = React.createRef<HTMLElement>();
     private guidesElement!: HTMLElement;
     private displayElement!: HTMLElement;
     private originElement!: HTMLElement;
@@ -66,7 +66,6 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             displayDragPos,
             cspNonce,
             dragGuideStyle,
-            portalContainer,
             guidePosStyle = {}
         } = this.props as Required<GuidesProps>;
         const props = this.props;
@@ -74,7 +73,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         const rulerProps: RulerProps = {};
 
         RULER_PROPERTIES.forEach(name => {
-            if (name === "style" || name === "portalContainer" || name === "useResizeObserver") {
+            if (name === "style" || name === "warpSelf" || name === "useResizeObserver") {
                 return;
             }
             (rulerProps as any)[name] = props[name];
@@ -82,10 +81,9 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
 
         this._zoom = zoom;
         return <GuidesElement
-            ref={ref(this, "manager")}
+            ref={this.managerRef}
             cspNonce={cspNonce}
             className={`${prefix("manager", type)} ${className}`}
-            portalContainer={portalContainer}
             style={style}
         >
             <div className={prefix("guide-origin")} ref={ref(this, "originElement")}></div>
@@ -98,8 +96,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                 transform: `${translateName}(${-this.scrollPos * zoom}px)`,
             }}>
                 {displayDragPos && <div className={DISPLAY_DRAG}
-                    ref={ref(this, "displayElement")} style={guidePosStyle || {}}/>}
-                <div className={ADDER} ref={ref(this, "adderElement")} style={dragGuideStyle}/>
+                    ref={ref(this, "displayElement")} style={guidePosStyle || {}} />}
+                <div className={ADDER} ref={ref(this, "adderElement")} style={dragGuideStyle} />
                 {this.renderGuides()}
             </div>
         </GuidesElement>;
@@ -134,16 +132,16 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                         ...guideStyle,
                         transform: `${translateName}(${guidePos * zoom}px) translateZ(0px)`,
                     }}>
-                        {displayGuidePos && <div className={prefix("guide-pos")} style={guidePosStyle || {}}>
-                            {guidePosFormat!(pos)}
-                        </div>}
-                    </div>);
+                    {displayGuidePos && <div className={prefix("guide-pos")} style={guidePosStyle || {}}>
+                        {guidePosFormat!(pos)}
+                    </div>}
+                </div>);
             });
         }
         return;
     }
     public componentDidMount() {
-        this.gesto = new Gesto(this.manager.getElement(), {
+        this.gesto = new Gesto(this.managerRef.current!, {
             container: document.body,
         }).on("dragStart", e => {
             const {
@@ -163,7 +161,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             const guidesElement = this.guidesElement;
             const isHorizontal = type === "horizontal";
             const originRect = this.originElement.getBoundingClientRect();
-            const matrix = getDistElementMatrix(this.manager.getElement());
+            const matrix = getDistElementMatrix(this.managerRef.current!);
             const offsetPos = calculateMatrixDist(matrix, [
                 e.clientX - originRect.left,
                 e.clientY - originRect.top,
@@ -260,7 +258,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             const guidePos = guides[i] + (guidesOffset || 0);
 
             el.style.transform = `${translateName}(${guidePos * nextZoom}px) translateZ(0px)`;
-            el.style.display = -pos +guidePos < 0 ? "none" : "block";
+            el.style.display = -pos + guidePos < 0 ? "none" : "block";
         });
     }
     /**
@@ -279,7 +277,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
      * @instance
      */
     public getElement() {
-        return this.manager.getElement();
+        return this.managerRef.current!;
     }
     /**
      * Get Ruler DOM Element
@@ -554,7 +552,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         if (!scrollOptions) {
             return;
         }
-        const dragScroll  = e.datas.dragScroll as DragScroll;
+        const dragScroll = e.datas.dragScroll as DragScroll;
 
         dragScroll.drag(e, scrollOptions);
     }

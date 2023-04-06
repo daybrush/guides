@@ -49,7 +49,10 @@
   });
   onMount(() => {
     setStyle();
-    guides = new VanillaGuides(guidesElement, options);
+    guides = new VanillaGuides(guidesElement, {
+      ...options,
+      warpSelf: true,
+    });
 
     EVENTS.forEach((name, i) => {
       guides.on(name, e => {

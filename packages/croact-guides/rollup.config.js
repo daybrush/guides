@@ -3,9 +3,9 @@ import builder from "@daybrush/builder";
 import reactCompat from "rollup-plugin-react-compat";
 
 const external = {
-    "react-simple-compat": "react-simple-compat",
-    "react-compat-ruler": "react-compat-ruler",
-    "react-compat-css-styled": "react-compat-css-styled",
+    "croact": "croact",
+    "croact-ruler": "croact-ruler",
+    "croact-css-styled": "croact-css-styled",
     "@daybrush/utils": "utils",
     "css-styled": "css-styled",
     "framework-utils": "framework-utils",
@@ -17,10 +17,10 @@ const external = {
 
 
 const reactPlugin = reactCompat({
-    useReactCompat: true,
+    useCroact: true,
     aliasModules: {
-        "@scena/react-ruler": "react-compat-ruler",
-        "react-css-styled": "react-compat-css-styled",
+        "@scena/react-ruler": "croact-ruler",
+        "react-css-styled": "croact-css-styled",
     }
 })
 

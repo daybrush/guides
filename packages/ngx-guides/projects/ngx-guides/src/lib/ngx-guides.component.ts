@@ -55,6 +55,8 @@ export class NgxGuidesComponent extends NgxGuidesInterface implements AfterViewI
         (options as any)[name] = this[name];
       }
     });
+
+    options.warpSelf = true;
     const guides = new Guides(el, options);
 
     this.guides = guides;

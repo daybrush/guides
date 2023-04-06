@@ -1,5 +1,4 @@
 import * as React from "react";
-import { createPortal } from "react-dom";
 import { ref } from "framework-utils";
 import ReactGuides from "@scena/react-guides";
 import { GuidesOptions } from "@scena/react-guides/declaration/types";
@@ -15,7 +14,6 @@ export default class InnerGuides extends React.Component<InnerGuidesProps, Inner
         this.state = this.props;
     }
     public render() {
-        const { container, ...state } = this.state;
-        return createPortal(<ReactGuides ref={ref(this, "guides")} {...state} />, container);
+        return <ReactGuides ref={ref(this, "guides")} {...this.state} />;
     }
 }

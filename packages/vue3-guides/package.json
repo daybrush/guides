@@ -26,6 +26,7 @@
         "./*",
         "src/*",
         "dist/*",
+        "declaration/*",
         "README.md"
     ],
     "author": "Daybrush",

@@ -73,7 +73,7 @@
         ]
     },
     "resolutions": {
-        "@daybrush/utils": "^1.7.1",
+        "@daybrush/utils": "^1.11.0",
         "@types/react": "^16.9.17",
         "typescript": "^4.5.0 <4.6.0",
         "@egjs/agent": "^2.2.1",
@@ -84,12 +84,12 @@
         "framework-utils": "^1.1.0",
         "gesto": "^1.13.4",
         "overlap-area": "^1.1.0",
-        "react-compat-css-styled": "^1.0.8",
-        "react-css-styled": "^1.0.3",
+        "croact-css-styled": "^1.1.2",
+        "react-css-styled": "^1.1.2",
         "tslib": "^2.3.0"
     },
     "overrides": {
-        "@daybrush/utils": "^1.7.1",
+        "@daybrush/utils": "^1.11.0",
         "@types/react": "^16.9.17",
         "typescript": "^4.5.0 <4.6.0",
         "@egjs/agent": "^2.2.1",
@@ -100,8 +100,8 @@
         "framework-utils": "^1.1.0",
         "gesto": "^1.13.4",
         "overlap-area": "^1.1.0",
-        "react-compat-css-styled": "^1.0.8",
-        "react-css-styled": "^1.0.3",
+        "croact-css-styled": "^1.1.2",
+        "react-css-styled": "^1.1.2",
         "tslib": "^2.3.0"
     }
 }

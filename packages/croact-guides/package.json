@@ -1,5 +1,5 @@
 {
-    "name": "react-compat-guides",
+    "name": "croact-guides",
     "version": "0.21.0",
     "description": "A React Compat Guides component that can draw ruler and manage guidelines.",
     "main": "./dist/guides.cjs.js",
@@ -24,7 +24,7 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/daybrush/guides/blob/master/packages/react-compat-guides"
+        "url": "https://github.com/daybrush/guides/blob/master/packages/croact-guides"
     },
     "author": "Daybrush",
     "license": "MIT",
@@ -36,6 +36,7 @@
         "./*",
         "src/*",
         "dist/*",
+        "declaration/*",
         "README.md"
     ],
     "devDependencies": {
@@ -44,9 +45,9 @@
         "@types/react": "^16.0.0",
         "keycon": "^0.3.0",
         "print-sizes": "^0.2.0",
-        "react-simple-compat": "^1.2.2",
+        "croact": "^1.0.0",
         "rollup-plugin-css-bundle": "^1.0.4",
-        "rollup-plugin-react-compat": "^0.1.0",
+        "rollup-plugin-react-compat": "^0.1.1",
         "scenejs": "^1.1.4",
         "shape-svg": "^0.3.3",
         "tslint": "^5.16.0",
@@ -59,8 +60,8 @@
         "css-to-mat": "^1.0.3",
         "framework-utils": "^1.1.0",
         "gesto": "^1.13.4",
-        "react-compat-css-styled": "^1.0.6",
-        "react-compat-ruler": "^0.14.0",
-        "react-css-styled": "^1.0.2"
+        "croact-css-styled": "^1.1.2",
+        "croact-ruler": "^0.15.0",
+        "react-css-styled": "^1.1.2"
     }
 }

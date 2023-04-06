@@ -52,7 +52,7 @@ export default {
     const container = refs.container as HTMLElement;
 
     options.style = props.vueStyle;
-    options.portalContainer = container;
+    options.warpSelf = true;
 
     this.$_guides = new VanillaGuides(container, options);
 

@@ -35,6 +35,7 @@
         "./*",
         "src/*",
         "dist/*",
+        "declaration/*",
         "README.md"
     ],
     "homepage": "https://daybrush.com/guides",
@@ -58,8 +59,8 @@
         "css-to-mat": "^1.0.3",
         "framework-utils": "^1.1.0",
         "gesto": "^1.13.4",
-        "preact-css-styled": "^1.0.0",
+        "preact-css-styled": "^1.1.2",
         "preact-ruler": "^0.15.0",
-        "react-css-styled": "^1.0.2"
+        "react-css-styled": "^1.1.2"
     }
 }

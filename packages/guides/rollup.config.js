@@ -4,19 +4,19 @@ import compat from "rollup-plugin-react-compat";
 
 
 const reactCompat = compat({
-    useReactCompat: true,
+    useCroact: true,
     aliasModules: {
-        "@scena/react-guides": "react-compat-guides",
+        "@scena/react-guides": "croact-guides",
     },
 });
 const resolveReactCompat = compat({
-    useReactCompat: true,
+    useCroact: true,
     resolveCompat: true,
 });
 
 const external = {
-    "react-simple-compat": "react-simple-compat",
-    "react-compat-guides": "react-compat-guides",
+    "croact": "croact",
+    "croact-guides": "croact-guides",
     "@egjs/component": "@egjs/component",
     "@daybrush/utils": "@daybrush/utils",
     "gesto": "gesto",

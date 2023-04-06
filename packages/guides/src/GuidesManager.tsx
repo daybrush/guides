@@ -1,11 +1,11 @@
 import { ref, Properties } from "framework-utils";
 import * as React from "react";
-import { render } from "react-dom";
 import { PROPERTIES, METHODS, EVENTS } from "./consts";
 import { GuidesInterface, GuidesEvents, GuidesOptions } from "@scena/react-guides/declaration/types";
 import InnerGuides from "./InnerGuides";
 import EventEmitter from "@scena/event-emitter";
 import { camelize } from "@daybrush/utils";
+import { ContainerProvider, renderSelf } from "croact";
 
 @Properties(METHODS as any, (prototype, property) => {
     if (prototype[property]) {
@@ -39,7 +39,9 @@ import { camelize } from "@daybrush/utils";
  * @extends EventEmitter
  */
 class Guides extends EventEmitter<GuidesEvents> {
-    private tempElement = document.createElement("div");
+    private containerProvider: ContainerProvider | null = null;
+    private selfElement: HTMLElement | null = null;
+    private _warp = false;
     private innerGuides!: InnerGuides;
     /**
      * @sort 1
@@ -53,10 +55,20 @@ class Guides extends EventEmitter<GuidesEvents> {
         EVENTS.forEach(name => {
             events[camelize(`on ${name}`)] = (e: any) => this.trigger(name as any, e);
         });
+        let selfElement!: HTMLElement;
 
-        render(
-            <InnerGuides  {...options} {...events} container={container} ref={ref(this, "innerGuides")} />,
-            this.tempElement,
+        if (options.warpSelf) {
+            delete options.warpSelf;
+            this._warp = true;
+            selfElement = container;
+        } else {
+            selfElement = document.createElement("div");
+            container.appendChild(selfElement);
+        }
+        renderSelf(
+            <InnerGuides ref={ref(this, "innerGuides")}
+                {...options} />,
+            selfElement,
         );
     }
     /**
@@ -76,8 +88,17 @@ class Guides extends EventEmitter<GuidesEvents> {
      * destroy guides
      */
     public destroy() {
-        render(null, this.tempElement);
-        this.tempElement = null;
+        const selfElement = this.selfElement!;
+
+        renderSelf(
+            null,
+            selfElement!,
+            this.containerProvider,
+        );
+        if (!this._warp) {
+            selfElement?.parentElement?.removeChild(selfElement);
+        }
+        this.selfElement = null;
         this.innerGuides = null;
     }
     private getInnerGuides() {
