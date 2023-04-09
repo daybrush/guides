@@ -67,6 +67,12 @@ canvas {
     height: 100%;
     width: 0;
 }
+:host.horizontal canvas {
+    cursor: ns-resize;
+}
+:host.vertical canvas {
+    cursor: ew-resize;
+}
 .guide {
     position: absolute;
     background: #f33;
@@ -125,6 +131,7 @@ export const PROPERTIES: Array<keyof GuidesOptions> = [
     "guideStyle",
     "guidesOffset",
     "digit",
+    "defaultGuidesPos",
     "dragGuideStyle",
     "displayGuidePos",
     "guidePosFormat",
