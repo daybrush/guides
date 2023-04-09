@@ -58,6 +58,11 @@ export interface GuidesOptions extends RulerProps {
      */
     defaultGuides?: number[];
     /**
+     * default guide pos for init
+     * @default 0
+     */
+    defaultGuidesPos?: number
+    /**
      * Whether to show guidelines
      * @default true
      */

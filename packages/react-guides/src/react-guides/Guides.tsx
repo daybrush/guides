@@ -35,6 +35,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         guideStyle: {},
         dragGuideStyle: {},
         guidePosStyle: {},
+        defaultGuidesPos: 0,
     };
     public state: GuidesState = {
         guides: [],
@@ -55,6 +56,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     constructor(props: GuidesProps) {
         super(props);
         this.state.guides = props.defaultGuides || [];
+        this.scrollPos = props.defaultGuidesPos || 0;
     }
     public render() {
         const {
