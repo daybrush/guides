@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.23.0](https://github.com/daybrush/guides/blob/master/packages/croact-guides/compare/croact-guides@0.22.0...croact-guides@0.23.0) (2023-04-12)
+
+
+### :rocket: New Features
+
+* add resize cursor ([85fb038](https://github.com/daybrush/guides/blob/master/packages/croact-guides/commit/85fb038c910e9c6c6f7432ad64acf54eaac1d0eb))
+
+
+### :mega: Other
+
+* publish packages ([548990d](https://github.com/daybrush/guides/blob/master/packages/croact-guides/commit/548990d8577ffe565b8605f74edd9eb5a6519deb))
+
+
+
 ## 0.22.0 (2023-04-06)
 
 

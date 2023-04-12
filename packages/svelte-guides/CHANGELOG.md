@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.25.0](https://github.com/daybrush/guides/compare/svelte-guides@0.24.0...svelte-guides@0.25.0) (2023-04-12)
+
+
+### :bug: Bug Fix
+
+* fix svelte main field ([9157cef](https://github.com/daybrush/guides/commit/9157cef04c3688b7d14596043c5ad774f9aa5179))
+
+
+### :mega: Other
+
+* publish packages ([548990d](https://github.com/daybrush/guides/commit/548990d8577ffe565b8605f74edd9eb5a6519deb))
+
+
+
 ## [0.24.0](https://github.com/daybrush/guides/compare/svelte-guides@0.23.0...svelte-guides@0.24.0) (2023-04-06)
 
 

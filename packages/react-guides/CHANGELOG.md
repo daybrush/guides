@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.25.0](https://github.com/daybrush/guides/blob/master/packages/react-guides/compare/@scena/react-guides@0.24.0...@scena/react-guides@0.25.0) (2023-04-12)
+
+
+### :rocket: New Features
+
+* add defaultGuidesPos prop ([a7d31ea](https://github.com/daybrush/guides/blob/master/packages/react-guides/commit/a7d31eacc9ecc429fc0aa3cf6e909eb02047acba))
+* add resize cursor ([85fb038](https://github.com/daybrush/guides/blob/master/packages/react-guides/commit/85fb038c910e9c6c6f7432ad64acf54eaac1d0eb))
+
+
+### :mega: Other
+
+* publish packages ([548990d](https://github.com/daybrush/guides/blob/master/packages/react-guides/commit/548990d8577ffe565b8605f74edd9eb5a6519deb))
+
+
+
 ## [0.24.0](https://github.com/daybrush/guides/blob/master/packages/react-guides/compare/@scena/react-guides@0.23.0...@scena/react-guides@0.24.0) (2023-04-06)
 
 

@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.25.0](https://github.com/daybrush/guides/blob/master/packages/preact-guides/compare/preact-guides@0.24.0...preact-guides@0.25.0) (2023-04-12)
+
+
+### :mega: Other
+
+* publish packages ([548990d](https://github.com/daybrush/guides/blob/master/packages/preact-guides/commit/548990d8577ffe565b8605f74edd9eb5a6519deb))
+
+
+
 ## [0.24.0](https://github.com/daybrush/guides/blob/master/packages/preact-guides/compare/preact-guides@0.23.0...preact-guides@0.24.0) (2023-04-06)
 
 

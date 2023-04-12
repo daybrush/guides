@@ -3,6 +3,39 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.26.0](https://github.com/daybrush/guides/compare/0.25.0...0.26.0) (2023-04-12)
+### :sparkles: Packages
+* `croact-guides` 0.23.0
+* `@scena/guides` 0.26.0
+* `preact-guides` 0.25.0
+* `@scena/react-guides` 0.25.0
+* `svelte-guides` 0.25.0
+* `vue-guides` 0.25.0
+* `vue3-guides` 0.9.0
+* `ngx-guides` 0.25.0
+
+
+### :rocket: New Features
+
+* `croact-guides`, `@scena/react-guides`
+    * add resize cursor ([85fb038](https://github.com/daybrush/guides/commit/85fb038c910e9c6c6f7432ad64acf54eaac1d0eb))
+* `@scena/react-guides`
+    * add defaultGuidesPos prop ([a7d31ea](https://github.com/daybrush/guides/commit/a7d31eacc9ecc429fc0aa3cf6e909eb02047acba))
+
+
+### :bug: Bug Fix
+
+* `svelte-guides`
+    * fix svelte main field ([9157cef](https://github.com/daybrush/guides/commit/9157cef04c3688b7d14596043c5ad774f9aa5179))
+
+
+### :mega: Other
+
+* All
+    * publish packages ([548990d](https://github.com/daybrush/guides/commit/548990d8577ffe565b8605f74edd9eb5a6519deb))
+
+
+
 ## [0.25.0](https://github.com/daybrush/guides/compare/0.24.0...0.25.0) (2023-04-06)
 ### :sparkles: Packages
 * `croact-guides` 0.22.0
