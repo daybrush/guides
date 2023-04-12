@@ -23,7 +23,7 @@
     "homepage": "https://github.com/daybrush/guides#readme",
     "scripts": {
         "build": "npm run build --prefix ./packages/guides",
-        "packages:update": "yarn && lerna-helper version && npm run update-type-consts",
+        "packages:update": "lerna-helper version && yarn && npm run update-type-consts",
         "update-type-consts": "node ./config/update-type-consts.js",
         "packages:build": "npm run build --prefix packages/react-guides && npm run update-type-consts && lerna run build --ignore ngx-guides --ignore @scena/react-guides",
         "packages:publish": "lerna-helper publish --ignore ngx-guides --commit 'chore: publish packages'",
