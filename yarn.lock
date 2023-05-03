@@ -6585,10 +6585,10 @@ croact-ruler@^0.16.1:
   dependencies:
     "@scena/react-ruler" "~0.17.1"
 
-croact@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/croact/-/croact-1.0.0.tgz#fb0fe8281b736acba4ca78e2545eff0e314fb414"
-  integrity sha512-VpPknTd65rB3VgRVchQiX5pQAqx/qaZVCNVzY3rwCpqYjQKVPHZ5YwdkHX9jTxkg5lKxrUmFzj/5SNUJ7S4dNA==
+croact@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.npmjs.org/croact/-/croact-1.0.2.tgz#403b0d5cfa89d570c56106b2b87465f6862e1c36"
+  integrity sha512-0hwt1OjN+6MCeVLcmsWyLyIdc2F/A8B3q3ESGxCOW7ha0G3JQpwfg2nX39x8NGWS0vxn46iE4/z5c74xayuEhQ==
   dependencies:
     "@daybrush/utils" "^1.11.0"
     "@egjs/list-differ" "^1.0.0"
