@@ -67,6 +67,7 @@ class Guides extends EventEmitter<GuidesEvents> {
         }
         renderSelf(
             <InnerGuides ref={ref(this, "innerGuides")}
+                {...events}
                 {...options} />,
             selfElement,
         );
