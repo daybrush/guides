@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.26.2](https://github.com/daybrush/guides/compare/0.26.0...0.26.2) (2023-05-07)
+### :sparkles: Packages
+* `croact-guides` 0.23.1
+* `@scena/guides` 0.26.2
+* `preact-guides` 0.25.1
+* `@scena/react-guides` 0.25.1
+* `svelte-guides` 0.25.2
+* `vue-guides` 0.25.2
+* `vue3-guides` 0.9.2
+* `ngx-guides` 0.25.2
+
+
+### :bug: Bug Fix
+
+* `@scena/guides`
+    * fix not triggered events #80 ([a8acea3](https://github.com/daybrush/guides/commit/a8acea31ceb22a89055e117c67e4d122e4cb52ac))
+* `@scena/react-guides`
+    * fix resize observer ([29cf3b0](https://github.com/daybrush/guides/commit/29cf3b076abf7095fd22c65f6a2baf9ac70287cb))
+
+
+### :mega: Other
+
+* All
+    * publish packages ([e1fb57c](https://github.com/daybrush/guides/commit/e1fb57c59a4a8e6b3e55ffb68cfea64760270288))
+* `vue3-guides`, `vue-guides`, `svelte-guides`, `ngx-guides`, `croact-guides`, `@scena/guides`
+    * update croact version ([2fd28db](https://github.com/daybrush/guides/commit/2fd28dbbfd648b8ee6fee39f3972057fce580ae0))
+
+
+
 ## [0.26.0](https://github.com/daybrush/guides/compare/0.25.0...0.26.0) (2023-04-12)
 ### :sparkles: Packages
 * `croact-guides` 0.23.0

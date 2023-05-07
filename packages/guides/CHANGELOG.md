@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.26.2](https://github.com/daybrush/guides/compare/@scena/guides@0.26.0...@scena/guides@0.26.2) (2023-05-07)
+
+
+### :bug: Bug Fix
+
+* fix not triggered events #80 ([a8acea3](https://github.com/daybrush/guides/commit/a8acea31ceb22a89055e117c67e4d122e4cb52ac))
+
+
+### :mega: Other
+
+* publish packages ([e1fb57c](https://github.com/daybrush/guides/commit/e1fb57c59a4a8e6b3e55ffb68cfea64760270288))
+* update croact version ([2fd28db](https://github.com/daybrush/guides/commit/2fd28dbbfd648b8ee6fee39f3972057fce580ae0))
+
+
+
 ## [0.26.0](https://github.com/daybrush/guides/compare/@scena/guides@0.25.0...@scena/guides@0.26.0) (2023-04-12)
 
 

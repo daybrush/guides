@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.25.1](https://github.com/daybrush/guides/blob/master/packages/react-guides/compare/@scena/react-guides@0.25.0...@scena/react-guides@0.25.1) (2023-05-07)
+
+
+### :bug: Bug Fix
+
+* fix resize observer ([29cf3b0](https://github.com/daybrush/guides/blob/master/packages/react-guides/commit/29cf3b076abf7095fd22c65f6a2baf9ac70287cb))
+
+
+### :mega: Other
+
+* publish packages ([e1fb57c](https://github.com/daybrush/guides/blob/master/packages/react-guides/commit/e1fb57c59a4a8e6b3e55ffb68cfea64760270288))
+
+
+
 ## [0.25.0](https://github.com/daybrush/guides/blob/master/packages/react-guides/compare/@scena/react-guides@0.24.0...@scena/react-guides@0.25.0) (2023-04-12)
 
 
