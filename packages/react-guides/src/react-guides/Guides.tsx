@@ -206,6 +206,11 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             this._observer.observe(this.guidesElement, {
                 box: "border-box",
             });
+            this._observer.observe(this.getRulerElement(), {
+                box: "border-box",
+            });
+        } else {
+            this._onCheck();
         }
     }
     public componentWillUnmount() {
