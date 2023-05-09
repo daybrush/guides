@@ -65,7 +65,7 @@ class Guides extends EventEmitter<GuidesEvents> {
             selfElement = document.createElement("div");
             container.appendChild(selfElement);
         }
-        renderSelf(
+        this.containerProvider = renderSelf(
             <InnerGuides ref={ref(this, "innerGuides")}
                 {...events}
                 {...options} />,
