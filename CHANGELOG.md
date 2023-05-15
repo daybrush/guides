@@ -3,6 +3,39 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.26.4](https://github.com/daybrush/guides/compare/0.26.2...0.26.4) (2023-05-15)
+### :sparkles: Packages
+* `croact-guides` 0.23.2
+* `@scena/guides` 0.26.4
+* `preact-guides` 0.25.2
+* `@scena/react-guides` 0.25.2
+* `svelte-guides` 0.25.4
+* `vue-guides` 0.25.4
+* `vue3-guides` 0.9.4
+* `ngx-guides` 0.25.4
+
+
+### :rocket: New Features
+
+* `preact-guides`, `croact-guides`, `@scena/react-guides`, `@scena/guides`
+    * update depency modules ([21b67a8](https://github.com/daybrush/guides/commit/21b67a80dfd61183e175d9ac6c64502c092aba74))
+
+
+### :bug: Bug Fix
+
+* `@scena/guides`
+    * fix containerProvider #81 ([d12a0b2](https://github.com/daybrush/guides/commit/d12a0b213adac199f61358f71a0787f1d05208ba))
+
+
+### :mega: Other
+
+* All
+    * publish packages ([1898b89](https://github.com/daybrush/guides/commit/1898b895d5c812a5fd77d99a5928f7e420152772))
+* `vue3-guides`, `vue-guides`, `svelte-guides`, `ngx-guides`, `@scena/guides`
+    * update packages ([d8db884](https://github.com/daybrush/guides/commit/d8db884cdf43c19f77ad9c5721d3a466808853c3))
+
+
+
 ## [0.26.2](https://github.com/daybrush/guides/compare/0.26.0...0.26.2) (2023-05-07)
 ### :sparkles: Packages
 * `croact-guides` 0.23.1

@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.25.2](https://github.com/daybrush/guides/blob/master/packages/react-guides/compare/@scena/react-guides@0.25.1...@scena/react-guides@0.25.2) (2023-05-15)
+
+
+### :rocket: New Features
+
+* update depency modules ([21b67a8](https://github.com/daybrush/guides/blob/master/packages/react-guides/commit/21b67a80dfd61183e175d9ac6c64502c092aba74))
+
+
+### :mega: Other
+
+* publish packages ([1898b89](https://github.com/daybrush/guides/blob/master/packages/react-guides/commit/1898b895d5c812a5fd77d99a5928f7e420152772))
+
+
+
 ## [0.25.1](https://github.com/daybrush/guides/blob/master/packages/react-guides/compare/@scena/react-guides@0.25.0...@scena/react-guides@0.25.1) (2023-05-07)
 
 
