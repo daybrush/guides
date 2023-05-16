@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.23.3](https://github.com/daybrush/guides/blob/master/packages/croact-guides/compare/croact-guides@0.23.2...croact-guides@0.23.3) (2023-05-16)
+
+
+### :bug: Bug Fix
+
+* update css-styled version ([7327395](https://github.com/daybrush/guides/blob/master/packages/croact-guides/commit/7327395786810c872f53678d47602b80db127197))
+
+
+### :mega: Other
+
+* publish packages ([78ed8c7](https://github.com/daybrush/guides/blob/master/packages/croact-guides/commit/78ed8c708759927cabeb53b8c607fc6f54324371))
+
+
+
 ## [0.23.2](https://github.com/daybrush/guides/blob/master/packages/croact-guides/compare/croact-guides@0.23.1...croact-guides@0.23.2) (2023-05-15)
 
 
