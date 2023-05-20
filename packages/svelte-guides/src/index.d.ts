@@ -1,27 +1,16 @@
-import { GuidesInterface } from "@scena/guides";
+/// <reference types="svelte" />
+import { SvelteComponentTyped } from "svelte";
+import { GuidesInterface, GuidesOptions, GuidesEvents } from "@scena/guides";
 
+export type SvelteGuidesEvents = {
+    [key in keyof GuidesEvents]: CustomEvent<GuidesEvents[key]>;
+}
+export default class GuidesComponent extends SvelteComponentTyped<
+    GuidesOptions,
+    SvelteGuidesEvents
+> { }
 
-interface ComponentOptions {
-    target: HTMLElement;
-    anchor?: HTMLElement | null;
-    props?: {};
-    hydrate?: boolean;
-    intro?: boolean;
+export default interface GuidesComponent extends GuidesInterface {
 }
 
-interface GuidesComponent extends GuidesInterface {
-    new(options: ComponentOptions): any;
-    // client-side methods
-    $set(props: {}): void;
-    $on(event: string, callback: (event: CustomEvent) => void): void;
-    $destroy(): void;
-    // server-side methods
-    render(props?: {}): {
-        html: string;
-        css: { code: string; map: string | null };
-        head?: string;
-    };
-}
-
-export default GuidesComponent;
 export * from "@scena/guides";

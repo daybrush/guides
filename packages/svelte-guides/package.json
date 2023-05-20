@@ -1,6 +1,6 @@
 {
     "name": "svelte-guides",
-    "version": "0.25.5",
+    "version": "0.25.6",
     "description": "A Svelte Guides component that can draw ruler and manage guidelines.",
     "svelte": "./src/index.js",
     "sideEffects": false,
