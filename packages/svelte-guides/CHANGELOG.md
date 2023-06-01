@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.26.0](https://github.com/daybrush/guides/compare/svelte-guides@0.25.5...svelte-guides@0.26.0) (2023-06-01)
+
+
+### :rocket: New Features
+
+* support svelte types ([a401a7a](https://github.com/daybrush/guides/commit/a401a7a4f1325e8364aef55d1728a27167dc1c91))
+
+
+### :mega: Other
+
+* publish packages ([d038e92](https://github.com/daybrush/guides/commit/d038e92046e55f0f65f4ddde24f12ed117fd64e2))
+
+
+
 ## [0.25.5](https://github.com/daybrush/guides/compare/svelte-guides@0.25.4...svelte-guides@0.25.5) (2023-05-16)
 
 
