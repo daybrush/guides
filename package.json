@@ -73,7 +73,7 @@
         ]
     },
     "resolutions": {
-        "@daybrush/utils": "^1.11.0",
+        "@daybrush/utils": "^1.12.1",
         "@types/react": "^16.9.17",
         "typescript": "^4.5.0 <4.6.0",
         "@egjs/agent": "^2.2.1",
@@ -82,14 +82,14 @@
         "@scena/matrix": "^1.1.1",
         "css-to-mat": "^1.0.3",
         "framework-utils": "^1.1.0",
-        "gesto": "^1.17.2",
+        "gesto": "^1.18.1",
         "overlap-area": "^1.1.0",
-        "croact-css-styled": "^1.1.7",
-        "react-css-styled": "^1.1.7",
+        "croact-css-styled": "^1.1.8",
+        "react-css-styled": "^1.1.8",
         "tslib": "^2.3.0"
     },
     "overrides": {
-        "@daybrush/utils": "^1.11.0",
+        "@daybrush/utils": "^1.12.1",
         "@types/react": "^16.9.17",
         "typescript": "^4.5.0 <4.6.0",
         "@egjs/agent": "^2.2.1",
@@ -98,10 +98,10 @@
         "@scena/matrix": "^1.1.1",
         "css-to-mat": "^1.0.3",
         "framework-utils": "^1.1.0",
-        "gesto": "^1.17.2",
+        "gesto": "^1.18.1",
         "overlap-area": "^1.1.0",
-        "croact-css-styled": "^1.1.7",
-        "react-css-styled": "^1.1.7",
+        "croact-css-styled": "^1.1.8",
+        "react-css-styled": "^1.1.8",
         "tslib": "^2.3.0"
     }
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Guides from "../react-guides";
 import InfiniteViewer from "react-infinite-viewer";
 
@@ -10,6 +10,8 @@ export default function App() {
     const viewerRef = React.useRef<InfiniteViewer>(null);
     const horizontalGuidesRef = React.useRef<Guides>(null);
     const verticalGuidesRef = React.useRef<Guides>(null);
+    const [horizontalGuidelines, setHorizontalGuidelines] = useState<number[]>([]);
+    const [verticalGuidelines, setVerticalGuidelines] = useState<number[]>([]);
 
     React.useEffect(() => {
         viewerRef.current!.scrollCenter();
@@ -26,19 +28,26 @@ export default function App() {
                     displayGuidePos={true}
                     zoom={zoom}
                     unit={unit}
+                    marks={verticalGuidelines}
+                    onChangeGuides={({ guides }) => {
+                        console.log("horizontal", guides);
+                        setHorizontalGuidelines(guides);
+                    }}
                 />
             </div>
             <div className="guides vertical">
                 <Guides
                     ref={verticalGuidesRef}
                     type="vertical"
-                    // useResizeObserver={true}
+                    useResizeObserver={true}
                     displayDragPos={true}
                     displayGuidePos={true}
                     zoom={zoom}
                     unit={unit}
+                    marks={horizontalGuidelines}
                     onChangeGuides={({ guides }) => {
                         console.log("vertical", guides);
+                        setVerticalGuidelines(guides);
                     }}
                 />
             </div>
