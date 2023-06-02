@@ -3042,10 +3042,10 @@
   dependencies:
     "@daybrush/utils" "^1.4.0"
 
-"@scena/react-ruler@^0.18.0", "@scena/react-ruler@~0.18.0":
-  version "0.18.0"
-  resolved "https://registry.npmjs.org/@scena/react-ruler/-/react-ruler-0.18.0.tgz#b2d89ddb9b93277712f486c7722d6e0937dbc681"
-  integrity sha512-mS76YxfNtzjrWlv5HDwwRhsWK+dTjAdGrsDWkuhS9i5io7lBLmEBSCn4bByH28nlHR6N+rAPhH5jjopWmockag==
+"@scena/react-ruler@^0.19.0", "@scena/react-ruler@~0.19.0":
+  version "0.19.0"
+  resolved "https://registry.npmjs.org/@scena/react-ruler/-/react-ruler-0.19.0.tgz#7e94a3b016e9c3e0bd105455f0939832c80def0e"
+  integrity sha512-2OEOjLMOptDxdSuEqID2JAljQuYoeoV09MnLjiBeyzJxoUcVjzyBCPwkMbHRKj2Z3WrwztJAFBF+y6yNNM5Lcw==
   dependencies:
     "@daybrush/utils" "^1.11.0"
     framework-utils "^1.1.0"
@@ -6570,12 +6570,12 @@ croact-css-styled@^1.1.8:
     css-styled "~1.0.7"
     framework-utils "^1.1.0"
 
-croact-ruler@^0.17.0:
-  version "0.17.0"
-  resolved "https://registry.npmjs.org/croact-ruler/-/croact-ruler-0.17.0.tgz#432f0674614094cb1a25ccd63545a31a0c30dc6b"
-  integrity sha512-2+BYQpPC8deg/DhjjQMuyHwDXRbINZmuFmJakJZnyDXBwFH/6WqF1PfAgNIrI1plZCO27NXyo2K3eXX09UIGAQ==
+croact-ruler@^0.18.0:
+  version "0.18.0"
+  resolved "https://registry.npmjs.org/croact-ruler/-/croact-ruler-0.18.0.tgz#50850341f6574fe24b26cc32db34fc1c19f5cdc8"
+  integrity sha512-FZtYH1n3Mpv7VX24y26lAMOVqem+/qRG4a7nBy9pwDeh9Q8UycOQqAdmWxNC1CNh1Pw1k4K28/gRQOyo4r1Zag==
   dependencies:
-    "@scena/react-ruler" "~0.18.0"
+    "@scena/react-ruler" "~0.19.0"
 
 croact@^1.0.3:
   version "1.0.3"
@@ -15268,12 +15268,12 @@ preact-render-to-string@^3.8.2:
   dependencies:
     pretty-format "^3.5.1"
 
-preact-ruler@^0.18.0:
-  version "0.18.0"
-  resolved "https://registry.npmjs.org/preact-ruler/-/preact-ruler-0.18.0.tgz#29603431c655552215d470d75427f4f996c7ad44"
-  integrity sha512-+VTw+pgcaz72Ax8OV9up2jJlcLwg2UH1vUTXqIJSPPvwUA53LXk3rRpzHkUlCIhxM8VJpMypMvOcu0B11Wudbw==
+preact-ruler@^0.19.0:
+  version "0.19.0"
+  resolved "https://registry.npmjs.org/preact-ruler/-/preact-ruler-0.19.0.tgz#faa5abbd4c53e5227b6169f3fe56f09690fa762c"
+  integrity sha512-mkL7YoROisIgJzP/bnLGba7MgKuJ/VPPBI7OFhqFILW6ew7/4rMIrZW1U0Vu1OZ+FtYUXtQ4ZtK8JTtquUTxUQ==
   dependencies:
-    "@scena/react-ruler" "~0.18.0"
+    "@scena/react-ruler" "~0.19.0"
 
 preact-transition-group@^1.1.1:
   version "1.1.1"

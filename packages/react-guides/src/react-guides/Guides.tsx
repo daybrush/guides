@@ -1,5 +1,5 @@
 import * as React from "react";
-import Ruler, { PROPERTIES as RULER_PROPERTIES, RulerProps } from "@scena/react-ruler";
+import Ruler, { DrawRulerOptions, PROPERTIES as RULER_PROPERTIES, RulerProps } from "@scena/react-ruler";
 import { ref, refs } from "framework-utils";
 import DragScroll from "@scena/dragscroll";
 import Gesto, { OnDrag, OnDragEnd, OnDragStart } from "gesto";
@@ -103,6 +103,12 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                 {this.renderGuides()}
             </div>
         </GuidesElement>;
+    }
+    /**
+     * Draw ruler
+     */
+    public drawRuler(options: DrawRulerOptions) {
+        this.ruler.draw(options);
     }
     public renderGuides() {
         const props = this.props;

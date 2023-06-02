@@ -1,4 +1,4 @@
-import { RulerProps } from "@scena/react-ruler/declaration/types";
+import { DrawRulerOptions, RulerProps } from "@scena/react-ruler/declaration/types";
 import { IObject } from "@daybrush/utils";
 import {
     OnDragStart as OnGestoDragStart,
@@ -198,6 +198,7 @@ export interface GuidesInterface {
     getGuides(): number[];
     scroll(pos: number): void;
     scrollGuides(pos: number): void;
+    drawRuler(options: DrawRulerOptions): void;
     loadGuides(guides: number[]): void;
     resize(): void;
     getElement(): HTMLElement;

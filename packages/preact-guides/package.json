@@ -60,7 +60,7 @@
         "framework-utils": "^1.1.0",
         "gesto": "^1.18.1",
         "preact-css-styled": "^1.1.8",
-        "preact-ruler": "^0.18.0",
+        "preact-ruler": "^0.19.0",
         "react-css-styled": "^1.1.8"
     }
 }

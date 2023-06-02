@@ -152,6 +152,7 @@ export const METHODS = [
     "getRulerScrollPos",
     "getGuideScrollPos",
     "zoomTo",
+    "drawRuler",
 ] as const;
 
 export const EVENTS = [
