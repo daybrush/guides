@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.27.0](https://github.com/daybrush/guides/blob/master/packages/preact-guides/compare/preact-guides@0.26.0...preact-guides@0.27.0) (2023-06-02)
+
+
+### :rocket: New Features
+
+* update ruler and add drawRuler method ([20b1182](https://github.com/daybrush/guides/blob/master/packages/preact-guides/commit/20b1182c3e8c93980418f34e1360cb4c81a2a0d3))
+
+
+### :mega: Other
+
+* publish packages ([53d07f3](https://github.com/daybrush/guides/blob/master/packages/preact-guides/commit/53d07f3e31011ee6bff1a2558380dc6e61e98337))
+
+
+
 ## [0.26.0](https://github.com/daybrush/guides/blob/master/packages/preact-guides/compare/preact-guides@0.25.3...preact-guides@0.26.0) (2023-06-01)
 
 

@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.28.0](https://github.com/daybrush/guides/compare/@scena/guides@0.27.0...@scena/guides@0.28.0) (2023-06-02)
+
+
+### :mega: Other
+
+* publish packages ([53d07f3](https://github.com/daybrush/guides/commit/53d07f3e31011ee6bff1a2558380dc6e61e98337))
+
+
+
 ## [0.27.0](https://github.com/daybrush/guides/compare/@scena/guides@0.26.5...@scena/guides@0.27.0) (2023-06-01)
 
 

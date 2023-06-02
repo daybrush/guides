@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.28.0](https://github.com/daybrush/guides/compare/0.27.0...0.28.0) (2023-06-02)
+### :sparkles: Packages
+* `croact-guides` 0.25.0
+* `@scena/guides` 0.28.0
+* `preact-guides` 0.27.0
+* `@scena/react-guides` 0.27.0
+* `svelte-guides` 0.27.0
+* `vue-guides` 0.27.0
+* `vue3-guides` 0.11.0
+* `ngx-guides` 0.27.0
+
+
+### :rocket: New Features
+
+* `preact-guides`, `croact-guides`, `@scena/react-guides`
+    * update ruler and add drawRuler method ([20b1182](https://github.com/daybrush/guides/commit/20b1182c3e8c93980418f34e1360cb4c81a2a0d3))
+
+
+### :mega: Other
+
+* All
+    * publish packages ([53d07f3](https://github.com/daybrush/guides/commit/53d07f3e31011ee6bff1a2558380dc6e61e98337))
+
+
+
 ## [0.27.0](https://github.com/daybrush/guides/compare/0.26.5...0.27.0) (2023-06-01)
 ### :sparkles: Packages
 * `croact-guides` 0.24.0
