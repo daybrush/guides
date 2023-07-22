@@ -5,8 +5,10 @@ import InfiniteViewer from "react-infinite-viewer";
 import "./InfiniteViewer.css";
 
 export default function App() {
-    const [zoom, setZoom] = React.useState(1);
-    const unit = Math.round(Math.floor(1 / zoom) * 50) || 50;
+    const [horizontalZoom, setHorizontalZoom] = React.useState(1);
+    const [verticalZoom, setVerticalZoom] = React.useState(1);
+    const horizontalUnit = Math.round(Math.floor(1 / horizontalZoom) * 50) || 50;
+    const verticalUnit = Math.round(Math.floor(1 / verticalZoom) * 50) || 50;
     const viewerRef = React.useRef<InfiniteViewer>(null);
     const horizontalGuidesRef = React.useRef<Guides>(null);
     const verticalGuidesRef = React.useRef<Guides>(null);
@@ -26,8 +28,9 @@ export default function App() {
                     useResizeObserver={true}
                     displayDragPos={true}
                     displayGuidePos={true}
-                    zoom={zoom}
-                    unit={unit}
+                    zoom={horizontalZoom}
+                    guidesZoom={verticalZoom}
+                    unit={horizontalUnit}
                     marks={verticalGuidelines}
                     onChangeGuides={({ guides }) => {
                         console.log("horizontal", guides);
@@ -42,8 +45,9 @@ export default function App() {
                     useResizeObserver={true}
                     displayDragPos={true}
                     displayGuidePos={true}
-                    zoom={zoom}
-                    unit={unit}
+                    zoom={verticalZoom}
+                    guidesZoom={horizontalZoom}
+                    unit={verticalUnit}
                     marks={horizontalGuidelines}
                     onChangeGuides={({ guides }) => {
                         console.log("vertical", guides);
@@ -65,9 +69,9 @@ export default function App() {
                 }}
                 onPinch={(e) => {
                     const zoom = e.zoom;
-                    horizontalGuidesRef.current!.zoomTo(zoom);
-                    verticalGuidesRef.current!.zoomTo(zoom);
-                    setZoom(e.zoom);
+                    horizontalGuidesRef.current!.zoomTo(e.zoomX,);
+                    // verticalGuidesRef.current!.zoomTo(e.zoomY);
+                    setHorizontalZoom(e.zoomX);
                 }}
             >
                 <div className="viewport">Viewport</div>

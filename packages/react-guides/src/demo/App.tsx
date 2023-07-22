@@ -6,22 +6,20 @@ import Guides from "../react-guides/Guides";
 import { ref } from "framework-utils";
 import Gesto from "gesto";
 
-type LockGuides = boolean | Array<"add" | "change" | "remove">;
-
 interface State {
-    lockGuides: LockGuides;
     lockAdd: boolean;
     lockRemove: boolean;
     lockChange: boolean;
-    unit: number,
-    zoom: number,
+    unit: number;
+    horizontalZoom: number;
+    verticalZoom: number;
 }
 
 export default class App extends Component<{}> {
     public state: State = {
-        zoom: 1,
+        horizontalZoom: 1,
+        verticalZoom: 1,
         unit: 37.7,
-        lockGuides: false,
         lockAdd: false,
         lockChange: false,
         lockRemove: false,
@@ -32,50 +30,54 @@ export default class App extends Component<{}> {
     private guides2: Guides;
     private scrollX: number = 0;
     private scrollY: number = 0;
-    private lockGuides: LockGuides = [];
 
     private handleLockRemoveClick = () => {
         const lockRemove = !this.state.lockRemove;
-        lockRemove ? this.lockGuides.push("remove") : this.lockGuides.remove("remove");
-        this.setState({ lockRemove, lockGuides: this.lockGuides });
+
+        this.setState({ lockRemove });
     }
 
     private handleLockAddClick = () => {
         const lockAdd = !this.state.lockAdd;
-        lockAdd ? this.lockGuides.push("add") : this.lockGuides.remove("add");
-        this.setState({ lockAdd, lockGuides: this.lockGuides });
+        this.setState({ lockAdd });
     }
 
     private handleLockChangeClick = () => {
         const lockChange = !this.state.lockChange;
         const lockRemove = !this.state.lockRemove && true;
-        lockChange ? this.lockGuides.push("change") : this.lockGuides.remove("change");
-        lockRemove ? this.lockGuides.push("remove") : this.lockGuides.remove("remove");
-        this.setState({ lockChange, lockRemove, lockGuides: this.lockGuides });
+        this.setState({ lockChange, lockRemove });
     }
 
     private handleLockToggleClick = () => {
-        if (typeof !this.state.lockGuides === 'boolean') {
-            this.setState({ lockGuides: !this.state.lockGuides, lockAdd: false, lockRemove: false, lockChange: false });
-        }
+        this.setState({ lockAdd: false, lockRemove: false, lockChange: false });
     }
 
     public render() {
-        const lockText = this.state.lockGuides ? 'unlock' : 'lock';
-        const isLockButtonActive = (lockType: boolean) => lockType && { background: '#333', color: '#fff'};
+        const lockGuides: Array<"add" | "change" | "remove"> = [];
+        if (this.state.lockAdd) {
+            lockGuides.push("add");
+        }
+        if (this.state.lockChange) {
+            lockGuides.push("change");
+        }
+        if (this.state.lockRemove) {
+            lockGuides.push("remove");
+        }
+        const lockText = lockGuides.length ? 'unlock' : 'lock';
+        const isLockButtonActive = (lockType: boolean) => lockType && { background: '#333', color: '#fff' };
         return (<div className="page">
             <div className="box" onClick={this.restore}></div>
-            <div className="ruler horizontal" style={{ }}>
+            <div className="ruler horizontal" style={{}}>
                 <Guides ref={ref(this, "guides1")}
                     type="horizontal"
                     zoom={1}
                     unit={50}
-                    lockGuides={this.state.lockGuides}
+                    lockGuides={lockGuides}
                     snapThreshold={5}
                     textFormat={v => `${v}px`}
                     snaps={[1, 2, 3]}
                     digit={1}
-                    style={{  height: "30px" }}
+                    style={{ height: "30px" }}
                     rulerStyle={{ left: "30px", width: "calc(100% - 30px)", height: "100%" }}
                     dragPosFormat={v => `${v}cm`}
                     displayDragPos={true}
@@ -101,7 +103,7 @@ export default class App extends Component<{}> {
             <div className="ruler vertical">
                 <Guides ref={ref(this, "guides2")}
                     type="vertical"
-                    lockGuides={this.state.lockGuides}
+                    lockGuides={lockGuides}
                     zoom={1}
                     unit={50}
                     snaps={[100, 200, 400]}
@@ -126,12 +128,14 @@ export default class App extends Component<{}> {
                 <p className="dragit">Drag Screen & Rulers!</p>
                 <p><button onClick={() => {
                     this.setState({
-                        zoom: this.state.zoom / 2,
+                        horizontalZoom: this.state.horizontalZoom / 2,
+                        verticalZoom: this.state.horizontalZoom / 2,
                         unit: this.state.unit * 2,
                     });
                 }}>-</button> / <button onClick={() => {
                     this.setState({
-                        zoom: this.state.zoom * 2,
+                        horizontalZoom: this.state.horizontalZoom * 2,
+                        verticalZoom: this.state.horizontalZoom * 2,
                         unit: this.state.unit / 2,
                     });
                 }}>+</button></p>
@@ -140,9 +144,9 @@ export default class App extends Component<{}> {
                         <i className={`fa fa-${lockText}`}></i>
                         {" " + lockText[0].toUpperCase() + lockText.slice(1)} Guides
                     </button>
-                    <button style={{...isLockButtonActive(this.state.lockAdd)}} onClick={this.handleLockAddClick}> Add</button>
-                    <button style={{...isLockButtonActive(this.state.lockChange)}} onClick={this.handleLockChangeClick}> Change</button>
-                    <button style={{...isLockButtonActive(this.state.lockRemove)}} onClick={this.handleLockRemoveClick}> Remove</button>
+                    <button style={{ ...isLockButtonActive(this.state.lockAdd) }} onClick={this.handleLockAddClick}> Add</button>
+                    <button style={{ ...isLockButtonActive(this.state.lockChange) }} onClick={this.handleLockChangeClick}> Change</button>
+                    <button style={{ ...isLockButtonActive(this.state.lockRemove) }} onClick={this.handleLockRemoveClick}> Remove</button>
                 </div>
                 <p className="badges">
                     <a href="https://www.npmjs.com/package/svelte-guides" target="_blank">
@@ -204,10 +208,10 @@ export default class App extends Component<{}> {
 }
 
 Object.defineProperty(Array.prototype, "remove", {
-    value: function(value) {
+    value: function (value) {
         for (let key in this) {
             if (this[key] === value) {
-                this.splice(key,1);
+                this.splice(key, 1);
             }
         }
         return this;

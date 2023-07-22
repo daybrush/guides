@@ -17,6 +17,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         className: "",
         type: "horizontal",
         zoom: 1,
+        guidesZoom: 0,
         style: {},
         snapThreshold: 5,
         snaps: [],
@@ -51,6 +52,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     private guideElements: HTMLElement[] = [];
     private _isFirstMove = false;
     private _zoom = 1;
+    private _guidesZoom = 1;
     private _observer: ResizeObserver | null = null;
 
     constructor(props: GuidesProps) {
@@ -63,6 +65,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             className,
             type,
             zoom,
+            guidesZoom,
             style,
             rulerStyle,
             displayDragPos,
@@ -82,6 +85,9 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         });
 
         this._zoom = zoom;
+        this._guidesZoom = guidesZoom || zoom;
+
+        console.log(type, zoom, guidesZoom);
         return <GuidesElement
             ref={this.managerRef}
             cspNonce={cspNonce}
@@ -95,7 +101,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                 {...rulerProps}
             />
             <div className={GUIDES} ref={ref(this, "guidesElement")} style={{
-                transform: `${translateName}(${-this.scrollPos * zoom}px)`,
+                transform: `${translateName}(${-this.scrollPos * this._guidesZoom}px)`,
             }}>
                 {displayDragPos && <div className={DISPLAY_DRAG}
                     ref={ref(this, "displayElement")} style={guidePosStyle || {}} />}
@@ -121,7 +127,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             guidesOffset,
         } = props as Required<GuidesProps>;
 
-        const zoom = this._zoom;
+        const zoom = this._guidesZoom;
         const translateName = this.getTranslateName();
         const guides = this.state.guides;
         const guidePosFormat = props.guidePosFormat || props.dragPosFormat || (v => v);
@@ -156,7 +162,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                 type,
                 lockGuides,
             } = this.props;
-            const zoom = this._zoom;
+            const zoom = this._guidesZoom;
 
             if (lockGuides === true) {
                 e.stop();
@@ -254,8 +260,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
      * @memberof Guides
      * @instance
      */
-    public scrollGuides(pos: number, nextZoom = this._zoom) {
-        this._zoom = nextZoom;
+    public scrollGuides(pos: number, nextZoom = this._guidesZoom) {
+        this._setZoom({ guidesZoom: nextZoom });
         const translateName = this.getTranslateName();
         const guidesElement = this.guidesElement;
 
@@ -280,9 +286,9 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
      * @since 0.22.0
      * @param nextZoom - next zoom
      */
-    public zoomTo(nextZoom: number) {
+    public zoomTo(nextZoom: number, nextGuidesZoom = nextZoom) {
         this.scroll(this.getRulerScrollPos(), nextZoom);
-        this.scrollGuides(this.getGuideScrollPos(), nextZoom);
+        this.scrollGuides(this.getGuideScrollPos(), nextGuidesZoom);
     }
     /**
      * Get Guides DOM Element
@@ -318,7 +324,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
      * @instance
      */
     public scroll(pos: number, nextZoom = this._zoom) {
-        this._zoom = nextZoom;
+        this._setZoom({ zoom: nextZoom });
         this.ruler.scroll(pos, nextZoom);
     }
     /**
@@ -327,6 +333,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
      * @instance
      */
     public resize(nextZoom = this._zoom) {
+        this._setZoom({ zoom: nextZoom });
         this.ruler.resize(nextZoom);
     }
     private onDragStart = (e: any) => {
@@ -575,5 +582,30 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     }
     private _onCheck = () => {
         this.resize();
+    }
+    private _setZoom(zooms: { zoom?: number; guidesZoom?: number }) {
+        const {
+            zoom: nextZoom,
+            guidesZoom: nextGuidesZoom,
+        } = zooms;
+        const hasZoom = !!this.props.zoom;
+        const hasGuidesZoom = !!this.props.guidesZoom;
+
+        if (hasGuidesZoom) {
+            if (nextGuidesZoom) {
+                this._guidesZoom = nextGuidesZoom;
+            }
+        } else {
+            if (nextGuidesZoom) {
+                this._zoom = nextGuidesZoom;
+                this._guidesZoom = nextGuidesZoom;
+            }
+            if (nextZoom) {
+                this._guidesZoom = nextZoom;
+            }
+        }
+        if (nextZoom) {
+            this._zoom  = nextZoom;
+        }
     }
 }

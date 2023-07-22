@@ -137,6 +137,7 @@ export const PROPERTIES: Array<keyof GuidesOptions> = [
     "guidePosFormat",
     "guidePosStyle",
     "lockGuides",
+    "guidesZoom",
     ...RULER_PROPERTIES,
 ];
 

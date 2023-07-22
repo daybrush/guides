@@ -44,6 +44,12 @@ export interface GuidesOptions extends RulerProps {
      */
     displayDragPos?: boolean;
     /**
+     * guides zoom(side zoom). If not set, it is the same as `zoom`.
+     * @default zoom
+     * @since 0.29.0
+     */
+    guidesZoom?: number;
+    /**
      * csp nonce
      */
     cspNonce?: string;
