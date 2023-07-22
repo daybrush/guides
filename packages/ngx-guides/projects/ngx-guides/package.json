@@ -1,6 +1,6 @@
 {
   "name": "ngx-guides",
-  "version": "0.27.0",
+  "version": "0.28.0",
   "description": "An Angular Guides component that can draw ruler and manage guidelines.",
   "keywords": [
     "scene",
@@ -24,7 +24,7 @@
   },
   "homepage": "https://daybrush.com/guides",
   "dependencies": {
-    "@scena/guides": "~0.28.0",
+    "@scena/guides": "~0.29.0",
     "tslib": "^2.3.0"
   }
 }
