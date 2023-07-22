@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.29.0](https://github.com/daybrush/guides/compare/0.28.0...0.29.0) (2023-07-22)
+### :sparkles: Packages
+* `croact-guides` 0.26.0
+* `@scena/guides` 0.29.0
+* `preact-guides` 0.28.0
+* `@scena/react-guides` 0.28.0
+* `svelte-guides` 0.28.0
+* `vue-guides` 0.28.0
+* `vue3-guides` 0.12.0
+* `ngx-guides` 0.28.0
+
+
+### :rocket: New Features
+
+* `@scena/react-guides`
+    * add `guidesZoom` prop #83 ([42694cc](https://github.com/daybrush/guides/commit/42694cc48173a31df52e430697a43dfe2569426b))
+
+
+### :mega: Other
+
+* All
+    * publish packages ([324f848](https://github.com/daybrush/guides/commit/324f848e0bae231c82b33be29ee2534d58a6d6b1))
+
+
+
 ## [0.28.0](https://github.com/daybrush/guides/compare/0.27.0...0.28.0) (2023-06-02)
 ### :sparkles: Packages
 * `croact-guides` 0.25.0

@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.28.0](https://github.com/daybrush/guides/compare/ngx-guides@0.27.0...ngx-guides@0.28.0) (2023-07-22)
+
+
+### :mega: Other
+
+* publish packages ([324f848](https://github.com/daybrush/guides/commit/324f848e0bae231c82b33be29ee2534d58a6d6b1))
+
+
+
 ## [0.27.0](https://github.com/daybrush/guides/compare/ngx-guides@0.26.0...ngx-guides@0.27.0) (2023-06-02)
 
 
