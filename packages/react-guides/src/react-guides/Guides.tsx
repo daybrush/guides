@@ -393,7 +393,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         const pos = this.movePos(e);
         let guides = this.state.guides;
         const { onChangeGuides, displayDragPos, digit, lockGuides, guidesOffset } = this.props;
-        const zoom = this._zoom;
+        const zoom = this._guidesZoom;
         const guidePos = parseFloat((pos / zoom!).toFixed(digit || 0));
         const baseScrollPos = this.scrollPos - (guidesOffset || 0);
 
@@ -499,7 +499,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             digit,
         } = props;
         const guidesOffset = props.guidesOffset || 0;
-        const zoom = this._zoom;
+        const zoom = this._guidesZoom;
         const dragPosFormat = props.dragPosFormat || (v => v);
         const isHorizontal = type === "horizontal";
         const matrixPos = calculateMatrixDist(datas.matrix, [distX, distY]);
