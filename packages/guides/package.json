@@ -1,6 +1,6 @@
 {
     "name": "@scena/guides",
-    "version": "0.29.0",
+    "version": "0.29.1",
     "description": "A Vanilla Guides component that can draw ruler and manage guidelines.",
     "main": "./dist/guides.cjs.js",
     "module": "./dist/guides.esm.js",
@@ -61,6 +61,6 @@
     "dependencies": {
         "@scena/event-emitter": "^1.0.4",
         "croact": "^1.0.3",
-        "croact-guides": "~0.26.0"
+        "croact-guides": "~0.26.1"
     }
 }
