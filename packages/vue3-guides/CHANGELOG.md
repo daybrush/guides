@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.12.1](https://github.com/daybrush/guides/compare/vue3-guides@0.12.0...vue3-guides@0.12.1) (2023-07-23)
+
+
+### :mega: Other
+
+* publish packages ([73e2427](https://github.com/daybrush/guides/commit/73e24270c27eec1f30cc051fe84569e79f85822c))
+
+
+
 ## [0.12.0](https://github.com/daybrush/guides/compare/vue3-guides@0.11.0...vue3-guides@0.12.0) (2023-07-22)
 
 

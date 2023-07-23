@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.28.1](https://github.com/daybrush/guides/blob/master/packages/react-guides/compare/@scena/react-guides@0.28.0...@scena/react-guides@0.28.1) (2023-07-23)
+
+
+### :bug: Bug Fix
+
+* fix guides zoom #83 ([207f218](https://github.com/daybrush/guides/blob/master/packages/react-guides/commit/207f218266968c0a206df10a0732312e3a6508de))
+
+
+### :mega: Other
+
+* publish packages ([73e2427](https://github.com/daybrush/guides/blob/master/packages/react-guides/commit/73e24270c27eec1f30cc051fe84569e79f85822c))
+
+
+
 ## [0.28.0](https://github.com/daybrush/guides/blob/master/packages/react-guides/compare/@scena/react-guides@0.27.0...@scena/react-guides@0.28.0) (2023-07-22)
 
 
