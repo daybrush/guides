@@ -87,7 +87,6 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         this._zoom = zoom;
         this._guidesZoom = guidesZoom || zoom;
 
-        console.log(type, zoom, guidesZoom);
         return <GuidesElement
             ref={this.managerRef}
             cspNonce={cspNonce}
